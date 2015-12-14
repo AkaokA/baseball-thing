@@ -22,7 +22,6 @@ public class BaseballEvents : MonoBehaviour {
 	public void HitBaseball() {
 		hitDirection = Random.onUnitSphere;
 		hitDirection.x = Mathf.Abs(hitDirection.x);
-		hitDirection.y = Mathf.Abs(hitDirection.y);
 		hitDirection.z = Mathf.Abs(hitDirection.z);
 
 		hitForce = Random.Range (500, 1500);
