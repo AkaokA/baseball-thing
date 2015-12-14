@@ -25,7 +25,7 @@ public class BaseballEvents : MonoBehaviour {
 		hitDirection.y = Mathf.Abs(hitDirection.y);
 		hitDirection.z = Mathf.Abs(hitDirection.z);
 
-		hitForce = Random.Range (500, 1800);
+		hitForce = Random.Range (500, 1500);
 
 		GameObject baseballInstance = Instantiate (baseball);
 		baseballInstance.GetComponent<Rigidbody>().AddForce( hitDirection * hitForce);
