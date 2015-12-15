@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BallplayerEvents : MonoBehaviour {
 
-	public float moveSpeed = 0.5f;
+	public float moveSpeed = 0.2f;
 	private RaycastHit hit;
 
 	// Use this for initialization
@@ -18,16 +18,24 @@ public class BallplayerEvents : MonoBehaviour {
 
 	void OnMouseUp () {
 		gameObject.layer = 0;
+		StartCoroutine (MoveBallplayer ());
 	}
 
 	public GameObject dragParticles;
 
-	IEnumerator spawnDragParticles () {
+	IEnumerator SpawnDragParticles () {
 		GameObject dragParticleInstance = Instantiate (dragParticles);
 		dragParticleInstance.transform.position = hit.point;
 		yield return new WaitForSeconds(0.5f);
 		Destroy (dragParticleInstance);
 		yield return null;
+	}
+
+	IEnumerator MoveBallplayer () {
+		while (Vector3.Distance (transform.position, hit.point) > 0) {
+			transform.position = Vector3.MoveTowards (transform.position, hit.point, moveSpeed);
+			yield return null;
+		}
 	}
 
 	void OnMouseDrag () {
@@ -38,7 +46,7 @@ public class BallplayerEvents : MonoBehaviour {
 		// Casts the ray and get the first game object hit
 		Physics.Raycast(ray, out hit);
 
-		StartCoroutine (spawnDragParticles ());
+		StartCoroutine (SpawnDragParticles ());
 
 		transform.position = Vector3.MoveTowards (transform.position, hit.point, moveSpeed);
 	}
