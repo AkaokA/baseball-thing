@@ -3,7 +3,7 @@ using System.Collections;
 
 public class OutfieldCameraTriggerView : MonoBehaviour {
 
-	public float cameraTransitionTime = 1f;
+	public float cameraTransitionTime;
 
 	// Use this for initialization
 	void Start () {
