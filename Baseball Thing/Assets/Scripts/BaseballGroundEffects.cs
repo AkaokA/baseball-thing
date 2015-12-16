@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HeightMarker : MonoBehaviour {
+public class BaseballGroundEffects : MonoBehaviour {
+
+	public float markerScaleFactor = 6.4f;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +20,7 @@ public class HeightMarker : MonoBehaviour {
 		tempRotation = Quaternion.Euler(90, 0, 0);
 		transform.rotation = tempRotation;
 
-		float markerScale = transform.parent.position.y * 6.4f;
+		float markerScale = transform.parent.position.y * markerScaleFactor;
 
 		if (transform.parent.position.y >= 0) {
 			Vector3 tempScale;
