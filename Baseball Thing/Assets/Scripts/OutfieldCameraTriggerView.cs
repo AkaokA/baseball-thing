@@ -3,6 +3,8 @@ using System.Collections;
 
 public class OutfieldCameraTriggerView : MonoBehaviour {
 
+	public float cameraTransitionTime = 1f;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -14,7 +16,7 @@ public class OutfieldCameraTriggerView : MonoBehaviour {
 	}
 
 	void OnTriggerExit (Collider other) {
-		GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield");
+		GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield", cameraTransitionTime);
 	}
 
 }
