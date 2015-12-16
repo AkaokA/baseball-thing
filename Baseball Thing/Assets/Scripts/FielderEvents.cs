@@ -17,7 +17,7 @@ public class FielderEvents : MonoBehaviour {
 		// iTween parameters
 		ballplayerTweenParams.Add ("position", destination);
 		ballplayerTweenParams.Add ("speed", movementSpeed);
-		ballplayerTweenParams.Add ("easetype", "easeInOutCubic");
+		ballplayerTweenParams.Add ("easetype", "easeInOut");
 	}
 	
 	// Update is called once per frame
@@ -26,6 +26,7 @@ public class FielderEvents : MonoBehaviour {
 	}
 
 	void OnMouseDown () {
+
 		// Highlight selected ballplayer
 	}
 
