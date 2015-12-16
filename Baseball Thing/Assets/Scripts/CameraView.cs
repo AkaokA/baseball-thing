@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraStates : MonoBehaviour {
+public class CameraView : MonoBehaviour {
 
 	public float lerpTime = 2f;
 	public AnimationCurve cameraCurve;

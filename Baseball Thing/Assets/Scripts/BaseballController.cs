@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseballEvents : MonoBehaviour {
+public class BaseballController : MonoBehaviour {
 	public float hitForceMin = 500;
 	public float hitForceMax = 1200;
 	public float hitForce;

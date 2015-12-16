@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OutfieldCameraTrigger : MonoBehaviour {
+public class OutfieldCameraTriggerView : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -14,7 +14,7 @@ public class OutfieldCameraTrigger : MonoBehaviour {
 	}
 
 	void OnTriggerExit (Collider other) {
-		GameObject.Find ("Main Camera").GetComponent<CameraStates>().MoveCamera("outfield");
+		GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield");
 	}
 
 }

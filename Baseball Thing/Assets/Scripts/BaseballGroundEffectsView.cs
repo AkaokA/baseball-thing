@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseballGroundEffects : MonoBehaviour {
+public class BaseballGroundEffectsView: MonoBehaviour {
 
 	public float markerScaleFactor = 6.4f;
 
@@ -13,7 +13,7 @@ public class BaseballGroundEffects : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector3 tempPosition = transform.parent.position;
-		tempPosition.y = 0.002f;
+		tempPosition.y = 0.005f;
 		transform.position = tempPosition;
 
 		Quaternion tempRotation = transform.rotation;
