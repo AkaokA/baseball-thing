@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class BaseballEvents : MonoBehaviour {
+	public float hitForceMin = 500;
+	public float hitForceMax = 1200;
 	public float hitForce;
 	public Vector3 hitDirection = new Vector3(0f,0f,0f);
 
@@ -24,7 +26,7 @@ public class BaseballEvents : MonoBehaviour {
 		hitDirection.x = Mathf.Abs(hitDirection.x);
 		hitDirection.z = Mathf.Abs(hitDirection.z);
 
-		hitForce = Random.Range (500, 1500);
+		hitForce = Random.Range (hitForceMin, hitForceMax);
 
 		GameObject baseballInstance = Instantiate (baseball);
 		baseballInstance.GetComponent<Rigidbody>().AddForce( hitDirection * hitForce);
