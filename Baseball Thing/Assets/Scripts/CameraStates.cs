@@ -34,12 +34,12 @@ public class CameraStates : MonoBehaviour {
 			finalCameraHeight = 2.5f;
 			break;
 		case "infield":
-			finalCameraSize = 5f;
-			finalCameraHeight = 5f;
+			finalCameraSize = 6f;
+			finalCameraHeight = 6f;
 			break;
 		case "outfield":
-			finalCameraSize = 12f;
-			finalCameraHeight = 12f;
+			finalCameraSize = 13f;
+			finalCameraHeight = 13f;
 			break;
 		}
 
