@@ -26,6 +26,7 @@ public class CameraView : MonoBehaviour {
 
 	public void MoveCamera (string state, float time) {
 		StopCoroutine ("SwitchCameraState");
+
 		initialSize = GetComponent<Camera> ().orthographicSize;
 		initialHeight = transform.position.y;
 		initialDiagPosition = transform.position.x;
