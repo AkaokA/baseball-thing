@@ -51,7 +51,7 @@ public class BaseballView : MonoBehaviour {
 		GetComponent<Rigidbody>().AddForce( hitDirection * hitForce);
 	}
 
-//	public void PitchBaseballByAngle(Transform target, float pitchAngle) {
+//	public void PitchBaseballWithAngle(Transform target, float pitchAngle) {
 //		// move to location of pitcher's mound
 //		transform.position = new Vector3(5f, 1f, 5f);
 //

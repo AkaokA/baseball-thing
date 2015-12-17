@@ -5,14 +5,18 @@ public class AppController : MonoBehaviour {
 
 	public GameObject Baseball;
 	private GameObject StrikeZone;
+	private GameObject MainCamera;
+	private GameObject Sun;
 
 	// Use this for initialization
 	void Start () {
+		MainCamera = GameObject.Find ("Main Camera");
+		Sun = GameObject.Find ("Sun");
+		StrikeZone = GameObject.Find ("Strike Zone");
 
 		// Intro animations
-		GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera ("infield", 3f);
-		GameObject.Find ("Sun").GetComponent<SunView> ().BeginSunrise ();
-		StrikeZone = GameObject.Find ("Strike Zone");
+		MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
+		Sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 	
 	// Update is called once per frame
@@ -27,6 +31,8 @@ public class AppController : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.P)) {
+			MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 0.3f);
+
 			GameObject baseballInstance = Instantiate (Baseball);
 			baseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (9f, 18f));
 		}

@@ -12,11 +12,14 @@ public class OutfieldCameraTriggerView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
 	void OnTriggerExit (Collider other) {
-		GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield", cameraTransitionTime);
+		if (other.transform.position.x > 0 && other.transform.position.z > 0) {
+			GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield", cameraTransitionTime);			
+		}
+
 	}
 
 }
