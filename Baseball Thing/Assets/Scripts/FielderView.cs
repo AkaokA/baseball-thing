@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class FielderView : MonoBehaviour {
+public class FielderView : BaseballElement {
 
 	private RaycastHit hit;
 	Hashtable ballplayerTweenParams = new Hashtable ();

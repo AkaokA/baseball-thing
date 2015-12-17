@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraView : MonoBehaviour {
-
+public class CameraView : BaseballElement {
 
 	public AnimationCurve cameraCurve;
 

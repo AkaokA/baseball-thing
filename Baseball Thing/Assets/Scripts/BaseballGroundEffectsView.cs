@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseballGroundEffectsView: MonoBehaviour {
+public class BaseballGroundEffectsView: BaseballElement {
 
 	public float markerScaleFactor = 6.4f;
 

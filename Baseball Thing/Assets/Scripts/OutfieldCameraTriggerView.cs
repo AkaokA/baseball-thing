@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OutfieldCameraTriggerView : MonoBehaviour {
+public class OutfieldCameraTriggerView : BaseballElement {
 
 	public float cameraTransitionTime;
 

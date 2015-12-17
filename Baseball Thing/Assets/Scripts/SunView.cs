@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SunView : MonoBehaviour {
+public class SunView : BaseballElement {
 
 	public AnimationCurve sunCurve;
 

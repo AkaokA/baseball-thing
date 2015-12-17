@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AppController : MonoBehaviour {
+public class AppController : BaseballElement {
+
+	public Inning currentInning;
 
 	public GameObject Baseball;
 	private GameObject StrikeZone;
@@ -13,6 +15,8 @@ public class AppController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		// get GameObjects
 		MainCamera = GameObject.Find ("Main Camera");
 		Sun = GameObject.Find ("Sun");
 		StrikeZone = GameObject.Find ("Strike Zone");
@@ -45,6 +49,53 @@ public class AppController : MonoBehaviour {
 				MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
 				allowCameraMovement = false;
 			}
+		}
+	}
+
+	public void UpdateCount (string pitchOutcome) {
+		switch(pitchOutcome) {
+		case "ball":
+			if (app.model.currentGame.currentInning.currentAtBat.balls == 3) {
+				ResetCount ();
+			}
+			app.model.currentGame.currentInning.currentAtBat.balls++;
+			break;
+		case "strike":
+			if (app.model.currentGame.currentInning.currentAtBat.strikes == 2) {
+				ResetCount ();
+				UpdateOuts ();
+			}
+			app.model.currentGame.currentInning.currentAtBat.strikes++;
+			break;
+		case "foul":
+			if (app.model.currentGame.currentInning.currentAtBat.strikes < 2) {
+				app.model.currentGame.currentInning.currentAtBat.strikes++;				
+			}
+			break;
+		case "in play":
+			ResetCount ();
+			break;
+		}
+	}
+
+	void ResetCount () {
+		app.model.currentGame.currentInning.currentAtBat.balls = 0;
+		app.model.currentGame.currentInning.currentAtBat.strikes = 0;
+	}
+
+	void UpdateOuts () {
+		if (app.model.currentGame.currentInning.outs == 2) {
+			app.model.currentGame.currentInning.outs = 0;
+
+			if (app.model.currentGame.currentInning.half == "top") {
+				app.model.currentGame.currentInning.half = "bottom";
+			} else {
+				app.model.currentGame.currentInning.half = "top";
+				app.model.currentGame.currentInning = new Inning (app.model.currentGame.currentInning.inningNumber++);
+			}
+
+		} else {
+			app.model.currentGame.currentInning.outs++;		
 		}
 
 	}

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseballView : MonoBehaviour {
+public class BaseballView : BaseballElement {
 	public float hitForceMin = 500f;
 	public float hitForceMax = 1200f;
 	public float hitForce;

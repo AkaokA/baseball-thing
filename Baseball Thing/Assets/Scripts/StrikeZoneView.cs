@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StrikeZoneView : MonoBehaviour {
-
-	public int strikes = 0;
+public class StrikeZoneView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
@@ -16,11 +14,9 @@ public class StrikeZoneView : MonoBehaviour {
 	}
 
 	void OnTriggerEnter (Collider other) {
-
 		if (other.tag == "Baseball") {
-			strikes++;
+			app.controller.UpdateCount ("strike");
 		}
-
 	}
 
 }
