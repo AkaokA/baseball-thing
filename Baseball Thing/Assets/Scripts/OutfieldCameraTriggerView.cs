@@ -19,7 +19,6 @@ public class OutfieldCameraTriggerView : MonoBehaviour {
 		if (other.transform.position.x > 0 && other.transform.position.z > 0) {
 			GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield", cameraTransitionTime);			
 		}
-
 	}
 
 }

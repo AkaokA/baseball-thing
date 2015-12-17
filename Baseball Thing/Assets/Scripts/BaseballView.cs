@@ -50,6 +50,7 @@ public class BaseballView : MonoBehaviour {
 	public void HitBaseball() {
 		hitDirection = Random.onUnitSphere;
 		hitDirection.x = Mathf.Abs(hitDirection.x);
+		hitDirection.y = Mathf.Abs(hitDirection.z);
 		hitDirection.z = Mathf.Abs(hitDirection.z);
 
 		hitForce = Random.Range (hitForceMin, hitForceMax);

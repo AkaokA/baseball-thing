@@ -8,6 +8,9 @@ public class AppController : MonoBehaviour {
 	private GameObject MainCamera;
 	private GameObject Sun;
 
+	private GameObject currentBaseballInstance;
+	private bool allowCameraMovement = true;
+
 	// Use this for initialization
 	void Start () {
 		MainCamera = GameObject.Find ("Main Camera");
@@ -22,19 +25,27 @@ public class AppController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		// create and launch a baseball when Space is pressed
-		if (Input.GetKeyDown (KeyCode.Space)) {
-//			GameObject baseballInstance = Instantiate (Baseball);
-//			baseballInstance.GetComponent<BaseballView>().HitBaseball ();
-
-
-		}
-
+		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
-			MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 0.3f);
-
-			GameObject baseballInstance = Instantiate (Baseball);
-			baseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (9f, 18f), 0.8f);
+			currentBaseballInstance = Instantiate (Baseball);
+			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (9f, 18f), 0.8f);
+			allowCameraMovement = true;
 		}
+
+		// SPACE: hit pitch
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			currentBaseballInstance.GetComponent<BaseballView>().HitBaseball ();
+		}
+
+		// go back to infield camera when latest ball slows down
+		if (currentBaseballInstance && allowCameraMovement) {
+			float currentBaseballSpeed = currentBaseballInstance.GetComponent<Rigidbody> ().velocity.magnitude;
+			
+			if ( currentBaseballSpeed < 1f) {
+				MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
+				allowCameraMovement = false;
+			}
+		}
+
 	}
 }
