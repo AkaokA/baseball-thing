@@ -34,7 +34,7 @@ public class AppController : MonoBehaviour {
 			MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 0.3f);
 
 			GameObject baseballInstance = Instantiate (Baseball);
-			baseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (9f, 18f));
+			baseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (9f, 18f), 0.8f);
 		}
 	}
 }

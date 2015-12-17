@@ -23,7 +23,7 @@ public class BaseballView : MonoBehaviour {
 		
 	}
 
-	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed) {
+	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound
 		transform.position = new Vector3(5f, 0.75f, 5f);
 
@@ -35,7 +35,13 @@ public class BaseballView : MonoBehaviour {
 		// find angle using trajectory formula
 		float pitchAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (pitchSpeed, 2) ) / 2;
 
+		// add randomness according to accuracy
+		float randomness = 0.25f;
+		pitchDirection.x += Random.Range (-randomness, randomness) * (1 - accuracy);
+		pitchDirection.y += Random.Range (-randomness, randomness) * (1 - accuracy);
+
 		// set vertical angle
+		pitchDirection = pitchDirection.normalized;
 		pitchDirection.y = Mathf.Tan (pitchAngle);
 
 		GetComponent<Rigidbody>().velocity = pitchSpeed * pitchDirection;
