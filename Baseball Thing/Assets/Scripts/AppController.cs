@@ -13,6 +13,10 @@ public class AppController : BaseballElement {
 	private GameObject currentBaseballInstance;
 	private bool allowCameraMovement = true;
 
+	public float minPitchSpeed = 8.5f;
+	public float maxPitchSpeed = 20f;
+	public float pitchAccuracy = 0.5f;
+
 	// Use this for initialization
 	void Start () {
 
@@ -32,7 +36,7 @@ public class AppController : BaseballElement {
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
 			currentBaseballInstance = Instantiate (Baseball);
-			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (9f, 18f), 0.8f);
+			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (minPitchSpeed, maxPitchSpeed), pitchAccuracy);
 			allowCameraMovement = true;
 		}
 

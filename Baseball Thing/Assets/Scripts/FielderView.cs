@@ -51,7 +51,7 @@ public class FielderView : BaseballElement {
 		ballplayerTweenParams ["position"] = destination;
 			
 		// move ballplayer along path
-		iTween.MoveTo(gameObject, ballplayerTweenParams);
+//		iTween.MoveTo(gameObject, ballplayerTweenParams);
 	}
 
 }
