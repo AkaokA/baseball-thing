@@ -10,6 +10,9 @@ public class SunView : MonoBehaviour {
 	public float initialIntensity = 0f;
 	public float finalIntensity = 1f;
 
+	public Color initialColor;
+	public Color finalColor;
+
 	public float sunriseTime = 5f;
 
 	// Use this for initialization
@@ -23,10 +26,10 @@ public class SunView : MonoBehaviour {
 	}
 
 	public void BeginSunrise () {
-		StartCoroutine (Sunrise (initialAngle, finalAngle, initialIntensity, finalIntensity, sunriseTime));
+		StartCoroutine (Sunrise (initialAngle, finalAngle, initialIntensity, finalIntensity, initialColor, finalColor, sunriseTime));
 	}
 
-	IEnumerator Sunrise (float initialAngle, float finalAngle, float initialIntensity, float finalIntensity, float time) {
+	IEnumerator Sunrise (float initialAngle, float finalAngle, float initialIntensity, float finalIntensity, Color initialColor, Color finalColor, float time) {
 		float currentLerpTime;
 
 		for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
@@ -35,9 +38,11 @@ public class SunView : MonoBehaviour {
 
 			float angle;
 			float intensity;
-			
+			Color color;
+
 			angle = Mathf.LerpUnclamped(initialAngle, finalAngle, sunCurve.Evaluate (perc));
 			intensity = Mathf.LerpUnclamped(initialIntensity, finalIntensity, sunCurve.Evaluate (perc));
+			color = Color.LerpUnclamped(initialColor, finalColor, sunCurve.Evaluate (perc));
 
 			Quaternion tempRotation = transform.rotation;
 			Vector3 tempEulerAngles = tempRotation.eulerAngles;
@@ -46,6 +51,7 @@ public class SunView : MonoBehaviour {
 			transform.rotation = tempRotation;
 
 			GetComponent<Light> ().intensity = intensity;
+			GetComponent<Light> ().color = color;
 
 			yield return null;
 		}
