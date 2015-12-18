@@ -25,8 +25,8 @@ public class AppController : BaseballElement {
 	// Use this for initialization
 	void Start () {
 		// initialize UI
-		awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.awayTeam.teamName.ToUpper ();
-		homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.homeTeam.teamName.ToUpper ();
+		awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayTeam.teamName.ToUpper ();
+		homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeTeam.teamName.ToUpper ();
 		awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
 		homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
 		inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
