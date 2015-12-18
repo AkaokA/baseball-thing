@@ -4,13 +4,13 @@ using System.Collections;
 // Contains all data related to the app.
 public class AppModel : BaseballElement {
 	public BallGame currentGame = new BallGame();
-	public Team homeTeam = new Team("TOR", true);
-	public Team awayTeam = new Team("NYY", false);
+	public Team awayTeam = new Team("New York", false);
+	public Team homeTeam = new Team("Toronto", true);
 }
 
 public class BallGame {
-	public int homeScore = 0;
 	public int awayScore = 0;
+	public int homeScore = 0;
 
 	public Inning currentInning = new Inning(1);
 }

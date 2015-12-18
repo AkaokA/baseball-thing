@@ -9,8 +9,6 @@ public class AppViews : BaseballElement {
 	public BaseballView baseball;
 	public BaseballGroundEffectsView baseballGroundEffects;
 
-	public FielderView fielder;
-
 	public StrikeZoneView strikeZone;
 	public OutfieldCameraTriggerView outfieldCameraTrigger;
 }

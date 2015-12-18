@@ -44,7 +44,7 @@ public class BaseballView : BaseballElement {
 		pitchDirection = pitchDirection.normalized;
 		pitchDirection.y = Mathf.Tan (pitchAngle);
 
-		GetComponent<Rigidbody>().velocity = pitchSpeed * pitchDirection;
+		GetComponent<Rigidbody> ().velocity = pitchSpeed * pitchDirection;
 	}
 
 	public void HitBaseball() {
@@ -55,7 +55,8 @@ public class BaseballView : BaseballElement {
 
 		hitForce = Random.Range (hitForceMin, hitForceMax);
 
-		GetComponent<Rigidbody>().AddForce( hitDirection * hitForce);
+		GetComponent<Rigidbody> ().velocity = new Vector3(1,0,1);
+		GetComponent<Rigidbody> ().AddForce( hitDirection * hitForce);
 	}
 
 //	public void PitchBaseballWithAngle(Transform target, float pitchAngle) {

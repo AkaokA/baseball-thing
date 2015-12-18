@@ -4,11 +4,16 @@ using System.Collections;
 public class AppController : BaseballElement {
 
 	public Inning currentInning;
-
 	public GameObject Baseball;
-	private GameObject StrikeZone;
-	private GameObject MainCamera;
-	private GameObject Sun;
+
+	public GameObject MainCamera;
+	public GameObject Sun;
+	public GameObject StrikeZone;
+	public GameObject awayTeamNameLabel;
+	public GameObject homeTeamNameLabel;
+	public GameObject awayScoreLabel;
+	public GameObject homeScoreLabel;
+	public GameObject inningLabel;
 
 	private GameObject currentBaseballInstance;
 	private bool allowCameraMovement = true;
@@ -19,11 +24,12 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-
-		// get GameObjects
-		MainCamera = GameObject.Find ("Main Camera");
-		Sun = GameObject.Find ("Sun");
-		StrikeZone = GameObject.Find ("Strike Zone");
+		// initialize UI
+		awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.awayTeam.teamName.ToUpper ();
+		homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.homeTeam.teamName.ToUpper ();
+		awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
+		homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
+		inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
 
 		// Intro animations
 		MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
