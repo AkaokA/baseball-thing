@@ -4,6 +4,7 @@ using System.Collections;
 public class BaseballGroundEffectsView: BaseballElement {
 
 	public float markerScaleFactor = 6.4f;
+	public float yOffset = 0.005f;
 
 	// Use this for initialization
 	void Start () {
@@ -13,7 +14,7 @@ public class BaseballGroundEffectsView: BaseballElement {
 	// Update is called once per frame
 	void Update () {
 		Vector3 tempPosition = transform.parent.position;
-		tempPosition.y = 0.005f;
+		tempPosition.y = yOffset;
 		transform.position = tempPosition;
 
 		Quaternion tempRotation = transform.rotation;
