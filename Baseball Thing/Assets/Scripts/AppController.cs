@@ -6,14 +6,22 @@ public class AppController : BaseballElement {
 	public Inning currentInning;
 	public GameObject Baseball;
 
-	public GameObject MainCamera;
-	public GameObject Sun;
-	public GameObject StrikeZone;
+	public GameObject mainCamera;
+	public GameObject sun;
+	public GameObject strikeZone;
 	public GameObject awayTeamNameLabel;
 	public GameObject homeTeamNameLabel;
 	public GameObject awayScoreLabel;
 	public GameObject homeScoreLabel;
 	public GameObject inningLabel;
+
+	public GameObject ball1Dot;
+	public GameObject ball2Dot;
+	public GameObject ball3Dot;
+	public GameObject strike1Dot;
+	public GameObject strike2Dot;
+	public GameObject out1Dot;
+	public GameObject out2Dot;
 
 	private GameObject currentBaseballInstance;
 	private bool allowCameraMovement = true;
@@ -24,16 +32,11 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		// initialize UI
-		awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayTeam.teamName.ToUpper ();
-		homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeTeam.teamName.ToUpper ();
-		awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
-		homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
-		inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
+		UpdateScoreboard ();
 
 		// Intro animations
-		MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
-		Sun.GetComponent<SunView> ().BeginSunrise ();
+		mainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
+		sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 	
 	// Update is called once per frame
@@ -42,7 +45,7 @@ public class AppController : BaseballElement {
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
 			currentBaseballInstance = Instantiate (Baseball);
-			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (StrikeZone.transform, Random.Range (minPitchSpeed, maxPitchSpeed), pitchAccuracy);
+			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (strikeZone.transform, Random.Range (minPitchSpeed, maxPitchSpeed), pitchAccuracy);
 			allowCameraMovement = true;
 		}
 
@@ -56,7 +59,7 @@ public class AppController : BaseballElement {
 			float currentBaseballSpeed = currentBaseballInstance.GetComponent<Rigidbody> ().velocity.magnitude;
 			
 			if ( currentBaseballSpeed < 1f) {
-				MainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
+				mainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
 				allowCameraMovement = false;
 			}
 		}
@@ -86,11 +89,15 @@ public class AppController : BaseballElement {
 			ResetCount ();
 			break;
 		}
-	}
 
+		UpdateScoreboard ();
+	}
+		
 	void ResetCount () {
 		app.model.currentGame.currentInning.currentAtBat.balls = 0;
 		app.model.currentGame.currentInning.currentAtBat.strikes = 0;
+
+		UpdateScoreboard ();
 	}
 
 	void UpdateOuts () {
@@ -107,6 +114,19 @@ public class AppController : BaseballElement {
 		} else {
 			app.model.currentGame.currentInning.outs++;		
 		}
+
+		UpdateScoreboard ();
+	}
+
+	public void UpdateScoreboard () {
+		// text labels
+		awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayTeam.teamName.ToUpper ();
+		homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeTeam.teamName.ToUpper ();
+		awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
+		homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
+		inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
+
+		// BSO dots
 
 	}
 }
