@@ -89,20 +89,20 @@ public class BaseballView : BaseballElement {
 	}
 
 
-	public Vector3 SetLandingPoint () {
-		GameObject landingPointView = app.views.baseballLandingPoint;
-		Vector3 landingPoint = new Vector3 (0, 0, 0);
-		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
-		float angle;
-		float distance;
-
-		velocity = velocity.normalized;
-		angle = Mathf.Asin (velocity.y); // lol I guess?
-		distance = 0; // lol gotta check the formulas
-
-		landingPointView.transform.position = landingPoint;
-		landingPointView.SetActive (true);
-	}
+//	public Vector3 SetLandingPoint () {
+//		GameObject landingPointView = app.views.baseballLandingPoint;
+//		Vector3 landingPoint = new Vector3 (0, 0, 0);
+//		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
+//		float angle;
+//		float distance;
+//
+//		velocity = velocity.normalized;
+//		angle = Mathf.Asin (velocity.y); // lol I guess?
+//		distance = 0; // lol gotta check the formulas
+//
+//		landingPointView.transform.position = landingPoint;
+//		landingPointView.SetActive (true);
+//	}
 
 //	public void PitchBaseballWithAngle(Transform target, float pitchAngle) {
 //		// move to location of pitcher's mound
