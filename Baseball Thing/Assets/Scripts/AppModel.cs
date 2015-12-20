@@ -10,7 +10,7 @@ public class BallGame {
 	public int awayScore = 0;
 	public int homeScore = 0;
 
-	public Team awayTeam = new Team("Boston", false);
+	public Team awayTeam = new Team("Chicago", false);
 	public Team homeTeam = new Team("Toronto", true);
 
 	public Inning currentInning = new Inning(1);

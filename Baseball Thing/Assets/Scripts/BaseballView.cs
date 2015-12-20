@@ -19,7 +19,7 @@ public class BaseballView : BaseballElement {
 	// Update is called once per frame
 	void Update () {
 		// kill ball if it goes too far foul
-		if (transform.position.x < -10f || transform.position.z < -10f) {
+		if (transform.position.x < -10f || transform.position.z < -10f || transform.position.x > 40f || transform.position.z > 40f) {
 			Destroy (gameObject);
 		}
 	}
@@ -62,6 +62,11 @@ public class BaseballView : BaseballElement {
 	}
 
 	public void ThrowBaseballAt(Transform target) {
+		// put the ball back near the ground
+		Vector3 tempPosition = transform.position;
+		tempPosition.y = 1.0f;
+		transform.position = tempPosition;
+
 		float throwHeight = 10;
 		float throwSpeed = Mathf.Sqrt (2 * throwHeight * Physics.gravity.magnitude);
 

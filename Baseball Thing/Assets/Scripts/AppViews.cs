@@ -10,6 +10,8 @@ public class AppViews : BaseballElement {
 	public GameObject secondBase;
 	public GameObject thirdBase;
 
+	public GameObject infieldCameraTrigger;
+
 	public GameObject awayTeamNameLabel;
 	public GameObject homeTeamNameLabel;
 	public GameObject awayScoreLabel;

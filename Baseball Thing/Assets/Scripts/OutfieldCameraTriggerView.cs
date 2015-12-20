@@ -3,7 +3,7 @@ using System.Collections;
 
 public class OutfieldCameraTriggerView : BaseballElement {
 
-	public float cameraTransitionTime;
+
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +17,8 @@ public class OutfieldCameraTriggerView : BaseballElement {
 
 	void OnTriggerExit (Collider other) {
 		if (other.transform.position.x > 0 && other.transform.position.z > 0) {
-			GameObject.Find ("Main Camera").GetComponent<CameraView>().MoveCamera("outfield", cameraTransitionTime);			
+			app.views.mainCamera.GetComponent<CameraView>().MoveCamera("outfield", 1.5f);			
+			app.views.infieldCameraTrigger.SetActive (true);
 		}
 	}
 

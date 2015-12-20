@@ -8,7 +8,6 @@ public class AppController : BaseballElement {
 	public GameObject Baseball;
 
 	private GameObject currentBaseballInstance;
-	private bool allowCameraMovement = true;
 
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
@@ -28,34 +27,27 @@ public class AppController : BaseballElement {
 
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
+			app.views.infieldCameraTrigger.SetActive (false); // prevent the baseball instance from triggering the camera
 			currentBaseballInstance = Instantiate (Baseball);
 			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, Random.Range (minPitchSpeed, maxPitchSpeed), pitchAccuracy);
-			allowCameraMovement = true;
 		}
 
-		// ARROW KEYS: Throw to base
-		if (Input.GetKeyDown (KeyCode.RightArrow)) {
-			currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform);
-		}
-		if (Input.GetKeyDown (KeyCode.UpArrow)) {
-			currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform);
-		}
-		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-			currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform);
-		}
+		if (currentBaseballInstance) {
 
-		// SPACE: hit pitch
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			currentBaseballInstance.GetComponent<BaseballView>().HitBaseball ();
-		}
+			// ARROW KEYS: Throw to base
+			if (Input.GetKeyDown (KeyCode.RightArrow)) {
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform);
+			}
+			if (Input.GetKeyDown (KeyCode.UpArrow)) {
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform);
+			}
+			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform);
+			}
 
-		// go back to infield camera when latest ball slows down
-		if (currentBaseballInstance && allowCameraMovement) {
-			float currentBaseballSpeed = currentBaseballInstance.GetComponent<Rigidbody> ().velocity.magnitude;
-			
-			if ( currentBaseballSpeed < 1f) {
-				app.views.mainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
-				allowCameraMovement = false;
+			// SPACE: hit pitch
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				currentBaseballInstance.GetComponent<BaseballView>().HitBaseball ();
 			}
 		}
 	}

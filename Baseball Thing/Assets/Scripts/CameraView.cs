@@ -10,6 +10,8 @@ public class CameraView : BaseballElement {
 	private float initialDiagPosition;
 	private float initialAngle;
 
+	private bool allowCameraMovement = true;
+
 	// Use this for initialization
 	void Start () {
 		initialSize = GetComponent<Camera> ().orthographicSize;
@@ -24,7 +26,6 @@ public class CameraView : BaseballElement {
 	}
 
 	public void MoveCamera (string state, float time) {
-		StopCoroutine ("SwitchCameraState");
 
 		initialSize = GetComponent<Camera> ().orthographicSize;
 		initialHeight = transform.position.y;
@@ -57,13 +58,17 @@ public class CameraView : BaseballElement {
 			break;
 		}
 
-		StartCoroutine (SwitchCameraState (finalCameraSize, finalCameraHeight, finalCameraDiagPosition, finalCameraAngle, time));
+		if (allowCameraMovement) {
+			StartCoroutine (SwitchCameraState (finalCameraSize, finalCameraHeight, finalCameraDiagPosition, finalCameraAngle, time));
+		}
+
 	}
 
 	IEnumerator SwitchCameraState (float finalCameraSize, float finalCameraHeight, float finalCameraDiagPosition, float finalCameraAngle, float time) {
-		float currentLerpTime;
+		allowCameraMovement = false;
+		Debug.Log (allowCameraMovement);
 
-		for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
+		for ( float currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
 
 			float perc = currentLerpTime / time;
 			float cameraSize;
@@ -92,5 +97,8 @@ public class CameraView : BaseballElement {
 
 			yield return null;
 		}
+
+		allowCameraMovement = true;
+		Debug.Log (allowCameraMovement);
 	}
 }
