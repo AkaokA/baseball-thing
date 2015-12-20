@@ -6,8 +6,7 @@ public class AppController : BaseballElement {
 	public Inning currentInning;
 
 	public GameObject Baseball;
-
-	private GameObject currentBaseballInstance;
+	public GameObject currentBaseballInstance;
 
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
@@ -34,6 +33,13 @@ public class AppController : BaseballElement {
 
 		if (currentBaseballInstance) {
 
+			// SPACE: hit pitch
+			if (Input.GetKeyDown (KeyCode.Space)) {
+				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball ();
+				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+//				currentBaseballInstance.GetComponent<BaseballView> ().SetLandingPoint ();
+			}
+
 			// ARROW KEYS: Throw to base
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
 				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform);
@@ -43,11 +49,6 @@ public class AppController : BaseballElement {
 			}
 			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform);
-			}
-
-			// SPACE: hit pitch
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				currentBaseballInstance.GetComponent<BaseballView>().HitBaseball ();
 			}
 		}
 	}

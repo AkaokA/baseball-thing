@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class BaseballView : BaseballElement {
+
+	public GameObject heightIndicator;
+
 	public float hitForceMin = 500f;
 	public float hitForceMax = 1200f;
 	public float hitForce;
 	public Vector3 hitDirection = new Vector3(0f,0f,0f);
 
 	private float pitchSpeed;
-
-	const float gravityConstant = -9.81f;
 
 	// Use this for initialization
 	void Start () {
@@ -79,12 +80,6 @@ public class BaseballView : BaseballElement {
 		// find angle using trajectory formula
 		float pitchAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (throwSpeed, 2) ) / 2;
 
-		// add randomness according to accuracy
-		float randomness = 0.25f;
-		float accuracy = 1; //TODO: vary accuracy with throw speed
-		throwDirection.x += Random.Range (-randomness, randomness) * (1 - accuracy);
-		throwDirection.y += Random.Range (-randomness, randomness) * (1 - accuracy);
-
 		// set vertical angle
 		throwDirection = throwDirection.normalized;
 		throwDirection.y = Mathf.Tan (pitchAngle);
@@ -94,9 +89,20 @@ public class BaseballView : BaseballElement {
 	}
 
 
-//	public Vector3 BaseballLandingPoint () {
-//		
-//	}
+	public Vector3 SetLandingPoint () {
+		GameObject landingPointView = app.views.baseballLandingPoint;
+		Vector3 landingPoint = new Vector3 (0, 0, 0);
+		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
+		float angle;
+		float distance;
+
+		velocity = velocity.normalized;
+		angle = Mathf.Asin (velocity.y); // lol I guess?
+		distance = 0; // lol gotta check the formulas
+
+		landingPointView.transform.position = landingPoint;
+		landingPointView.SetActive (true);
+	}
 
 //	public void PitchBaseballWithAngle(Transform target, float pitchAngle) {
 //		// move to location of pitcher's mound

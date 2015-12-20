@@ -66,7 +66,7 @@ public class CameraView : BaseballElement {
 
 	IEnumerator SwitchCameraState (float finalCameraSize, float finalCameraHeight, float finalCameraDiagPosition, float finalCameraAngle, float time) {
 		allowCameraMovement = false;
-		Debug.Log (allowCameraMovement);
+//		Debug.Log (allowCameraMovement);
 
 		for ( float currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
 
@@ -99,6 +99,6 @@ public class CameraView : BaseballElement {
 		}
 
 		allowCameraMovement = true;
-		Debug.Log (allowCameraMovement);
+//		Debug.Log (allowCameraMovement);
 	}
 }

@@ -8,15 +8,18 @@ public class BaseballHeightIndicatorView: BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		// keep indicator on the ground
 		Vector3 tempPosition = transform.parent.position;
 		tempPosition.y = yOffset;
 		transform.position = tempPosition;
 
+		// prevent indicator from rotating with the ball
 		Quaternion tempRotation = transform.rotation;
 		tempRotation = Quaternion.Euler(90, 0, 0);
 		transform.rotation = tempRotation;
