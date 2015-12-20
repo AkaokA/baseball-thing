@@ -14,6 +14,6 @@ public class InfieldCameraTriggerView : BaseballElement {
 	}
 
 	void OnTriggerEnter (Collider otherCollider) {
-		app.views.mainCamera.GetComponent<CameraView>().MoveCamera("infield", 1.5f);
+		app.views.mainCamera.GetComponent<CameraView>().MoveCamera("infield", 1f);
 	}
 }
