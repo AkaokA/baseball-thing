@@ -27,7 +27,7 @@ public class BaseballView : BaseballElement {
 
 	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound
-		transform.position = new Vector3(5f, 0.75f, 5f);
+		transform.position = new Vector3(5f, 1f, 5f);
 
 		Vector3 pitchDirection = target.position - transform.position; // get target direction 
 		pitchDirection.y = 0; // retain only the horizontal direction
@@ -70,7 +70,8 @@ public class BaseballView : BaseballElement {
 		tempPosition.y = 1.0f;
 		transform.position = tempPosition;
 
-		float throwHeight = 8f;
+		// This seems wrong...
+		float throwHeight = 10f;
 		float throwSpeed = Mathf.Sqrt (2 * throwHeight * Physics.gravity.magnitude);
 
 		Vector3 throwDirection = target.position - transform.position; // get target direction 
@@ -84,7 +85,13 @@ public class BaseballView : BaseballElement {
 
 		// set vertical angle
 		throwDirection = throwDirection.normalized;
-		throwDirection.y = Mathf.Tan (throwAngle);
+
+		if (float.IsNaN (throwAngle)) {
+			throwSpeed = 10;
+			throwDirection.y = 1;
+		} else {
+			throwDirection.y = Mathf.Tan (throwAngle);
+		}
 
 		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
