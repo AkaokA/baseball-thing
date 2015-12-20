@@ -4,6 +4,7 @@ using System.Collections;
 // Contains all data related to the app.
 public class AppModel : BaseballElement {
 	public BallGame currentGame = new BallGame();
+
 }
 
 public class BallGame {
@@ -14,6 +15,7 @@ public class BallGame {
 	public Team homeTeam = new Team("Toronto", true);
 
 	public Inning currentInning = new Inning(1);
+
 }
 
 public class Team {
@@ -39,6 +41,9 @@ public class Inning {
 	public int outs = 0;
 	public int runsScored = 0;
 
+	public bool ballIsInPlay = false;
+	public bool currentPitchIsStrike = false;
+
 	public Base firstBase;
 	public Base secondBase;
 	public Base thirdBase;
@@ -53,7 +58,6 @@ public class Inning {
 public class AtBat {
 	public int balls = 0;
 	public int strikes = 0;
-	public bool inPlay = false;
 }
 
 public class Base {

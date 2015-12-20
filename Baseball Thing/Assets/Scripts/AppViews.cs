@@ -6,11 +6,12 @@ public class AppViews : BaseballElement {
 	public GameObject mainCamera;
 	public GameObject sun;
 
-	public GameObject strikeZone;
 	public GameObject firstBase;
 	public GameObject secondBase;
 	public GameObject thirdBase;
 
+	public GameObject strikeZone;
+	public GameObject pitchRegister;
 	public GameObject baseballLandingPoint;
 	public GameObject infieldCameraTrigger;
 

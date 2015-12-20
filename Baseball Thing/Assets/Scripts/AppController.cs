@@ -12,8 +12,26 @@ public class AppController : BaseballElement {
 	public float maxPitchSpeed = 20f;
 	public float pitchAccuracy = 0.5f;
 
+	private UIDotView ball1Dot;
+	private UIDotView ball2Dot;
+	private UIDotView ball3Dot;
+	private UIDotView strike1Dot;
+	private UIDotView strike2Dot;
+	private UIDotView out1Dot;
+	private UIDotView out2Dot;
+
 	// Use this for initialization
 	void Start () {
+		// init variables
+		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
+		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
+		ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
+		strike1Dot = app.views.strike1Dot.GetComponent<UIDotView> ();
+		strike2Dot = app.views.strike2Dot.GetComponent<UIDotView> ();
+		out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
+		out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
+
+		// draw scoreboard
 		UpdateScoreboard ();
 
 		// Intro animations
@@ -26,9 +44,13 @@ public class AppController : BaseballElement {
 
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
-			app.views.infieldCameraTrigger.SetActive (false); // prevent the baseball instance from triggering the camera
-			currentBaseballInstance = Instantiate (Baseball);
-			currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, Random.Range (minPitchSpeed, maxPitchSpeed), pitchAccuracy);
+			if (app.model.currentGame.currentInning.ballIsInPlay == false) {
+				app.views.infieldCameraTrigger.SetActive (false); // prevent the baseball instance from triggering the camera
+				currentBaseballInstance = Instantiate (Baseball);
+
+				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
+				currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
+			}
 		}
 
 		if (currentBaseballInstance) {
@@ -53,7 +75,17 @@ public class AppController : BaseballElement {
 		}
 	}
 
-	public void IncrementCount (string pitchOutcome) {
+	public void RegisterPitch () {
+		if (app.model.currentGame.currentInning.currentPitchIsStrike) {
+			app.controller.PitchOutcome ("strike");
+		} else {
+			app.controller.PitchOutcome ("ball");				
+		}
+		Destroy (app.controller.currentBaseballInstance);
+		app.model.currentGame.currentInning.currentPitchIsStrike = false;
+	}
+
+	public void PitchOutcome (string pitchOutcome) {
 		switch(pitchOutcome) {
 		case "ball":
 			IncrementBalls ();
@@ -78,6 +110,14 @@ public class AppController : BaseballElement {
 		app.model.currentGame.currentInning.currentAtBat.strikes = 0;
 	}
 
+	void ResetCountUI () {
+		ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.disabledColor));
+		ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.disabledColor));
+		ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.disabledColor));
+		strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.disabledColor));
+		strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.disabledColor));
+	}
+
 	public void UpdateScoreboard () {
 		// text labels
 		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayTeam.teamName.ToUpper ();
@@ -92,9 +132,6 @@ public class AppController : BaseballElement {
 	}
 
 	public void IncrementBalls () {
-		UIDotView ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
-		UIDotView ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
-		UIDotView ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
 
 		switch(app.model.currentGame.currentInning.currentAtBat.balls) {
 		case 0:
@@ -115,16 +152,12 @@ public class AppController : BaseballElement {
 		case 3:
 			Debug.Log ("walk!");
 			ResetCount ();
-			ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.disabledColor));
-			ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.disabledColor));
-			ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.disabledColor));
+			ResetCountUI ();
 			break;
 		}
 	}
 
 	public void IncrementStrikes () {
-		UIDotView strike1Dot = app.views.strike1Dot.GetComponent<UIDotView> ();
-		UIDotView strike2Dot = app.views.strike2Dot.GetComponent<UIDotView> ();
 
 		switch(app.model.currentGame.currentInning.currentAtBat.strikes) {
 		case 0:
@@ -140,8 +173,7 @@ public class AppController : BaseballElement {
 		case 2:
 			Debug.Log ("strikeout!");
 			ResetCount ();
-			strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.disabledColor));
-			strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.disabledColor));
+			ResetCountUI ();
 
 			IncrementOuts ();
 			break;
@@ -149,8 +181,6 @@ public class AppController : BaseballElement {
 	}
 
 	public void IncrementOuts () {
-		UIDotView out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
-		UIDotView out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
 
 		switch(app.model.currentGame.currentInning.outs) {
 		case 0:
@@ -166,6 +196,7 @@ public class AppController : BaseballElement {
 		case 2:
 			Debug.Log ("CHANGE!");
 			ResetCount ();
+			ResetCountUI ();
 			app.model.currentGame.currentInning.outs = 0;
 			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
 			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));

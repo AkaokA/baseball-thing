@@ -60,6 +60,8 @@ public class BaseballView : BaseballElement {
 		GetComponent<Rigidbody> ().velocity = new Vector3(0,0,0);
 		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().AddForce( hitDirection * hitForce);
+
+		app.model.currentGame.currentInning.ballIsInPlay = true;
 	}
 
 	public void ThrowBaseballAt(Transform target) {

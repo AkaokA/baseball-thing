@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StrikeZoneView : BaseballElement {
+public class PitchRegisterView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
@@ -15,8 +15,7 @@ public class StrikeZoneView : BaseballElement {
 
 	void OnTriggerEnter (Collider otherCollider) {
 		if (otherCollider.tag == "Baseball") {
-			app.model.currentGame.currentInning.currentPitchIsStrike = true;
+			app.controller.RegisterPitch ();
 		}
 	}
-
 }
