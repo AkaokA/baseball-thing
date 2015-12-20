@@ -68,7 +68,7 @@ public class BaseballView : BaseballElement {
 		tempPosition.y = 1.0f;
 		transform.position = tempPosition;
 
-		float throwHeight = 10;
+		float throwHeight = 8f;
 		float throwSpeed = Mathf.Sqrt (2 * throwHeight * Physics.gravity.magnitude);
 
 		Vector3 throwDirection = target.position - transform.position; // get target direction 
@@ -78,11 +78,11 @@ public class BaseballView : BaseballElement {
 		throwDirection = throwDirection.normalized;
 
 		// find angle using trajectory formula
-		float pitchAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (throwSpeed, 2) ) / 2;
+		float throwAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (throwSpeed, 2) ) / 2;
 
 		// set vertical angle
 		throwDirection = throwDirection.normalized;
-		throwDirection.y = Mathf.Tan (pitchAngle);
+		throwDirection.y = Mathf.Tan (throwAngle);
 
 		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
