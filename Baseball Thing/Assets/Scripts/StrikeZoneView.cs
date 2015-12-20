@@ -15,7 +15,7 @@ public class StrikeZoneView : BaseballElement {
 
 	void OnTriggerEnter (Collider other) {
 		if (other.tag == "Baseball") {
-			app.controller.UpdateCount ("strike");
+			app.controller.IncrementCount ("strike");
 		}
 	}
 

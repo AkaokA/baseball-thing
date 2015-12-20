@@ -6,6 +6,10 @@ public class AppViews : BaseballElement {
 	public GameObject mainCamera;
 	public GameObject sun;
 	public GameObject strikeZone;
+	public GameObject firstBase;
+	public GameObject secondBase;
+	public GameObject thirdBase;
+
 	public GameObject awayTeamNameLabel;
 	public GameObject homeTeamNameLabel;
 	public GameObject awayScoreLabel;

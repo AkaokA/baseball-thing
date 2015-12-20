@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BaseballGroundEffectsView: BaseballElement {
+public class BaseballHeightIndicatorView: BaseballElement {
 
 	public float markerScaleFactor = 6.4f;
 	public float yOffset = 0.005f;

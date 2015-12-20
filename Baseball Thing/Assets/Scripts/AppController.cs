@@ -33,6 +33,17 @@ public class AppController : BaseballElement {
 			allowCameraMovement = true;
 		}
 
+		// ARROW KEYS: Throw to base
+		if (Input.GetKeyDown (KeyCode.RightArrow)) {
+			currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform);
+		}
+		if (Input.GetKeyDown (KeyCode.UpArrow)) {
+			currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform);
+		}
+		if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+			currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform);
+		}
+
 		// SPACE: hit pitch
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			currentBaseballInstance.GetComponent<BaseballView>().HitBaseball ();
@@ -49,7 +60,7 @@ public class AppController : BaseballElement {
 		}
 	}
 
-	public void UpdateCount (string pitchOutcome) {
+	public void IncrementCount (string pitchOutcome) {
 		switch(pitchOutcome) {
 		case "ball":
 			if (app.model.currentGame.currentInning.currentAtBat.balls == 3) {
@@ -58,11 +69,15 @@ public class AppController : BaseballElement {
 			app.model.currentGame.currentInning.currentAtBat.balls++;
 			break;
 		case "strike":
+			Debug.Log ("strike!");
+
 			if (app.model.currentGame.currentInning.currentAtBat.strikes == 2) {
 				ResetCount ();
-				UpdateOuts ();
+				IncrementOuts ();
 			}
 			app.model.currentGame.currentInning.currentAtBat.strikes++;
+			app.views.strike1Dot.GetComponent<UIDotView> ().changeColor (app.views.strike1Dot.GetComponent<UIDotView> ().strikeDotColor);
+
 			break;
 		case "foul":
 			if (app.model.currentGame.currentInning.currentAtBat.strikes < 2) {
@@ -84,7 +99,7 @@ public class AppController : BaseballElement {
 		UpdateScoreboard ();
 	}
 
-	void UpdateOuts () {
+	void IncrementOuts () {
 		if (app.model.currentGame.currentInning.outs == 2) {
 			app.model.currentGame.currentInning.outs = 0;
 
@@ -96,7 +111,7 @@ public class AppController : BaseballElement {
 			}
 
 		} else {
-			app.model.currentGame.currentInning.outs++;		
+			app.model.currentGame.currentInning.outs++;
 		}
 
 		UpdateScoreboard ();
@@ -109,8 +124,5 @@ public class AppController : BaseballElement {
 		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
 		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
 		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
-
-		// BSO dots
-
 	}
 }

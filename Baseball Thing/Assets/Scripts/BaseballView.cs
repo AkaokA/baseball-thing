@@ -7,8 +7,6 @@ public class BaseballView : BaseballElement {
 	public float hitForce;
 	public Vector3 hitDirection = new Vector3(0f,0f,0f);
 
-	private Vector3 pitchDirection = new Vector3(0f,0f,0f);
-	private float distanceToTarget;
 	private float pitchSpeed;
 
 	const float gravityConstant = -9.81f;
@@ -20,16 +18,19 @@ public class BaseballView : BaseballElement {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		// kill ball if it goes too far foul
+		if (transform.position.x < -10f || transform.position.z < -10f) {
+			Destroy (gameObject);
+		}
 	}
 
 	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound
 		transform.position = new Vector3(5f, 0.75f, 5f);
 
-		pitchDirection = target.position - transform.position; // get target direction 
+		Vector3 pitchDirection = target.position - transform.position; // get target direction 
 		pitchDirection.y = 0; // retain only the horizontal direction
-		distanceToTarget = pitchDirection.magnitude; // get horizontal distance
+		float distanceToTarget = pitchDirection.magnitude; // get horizontal distance
 		pitchDirection = pitchDirection.normalized;
 
 		// find angle using trajectory formula
@@ -55,9 +56,42 @@ public class BaseballView : BaseballElement {
 
 		hitForce = Random.Range (hitForceMin, hitForceMax);
 
-		GetComponent<Rigidbody> ().velocity = new Vector3(1,0,1);
+		GetComponent<Rigidbody> ().velocity = new Vector3(0,0,0);
+		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().AddForce( hitDirection * hitForce);
 	}
+
+	public void ThrowBaseballAt(Transform target) {
+		float throwHeight = 10;
+		float throwSpeed = Mathf.Sqrt (2 * throwHeight * Physics.gravity.magnitude);
+
+		Vector3 throwDirection = target.position - transform.position; // get target direction 
+		throwDirection.y = 0; // retain only the horizontal direction
+
+		float distanceToTarget = throwDirection.magnitude; // get horizontal distance
+		throwDirection = throwDirection.normalized;
+
+		// find angle using trajectory formula
+		float pitchAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (throwSpeed, 2) ) / 2;
+
+		// add randomness according to accuracy
+		float randomness = 0.25f;
+		float accuracy = 1; //TODO: vary accuracy with throw speed
+		throwDirection.x += Random.Range (-randomness, randomness) * (1 - accuracy);
+		throwDirection.y += Random.Range (-randomness, randomness) * (1 - accuracy);
+
+		// set vertical angle
+		throwDirection = throwDirection.normalized;
+		throwDirection.y = Mathf.Tan (pitchAngle);
+
+		GetComponent<Rigidbody> ().WakeUp();
+		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
+	}
+
+
+//	public Vector3 BaseballLandingPoint () {
+//		
+//	}
 
 //	public void PitchBaseballWithAngle(Transform target, float pitchAngle) {
 //		// move to location of pitcher's mound
