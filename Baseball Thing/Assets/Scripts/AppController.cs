@@ -56,58 +56,26 @@ public class AppController : BaseballElement {
 	public void IncrementCount (string pitchOutcome) {
 		switch(pitchOutcome) {
 		case "ball":
-			if (app.model.currentGame.currentInning.currentAtBat.balls == 3) {
-				ResetCount ();
-			}
-			app.model.currentGame.currentInning.currentAtBat.balls++;
+			IncrementBalls ();
 			break;
 		case "strike":
-			Debug.Log ("strike!");
-
-			if (app.model.currentGame.currentInning.currentAtBat.strikes == 2) {
-				ResetCount ();
-				IncrementOuts ();
-			}
-			app.model.currentGame.currentInning.currentAtBat.strikes++;
-			app.views.strike1Dot.GetComponent<UIDotView> ().changeColor (app.views.strike1Dot.GetComponent<UIDotView> ().strikeDotColor);
-
+			IncrementStrikes ();
 			break;
 		case "foul":
+			Debug.Log ("foul!");
 			if (app.model.currentGame.currentInning.currentAtBat.strikes < 2) {
-				app.model.currentGame.currentInning.currentAtBat.strikes++;				
+				IncrementStrikes ();				
 			}
 			break;
 		case "in play":
-			ResetCount ();
+			Debug.Log ("in play!");
 			break;
 		}
-
-		UpdateScoreboard ();
 	}
 		
 	void ResetCount () {
 		app.model.currentGame.currentInning.currentAtBat.balls = 0;
 		app.model.currentGame.currentInning.currentAtBat.strikes = 0;
-
-		UpdateScoreboard ();
-	}
-
-	void IncrementOuts () {
-		if (app.model.currentGame.currentInning.outs == 2) {
-			app.model.currentGame.currentInning.outs = 0;
-
-			if (app.model.currentGame.currentInning.half == "top") {
-				app.model.currentGame.currentInning.half = "bottom";
-			} else {
-				app.model.currentGame.currentInning.half = "top";
-				app.model.currentGame.currentInning = new Inning (app.model.currentGame.currentInning.inningNumber++);
-			}
-
-		} else {
-			app.model.currentGame.currentInning.outs++;
-		}
-
-		UpdateScoreboard ();
 	}
 
 	public void UpdateScoreboard () {
@@ -116,6 +84,102 @@ public class AppController : BaseballElement {
 		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeTeam.teamName.ToUpper ();
 		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
 		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
+		UpdateInningLabel ();
+	}
+
+	public void UpdateInningLabel () {
 		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
+	}
+
+	public void IncrementBalls () {
+		UIDotView ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
+		UIDotView ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
+		UIDotView ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
+
+		switch(app.model.currentGame.currentInning.currentAtBat.balls) {
+		case 0:
+			Debug.Log ("ball 1!");
+			app.model.currentGame.currentInning.currentAtBat.balls++;
+			ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.ballDotColor));
+			break;
+		case 1:
+			Debug.Log ("ball 2!");
+			app.model.currentGame.currentInning.currentAtBat.balls++;
+			ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.ballDotColor));
+			break;
+		case 2:
+			Debug.Log ("ball 3!");
+			app.model.currentGame.currentInning.currentAtBat.balls++;
+			ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.ballDotColor));
+			break;
+		case 3:
+			Debug.Log ("walk!");
+			ResetCount ();
+			ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.disabledColor));
+			ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.disabledColor));
+			ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.disabledColor));
+			break;
+		}
+	}
+
+	public void IncrementStrikes () {
+		UIDotView strike1Dot = app.views.strike1Dot.GetComponent<UIDotView> ();
+		UIDotView strike2Dot = app.views.strike2Dot.GetComponent<UIDotView> ();
+
+		switch(app.model.currentGame.currentInning.currentAtBat.strikes) {
+		case 0:
+			Debug.Log ("strike 1!");
+			app.model.currentGame.currentInning.currentAtBat.strikes++;
+			strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.strikeDotColor));
+			break;
+		case 1:
+			Debug.Log ("strike 2!");
+			app.model.currentGame.currentInning.currentAtBat.strikes++;
+			strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.strikeDotColor));
+			break;
+		case 2:
+			Debug.Log ("strikeout!");
+			ResetCount ();
+			strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.disabledColor));
+			strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.disabledColor));
+
+			IncrementOuts ();
+			break;
+		}
+	}
+
+	public void IncrementOuts () {
+		UIDotView out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
+		UIDotView out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
+
+		switch(app.model.currentGame.currentInning.outs) {
+		case 0:
+			Debug.Log ("1 out!");
+			app.model.currentGame.currentInning.outs++;
+			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.outDotColor));
+			break;
+		case 1:
+			Debug.Log ("2 outs!");
+			app.model.currentGame.currentInning.outs++;
+			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.outDotColor));
+			break;
+		case 2:
+			Debug.Log ("CHANGE!");
+			ResetCount ();
+			app.model.currentGame.currentInning.outs = 0;
+			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
+			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
+
+			if (app.model.currentGame.currentInning.half == "top") {
+				app.model.currentGame.currentInning.half = "bot";
+			} else {
+				app.model.currentGame.currentInning.half = "top";
+				app.model.currentGame.currentInning.inningNumber++;
+			}
+
+			UpdateInningLabel ();
+
+			break;
+		}
 	}
 }

@@ -7,7 +7,7 @@ public class LandingPointView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		DrawLandingPoint ();
+
 	}
 
 	// Update is called once per frame
@@ -15,9 +15,4 @@ public class LandingPointView : BaseballElement {
 	
 	}
 
-	void DrawLandingPoint () {
-
-
-
-	}
 }

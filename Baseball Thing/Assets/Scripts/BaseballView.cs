@@ -88,7 +88,6 @@ public class BaseballView : BaseballElement {
 		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
 	}
 
-
 //	public Vector3 SetLandingPoint () {
 //		GameObject landingPointView = app.views.baseballLandingPoint;
 //		Vector3 landingPoint = new Vector3 (0, 0, 0);

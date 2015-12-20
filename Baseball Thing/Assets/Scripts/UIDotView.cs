@@ -19,14 +19,13 @@ public class UIDotView : MonoBehaviour {
 	}
 
 	public IEnumerator changeColor (Color color) {
-		float time = 1.0f;
+		float time = 0.5f;
 		float currentLerpTime;
 
 		Color initialColor = GetComponent<UnityEngine.UI.RawImage> ().color;
 		Color currentColor;
 
 		for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
-
 			float perc = currentLerpTime / time;
 			currentColor = Color.Lerp (initialColor, color, perc);
 
