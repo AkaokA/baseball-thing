@@ -9,6 +9,7 @@ public class AppViews : BaseballElement {
 	public GameObject firstBase;
 	public GameObject secondBase;
 	public GameObject thirdBase;
+	public GameObject homePlate;
 
 	public GameObject strikeZone;
 	public GameObject pitchRegister;

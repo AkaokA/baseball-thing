@@ -65,6 +65,9 @@ public class BaseballView : BaseballElement {
 	}
 
 	public void ThrowBaseballAt(Transform target) {
+		// Hide height indicator
+		app.controller.currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (false);
+
 		// put the ball back near the ground
 		Vector3 tempPosition = transform.position;
 		tempPosition.y = 1.0f;
@@ -88,7 +91,7 @@ public class BaseballView : BaseballElement {
 
 		if (float.IsNaN (throwAngle)) {
 			throwSpeed = 10;
-			throwDirection.y = 1;
+			throwDirection.y = Mathf.Sin (45 * Mathf.Deg2Rad);
 		} else {
 			throwDirection.y = Mathf.Tan (throwAngle);
 		}

@@ -72,6 +72,9 @@ public class AppController : BaseballElement {
 			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
 				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform);
 			}
+			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform);
+			}
 		}
 	}
 

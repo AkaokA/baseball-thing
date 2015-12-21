@@ -14,7 +14,7 @@ public class PitchRegisterView : BaseballElement {
 	}
 
 	void OnTriggerEnter (Collider otherCollider) {
-		if (otherCollider.tag == "Baseball") {
+		if (otherCollider.tag == "Baseball" && app.model.currentGame.currentInning.ballIsInPlay == false) {
 			app.controller.RegisterPitch ();
 		}
 	}
