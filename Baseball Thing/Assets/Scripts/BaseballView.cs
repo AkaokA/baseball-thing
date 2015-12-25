@@ -115,24 +115,4 @@ public class BaseballView : BaseballElement {
 //		landingPointView.SetActive (true);
 //	}
 
-//	public void PitchBaseballWithAngle(Transform target, float pitchAngle) {
-//		// move to location of pitcher's mound
-//		transform.position = new Vector3(5f, 1f, 5f);
-//
-//		pitchDirection = target.position - transform.position; // get target direction 
-//		heightDifference = pitchDirection.y; // get height difference
-//		pitchDirection.y = 0; // retain only the horizontal direction
-//		distanceToTarget = pitchDirection.magnitude; // get horizontal distance
-//
-//		float pitchAngleRad = pitchAngle * Mathf.Deg2Rad; // convert angle to radians 
-//
-//		pitchDirection.y = distanceToTarget * Mathf.Tan (pitchAngleRad);
-//		distanceToTarget += heightDifference / Mathf.Tan (pitchAngleRad);
-//
-//		pitchSpeed = Mathf.Sqrt (distanceToTarget * Physics.gravity.magnitude / Mathf.Sin (2 * pitchAngleRad));
-//		Debug.Log (pitchSpeed);
-//
-//		GetComponent<Rigidbody>().velocity = pitchSpeed * pitchDirection.normalized;
-//	}
-
 }

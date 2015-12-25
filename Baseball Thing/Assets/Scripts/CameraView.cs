@@ -20,7 +20,32 @@ public class CameraView : BaseballElement {
 	void Start () {
 		
 	}
-	
+
+	public void ChangeCameraState (string state, float time) {
+		smoothTime = time;
+
+		switch(state) {
+		case "overhead":
+			finalCameraSize = 16f;
+			finalCameraHeight = 2.5f;
+			finalCameraDiagPosition = 8f;
+			finalCameraAngle = 90f;
+			break;
+		case "infield":
+			finalCameraSize = 7f;
+			finalCameraHeight = 6f;
+			finalCameraDiagPosition = 0f;
+			finalCameraAngle = 30f;
+			break;
+		case "outfield":
+			finalCameraSize = 13f;
+			finalCameraHeight = 13f;
+			finalCameraDiagPosition = 0f;
+			finalCameraAngle = 30f;
+			break;
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
 
@@ -44,30 +69,5 @@ public class CameraView : BaseballElement {
 		tempEulerAngles.x = cameraAngle;
 		tempRotation.eulerAngles = tempEulerAngles;
 		transform.rotation = tempRotation;
-	}
-
-	public void MoveCamera (string state, float time) {
-		smoothTime = time;
-
-		switch(state) {
-		case "overhead":
-			finalCameraSize = 16f;
-			finalCameraHeight = 2.5f;
-			finalCameraDiagPosition = 8f;
-			finalCameraAngle = 90f;
-			break;
-		case "infield":
-			finalCameraSize = 7f;
-			finalCameraHeight = 6f;
-			finalCameraDiagPosition = 0f;
-			finalCameraAngle = 30f;
-			break;
-		case "outfield":
-			finalCameraSize = 13f;
-			finalCameraHeight = 13f;
-			finalCameraDiagPosition = 0f;
-			finalCameraAngle = 30f;
-			break;
-		}
 	}
 }
