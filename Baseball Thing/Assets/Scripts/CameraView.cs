@@ -3,39 +3,51 @@ using System.Collections;
 
 public class CameraView : BaseballElement {
 
-	public AnimationCurve cameraCurve;
+//	public AnimationCurve cameraCurve;
 
-	private float initialSize;
-	private float initialHeight;
-	private float initialDiagPosition;
-	private float initialAngle;
+	public float finalCameraSize = 0f;
+	public float finalCameraHeight = 0f;
+	public float finalCameraDiagPosition = 0f;
+	public float finalCameraAngle = 0f;
 
-	private bool allowCameraMovement = true;
+	private float sizeVelocity = 0.0f;
+	private Vector3 transformVelocity = new Vector3 (0,0,0);
+	private float angleVelocity = 0.0f;
+
+	public float smoothTime = 0f;
 
 	// Use this for initialization
 	void Start () {
-		initialSize = GetComponent<Camera> ().orthographicSize;
-		initialHeight = transform.position.y;
-		initialDiagPosition = transform.position.x;
-		initialAngle = transform.rotation.eulerAngles.x;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+		float cameraSize = GetComponent<Camera> ().orthographicSize;
+		float cameraAngle = transform.rotation.eulerAngles.x;
+
+		// set position
+		Vector3 targetPosition = new Vector3(finalCameraDiagPosition, finalCameraHeight, finalCameraDiagPosition);
+		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime);
+
+		// change size/angle values with smoothDamp
+		cameraSize = Mathf.SmoothDamp(cameraSize, finalCameraSize, ref sizeVelocity, smoothTime);
+		cameraAngle = Mathf.SmoothDamp(cameraAngle, finalCameraAngle, ref angleVelocity, smoothTime);
+
+		// set size
+		GetComponent<Camera>().orthographicSize = cameraSize;
+
+		// set angle
+		Quaternion tempRotation = transform.rotation;
+		Vector3 tempEulerAngles = tempRotation.eulerAngles;
+		tempEulerAngles.x = cameraAngle;
+		tempRotation.eulerAngles = tempEulerAngles;
+		transform.rotation = tempRotation;
 	}
 
 	public void MoveCamera (string state, float time) {
-
-		initialSize = GetComponent<Camera> ().orthographicSize;
-		initialHeight = transform.position.y;
-		initialDiagPosition = transform.position.x;
-		initialAngle = transform.rotation.eulerAngles.x;
-
-		float finalCameraSize = 0f;
-		float finalCameraHeight = 0f;
-		float finalCameraDiagPosition = 0f;
-		float finalCameraAngle = 0f;
+		smoothTime = time;
 
 		switch(state) {
 		case "overhead":
@@ -57,48 +69,5 @@ public class CameraView : BaseballElement {
 			finalCameraAngle = 30f;
 			break;
 		}
-
-		if (allowCameraMovement) {
-			StartCoroutine (SwitchCameraState (finalCameraSize, finalCameraHeight, finalCameraDiagPosition, finalCameraAngle, time));
-		}
-
-	}
-
-	IEnumerator SwitchCameraState (float finalCameraSize, float finalCameraHeight, float finalCameraDiagPosition, float finalCameraAngle, float time) {
-		allowCameraMovement = false;
-//		Debug.Log (allowCameraMovement);
-
-		for ( float currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
-
-			float perc = currentLerpTime / time;
-			float cameraSize;
-			float cameraHeight;
-			float cameraDiagPosition;
-			float cameraAngle;
-
-			cameraSize = Mathf.LerpUnclamped(initialSize, finalCameraSize, cameraCurve.Evaluate (perc));
-			cameraHeight = Mathf.LerpUnclamped(initialHeight, finalCameraHeight, cameraCurve.Evaluate (perc));
-			cameraDiagPosition = Mathf.LerpUnclamped(initialDiagPosition, finalCameraDiagPosition, cameraCurve.Evaluate (perc));
-			cameraAngle = Mathf.LerpUnclamped(initialAngle, finalCameraAngle, cameraCurve.Evaluate (perc));
-
-			GetComponent<Camera>().orthographicSize = cameraSize;
-
-			Vector3 tempPosition = transform.position;
-			tempPosition.x = cameraDiagPosition;
-			tempPosition.y = cameraHeight;
-			tempPosition.z = cameraDiagPosition;
-			transform.position = tempPosition;
-
-			Quaternion tempRotation = transform.rotation;
-			Vector3 tempEulerAngles = tempRotation.eulerAngles;
-			tempEulerAngles.x = cameraAngle;
-			tempRotation.eulerAngles = tempEulerAngles;
-			transform.rotation = tempRotation;
-
-			yield return null;
-		}
-
-		allowCameraMovement = true;
-//		Debug.Log (allowCameraMovement);
 	}
 }

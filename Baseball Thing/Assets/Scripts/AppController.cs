@@ -35,7 +35,7 @@ public class AppController : BaseballElement {
 		UpdateScoreboard ();
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().MoveCamera ("infield", 3f);
+		app.views.mainCamera.GetComponent<CameraView>().MoveCamera ("infield", 1.5f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 	
@@ -45,7 +45,6 @@ public class AppController : BaseballElement {
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
 			if (app.model.currentGame.currentInning.ballIsInPlay == false) {
-				app.views.infieldCameraTrigger.SetActive (false); // prevent the baseball instance from triggering the camera
 				currentBaseballInstance = Instantiate (Baseball);
 
 				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
