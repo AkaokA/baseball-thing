@@ -39,7 +39,7 @@ public class CameraView : BaseballElement {
 			break;
 		case "outfield":
 			finalCameraSize = 13f;
-			finalCameraHeight = 13f;
+			finalCameraHeight = 12f;
 			finalCameraDiagPosition = 0f;
 			finalCameraAngle = 30f;
 			break;
