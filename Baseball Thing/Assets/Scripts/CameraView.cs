@@ -48,7 +48,6 @@ public class CameraView : BaseballElement {
 
 	// Update is called once per frame
 	void Update () {
-
 		float cameraSize = GetComponent<Camera> ().orthographicSize;
 		float cameraAngle = transform.rotation.eulerAngles.x;
 
