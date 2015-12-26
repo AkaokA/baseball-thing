@@ -22,6 +22,7 @@ public class BaseballView : BaseballElement {
 		// kill ball if it goes too far foul
 		if (transform.position.x < -10f || transform.position.z < -10f || transform.position.x > 40f || transform.position.z > 40f) {
 			Destroy (gameObject);
+			app.model.currentGame.currentInning.ballIsInPlay = false;
 		}
 	}
 

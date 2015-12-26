@@ -5,10 +5,10 @@ public class CameraView : BaseballElement {
 
 //	public AnimationCurve cameraCurve;
 
-	public float finalCameraSize = 0f;
-	public float finalCameraHeight = 0f;
-	public float finalCameraDiagPosition = 0f;
-	public float finalCameraAngle = 0f;
+	public float targetCameraSize = 0f;
+	public float targetCameraHeight = 0f;
+	public float targetCameraDiagPosition = 0f;
+	public float targetCameraAngle = 0f;
 
 	private float sizeVelocity = 0.0f;
 	private Vector3 transformVelocity = new Vector3 (0,0,0);
@@ -26,22 +26,22 @@ public class CameraView : BaseballElement {
 
 		switch(state) {
 		case "overhead":
-			finalCameraSize = 45f;
-			finalCameraHeight = 15f;
-			finalCameraDiagPosition = 15f;
-			finalCameraAngle = 90f;
+			targetCameraSize = 45f;
+			targetCameraHeight = 15f;
+			targetCameraDiagPosition = 15f;
+			targetCameraAngle = 90f;
 			break;
 		case "infield":
-			finalCameraSize = 7f;
-			finalCameraHeight = 6f;
-			finalCameraDiagPosition = 0f;
-			finalCameraAngle = 30f;
+			targetCameraSize = 7f;
+			targetCameraHeight = 6f;
+			targetCameraDiagPosition = 0f;
+			targetCameraAngle = 30f;
 			break;
 		case "outfield":
-			finalCameraSize = 13f;
-			finalCameraHeight = 12f;
-			finalCameraDiagPosition = 0f;
-			finalCameraAngle = 30f;
+			targetCameraSize = 13f;
+			targetCameraHeight = 12f;
+			targetCameraDiagPosition = 0f;
+			targetCameraAngle = 30f;
 			break;
 		}
 	}
@@ -52,12 +52,12 @@ public class CameraView : BaseballElement {
 		float cameraAngle = transform.rotation.eulerAngles.x;
 
 		// set position
-		Vector3 targetPosition = new Vector3(finalCameraDiagPosition, finalCameraHeight, finalCameraDiagPosition);
+		Vector3 targetPosition = new Vector3(targetCameraDiagPosition, targetCameraHeight, targetCameraDiagPosition);
 		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime);
 
 		// change size/angle values with smoothDamp
-		cameraSize = Mathf.SmoothDamp(cameraSize, finalCameraSize, ref sizeVelocity, smoothTime);
-		cameraAngle = Mathf.SmoothDamp(cameraAngle, finalCameraAngle, ref angleVelocity, smoothTime);
+		cameraSize = Mathf.SmoothDamp(cameraSize, targetCameraSize, ref sizeVelocity, smoothTime);
+		cameraAngle = Mathf.SmoothDamp(cameraAngle, targetCameraAngle, ref angleVelocity, smoothTime);
 
 		// set size
 		GetComponent<Camera>().orthographicSize = cameraSize;
