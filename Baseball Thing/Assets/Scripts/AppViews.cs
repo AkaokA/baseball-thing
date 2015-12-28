@@ -11,6 +11,8 @@ public class AppViews : BaseballElement {
 	public GameObject thirdBase;
 	public GameObject homePlate;
 
+	public GameObject fielder;
+
 	public GameObject strikeZone;
 	public GameObject pitchRegister;
 	public GameObject baseballLandingPoint;

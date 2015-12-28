@@ -20,9 +20,10 @@ public class InfieldCameraTriggerView : BaseballElement {
 	}
 
 	void OnTriggerEnter (Collider otherCollider) {
-		if (triggerIsActive) {
-			app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 0.5f);
+		if (otherCollider.tag == "Baseball") {
+			if (triggerIsActive) {
+				app.views.mainCamera.GetComponent<CameraView> ().ChangeCameraState ("infield", 0.5f);
+			}
 		}
-
 	}
 }

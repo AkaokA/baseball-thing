@@ -34,6 +34,21 @@ public class AppController : BaseballElement {
 		// draw scoreboard
 		UpdateScoreboard ();
 
+		// generate fielders
+		for (int position = 1; position <= 9; position++) {
+			Player playerInstance = new Player (position);
+			GameObject fielderInstance = Instantiate (app.views.fielder);
+
+			// put fielders in the dugout
+			Vector3 randomizedStartPosition = app.model.homeDugoutPosition;
+			randomizedStartPosition.x += Random.Range (-8, 0);
+			randomizedStartPosition.z += Random.Range (-4, 4);
+			fielderInstance.transform.position = randomizedStartPosition;
+
+			// run them out to their positions
+			fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (playerInstance.idleLocation);
+		}
+
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
