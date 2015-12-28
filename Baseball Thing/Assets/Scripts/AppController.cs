@@ -123,7 +123,19 @@ public class AppController : BaseballElement {
 			if (Input.GetKeyDown (KeyCode.DownArrow)) {
 				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform);
 			}
+
+			// ESC: reset gamestate
+			if (Input.GetKeyDown (KeyCode.Escape)) {
+				ResetPlay ();
+			}
 		}
+	}
+
+	public void ResetPlay () {
+		Destroy (currentBaseballInstance);
+		currentGame.currentInning.ballIsInPlay = false;
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.baseballLandingPoint.SetActive (false);
 	}
 
 	public void RegisterPitch () {
