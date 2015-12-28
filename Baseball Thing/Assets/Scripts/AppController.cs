@@ -40,7 +40,6 @@ public class AppController : BaseballElement {
 			player.fielderInstance.transform.position = randomizedStartPosition;
 
 			player.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (player.idleLocation);
-
 		}
 
 		// init variables
@@ -67,14 +66,19 @@ public class AppController : BaseballElement {
 		foreach (Player fielder in currentGame.homeTeam.players) {
 			// while the ball is in play
 			if (app.controller.currentGame.currentInning.ballIsInPlay) {
-				// follow ball lol
+
 				Vector3 ballGroundPosition = app.controller.currentBaseballInstance.transform.position;
 				ballGroundPosition.y = 0;
-
+				
 				Vector3 distanceToBall = ballGroundPosition - fielder.fielderInstance.transform.position;
-
 				if (distanceToBall.magnitude < 4f) {
-					fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (ballGroundPosition);
+					// follow ball lol
+					Vector3 targetPosition = ballGroundPosition + (currentBaseballInstance.GetComponent<Rigidbody> ().velocity /4);
+
+					fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (targetPosition);
+				} else {
+					// go back to idle position
+					fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (fielder.idleLocation);
 				}
 			} else {
 				// go back to idle position
