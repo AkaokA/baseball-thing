@@ -9,6 +9,8 @@ public class FielderView : BaseballElement {
 	private float maxSpeed = 8f;
 
 	public bool hasTheBall = false;
+	public bool isClosestToBall = false;
+	public bool fielderCanMove = true;
 
 	// Use this for initialization
 	void Start () {
@@ -20,9 +22,53 @@ public class FielderView : BaseballElement {
 		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);		
 	}
 
-	public void UpdateTargetPosition (Vector3 newTarget) {
+	public void MoveToward (Vector3 newTarget) {
 		newTarget.y = 0;
 		targetPosition = newTarget;
 	}
 
+	public void BeUseful(int fieldingPosition) {
+		switch (fieldingPosition) {
+		case 1:
+			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			break;
+		case 2:
+			MoveToward (app.views.homePlate.transform.position);
+			break;
+		case 3:
+			MoveToward (app.views.firstBase.transform.position);
+			break;
+		case 4:
+			MoveToward (app.views.secondBase.transform.position);
+			break;
+		case 5:
+			MoveToward (app.views.thirdBase.transform.position);
+			break;
+		case 6:
+			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			break;
+		case 7:
+			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			break;
+		case 8:
+			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			break;
+		case 9:
+			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			break;
+		}
+	}
+
+	void OnTriggerEnter (Collider collider) {
+		if (collider.tag == "Baseball" && !hasTheBall) {
+			hasTheBall = true;
+		}
+	}
+
+
+	void OnTriggerExit (Collider collider) {
+		if (collider.tag == "Baseball") {
+			hasTheBall = false;
+		}
+	}
 }

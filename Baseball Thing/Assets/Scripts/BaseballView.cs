@@ -13,6 +13,7 @@ public class BaseballView : BaseballElement {
 
 	private float pitchSpeed;
 
+	public bool ballIsRolling = false;
 
 	// Use this for initialization
 	void Start () {
@@ -68,22 +69,17 @@ public class BaseballView : BaseballElement {
 		StartCoroutine (SetLandingPoint ());
 	}
 
-	public void ThrowBaseballAt(Transform target) {
+	public void ThrowBaseballAt(Transform target, float throwSpeed) {
 		// Hide height indicator
 		app.controller.currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (false);
 
 		// put the ball back near the ground
 		Vector3 tempPosition = transform.position;
-		tempPosition.y = 1.0f;
+		tempPosition.y = 0.5f;
 		transform.position = tempPosition;
-
-		// This seems wrong...
-		float throwHeight = 2f;
-		float throwSpeed = Mathf.Sqrt (2 * throwHeight * Physics.gravity.magnitude);
 
 		Vector3 throwDirection = target.position - transform.position; // get target direction 
 		throwDirection.y = 0; // retain only the horizontal direction
-
 		float distanceToTarget = throwDirection.magnitude; // get horizontal distance
 		throwDirection = throwDirection.normalized;
 
@@ -91,42 +87,42 @@ public class BaseballView : BaseballElement {
 		float throwAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (throwSpeed, 2) ) / 2;
 
 		// set vertical angle
-		throwDirection = throwDirection.normalized;
-
 		if (float.IsNaN (throwAngle)) {
-			throwSpeed = 10;
 			throwDirection.y = Mathf.Sin (45 * Mathf.Deg2Rad);
 		} else {
 			throwDirection.y = Mathf.Sin (throwAngle);
 		}
-
+			
 		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
 	}
 
-	void OnCollisionStay () {
+	void OnCollisionStay (Collision collision) {
+		// get rid of the landing point indicator if the ball is rolling
 		landingPointView.SetActive (false);
+		ballIsRolling = true;
 	}
 
 	void OnCollisionExit (Collision collision) {
 		if (app.controller.currentGame.currentInning.ballIsInPlay) {
 			StartCoroutine (SetLandingPoint ());
+			ballIsRolling = false;
 		}
 	}
 
 	public IEnumerator SetLandingPoint () {
-		yield return 0;
+		yield return 0; // wait one frame so we can get the ball's velocity
 
 		Vector3 landingPoint = new Vector3 (0, 0, 0);
 		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
 		Vector3 unitVelocity = velocity.normalized;
 
-		float angle;
+		float angle = Mathf.Asin (unitVelocity.y);
+		float deltaHeight = transform.position.y;
 		float distance;
 
-		angle = Mathf.Asin (unitVelocity.y); // lol I guess?
-
-		distance = (velocity.sqrMagnitude * Mathf.Sin (2 * angle)) / Physics.gravity.magnitude;
+//		distance = (velocity.sqrMagnitude * Mathf.Sin (2 * angle)) / Physics.gravity.magnitude; // simplified for equal height
+		distance = (velocity.magnitude * Mathf.Cos (angle) / Physics.gravity.magnitude) * ((velocity.magnitude * Mathf.Sin (angle)) + Mathf.Sqrt ( Mathf.Pow (velocity.magnitude * Mathf.Sin (angle), 2f) + (2f * Physics.gravity.magnitude * deltaHeight) ));
 
 		unitVelocity.y = 0;
 		landingPoint = app.controller.currentBaseballInstance.transform.position + (unitVelocity * distance);

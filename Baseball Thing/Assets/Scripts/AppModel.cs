@@ -47,9 +47,6 @@ public class Player {
 		runningSpeed = 6f;
 
 		switch (fieldingPosition) {
-		case 0: // dummy player (DH?)
-			idleLocation = new Vector3 (0f, 0f, 0f);
-			break;
 		case 1: // pitcher
 			idleLocation = new Vector3 (5f, 0f, 5f);
 			break;

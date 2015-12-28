@@ -5,6 +5,7 @@ public class AppController : BaseballElement {
 
 	public BallGame currentGame;
 	public Inning currentInning;
+	public Team fieldingTeam;
 
 	public GameObject Baseball;
 	public GameObject currentBaseballInstance;
@@ -12,6 +13,7 @@ public class AppController : BaseballElement {
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
 	public float pitchAccuracy = 0.5f;
+	public float throwSpeed = 15f;
 
 	private Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
 	private Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
@@ -39,8 +41,10 @@ public class AppController : BaseballElement {
 			randomizedStartPosition.z += Random.Range (-3, 3);
 			player.fielderInstance.transform.position = randomizedStartPosition;
 
-			player.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (player.idleLocation);
+			player.fielderInstance.GetComponent<FielderView> ().MoveToward (player.idleLocation);
 		}
+
+		fieldingTeam = app.controller.currentGame.homeTeam;
 
 		// init variables
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
@@ -68,27 +72,31 @@ public class AppController : BaseballElement {
 
 			// while the ball is in play
 			if (app.controller.currentGame.currentInning.ballIsInPlay) {
-				Vector3 ballPosition = app.controller.currentBaseballInstance.transform.position;
+				Vector3 landingPoint = app.views.baseballLandingPoint.transform.position;
+				Vector3 ballPosition = currentBaseballInstance.transform.position;
 				Vector3 distanceToBall = ballPosition - fielder.fielderInstance.transform.position;
+				distanceToBall.y = 0; // use only horizontal distance
+				Vector3 distanceFromIdlePosition = fielder.idleLocation - fielder.fielderInstance.transform.position;
 
 				if (fielderView.hasTheBall ) {
-					Debug.Log (fielder.fieldingPosition);
-					currentBaseballInstance.GetComponent<Rigidbody> ().velocity = new Vector3(0,0,0);
-					fielderView.UpdateTargetPosition (ballPosition);
+//					currentBaseballInstance.GetComponent<Rigidbody> ().velocity *= 0.5f;
+					fielderView.MoveToward (ballPosition);
 				} else {
-					if (distanceToBall.magnitude < 4f) {
-						// follow ball lol
-						Vector3 targetPosition = ballPosition + (currentBaseballInstance.GetComponent<Rigidbody> ().velocity /4);
-
-						fielderView.UpdateTargetPosition (targetPosition);
+					if (distanceToBall.magnitude < 5f && distanceFromIdlePosition.magnitude < 10f) {
+						if (currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
+							fielderView.MoveToward (ballPosition);
+						} else {
+							// go to where the ball will be
+							fielderView.MoveToward (landingPoint);
+						}
 					} else {
-						// go back to idle position
-						fielderView.UpdateTargetPosition (fielder.idleLocation);
+						// go back to a useful position
+						fielderView.BeUseful (fielder.fieldingPosition);
 					}
 				}
 			} else {
 				// go back to idle position
-				fielderView.UpdateTargetPosition (fielder.idleLocation);
+				fielderView.MoveToward (fielder.idleLocation);
 			}
 		}
 			
@@ -112,16 +120,16 @@ public class AppController : BaseballElement {
 
 			// ARROW KEYS: Throw to base
 			if (Input.GetKeyDown (KeyCode.RightArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform);
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform, throwSpeed);
 			}
 			if (Input.GetKeyDown (KeyCode.UpArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform);
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform, throwSpeed);
 			}
 			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform);
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform, throwSpeed);
 			}
 			if (Input.GetKeyDown (KeyCode.DownArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform);
+				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform, throwSpeed);
 			}
 
 			// ESC: reset gamestate (for ease of testing)
@@ -136,6 +144,7 @@ public class AppController : BaseballElement {
 		currentGame.currentInning.ballIsInPlay = false;
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
+		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
 	}
 
 	public void RegisterPitch () {
@@ -266,8 +275,10 @@ public class AppController : BaseballElement {
 
 			if (currentGame.currentInning.half == "top") {
 				currentGame.currentInning.half = "bot";
+				fieldingTeam = app.controller.currentGame.awayTeam;
 			} else {
 				currentGame.currentInning.half = "top";
+				fieldingTeam = app.controller.currentGame.homeTeam;
 				currentGame.currentInning.inningNumber++;
 			}
 
