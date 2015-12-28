@@ -3,10 +3,7 @@ using System.Collections;
 
 // Contains all data related to the app.
 public class AppModel : BaseballElement {
-	public BallGame currentGame = new BallGame();
 
-	public Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
-	public Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
 }
 
 public class BallGame {
@@ -23,16 +20,23 @@ public class BallGame {
 public class Team {
 	public bool isHomeTeam;
 	public string teamName;
+	public Player[] players = new Player[9];
 
 	public Team (string name, bool isHome) {
 		teamName = name;
 		isHomeTeam = isHome;
-	}
 
-	public Player[] players = new Player[9];
+		// generate players
+		for (int position = 1; position <= 9; position++) {
+			Player playerInstance = new Player (position);
+			players [position-1] = playerInstance;
+		}
+	}
 }
 
 public class Player {
+	public GameObject fielderInstance;
+
 	public int fieldingPosition; // 1 through 9
 	public Vector3 idleLocation;
 
@@ -82,7 +86,7 @@ public class Inning {
 	public int outs = 0;
 	public int runsScored = 0;
 
-	public bool ballIsInPlay = false;
+	public bool ballIsInPlay;
 	public bool currentPitchIsStrike = false;
 
 	public Base firstBase;
@@ -91,6 +95,7 @@ public class Inning {
 
 	public Inning(int number) {
 		inningNumber = number;
+		ballIsInPlay = false;
 	}
 
 	public AtBat currentAtBat = new AtBat();

@@ -15,7 +15,7 @@ public class StrikeZoneView : BaseballElement {
 
 	void OnTriggerEnter (Collider otherCollider) {
 		if (otherCollider.tag == "Baseball") {
-			app.model.currentGame.currentInning.currentPitchIsStrike = true;
+			app.controller.currentGame.currentInning.currentPitchIsStrike = true;
 		}
 	}
 

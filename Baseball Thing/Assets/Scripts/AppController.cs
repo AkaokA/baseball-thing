@@ -3,6 +3,7 @@ using System.Collections;
 
 public class AppController : BaseballElement {
 
+	public BallGame currentGame;
 	public Inning currentInning;
 
 	public GameObject Baseball;
@@ -11,6 +12,9 @@ public class AppController : BaseballElement {
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
 	public float pitchAccuracy = 0.5f;
+
+	private Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
+	private Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
 
 	private UIDotView ball1Dot;
 	private UIDotView ball2Dot;
@@ -22,6 +26,23 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
+		// create teams
+		currentGame = new BallGame();
+
+		foreach (Player player in currentGame.homeTeam.players) {
+			// instantiate each fielder's gameobject
+			player.fielderInstance = Instantiate (app.views.fielder);
+
+			// put fielders in the dugout
+			Vector3 randomizedStartPosition = app.controller.homeDugoutPosition;
+			randomizedStartPosition.x += Random.Range (-8, 0);
+			randomizedStartPosition.z += Random.Range (-3, 3);
+			player.fielderInstance.transform.position = randomizedStartPosition;
+
+			player.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (player.idleLocation);
+
+		}
+
 		// init variables
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
 		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
@@ -34,21 +55,6 @@ public class AppController : BaseballElement {
 		// draw scoreboard
 		UpdateScoreboard ();
 
-		// generate fielders
-		for (int position = 1; position <= 9; position++) {
-			Player playerInstance = new Player (position);
-			GameObject fielderInstance = Instantiate (app.views.fielder);
-
-			// put fielders in the dugout
-			Vector3 randomizedStartPosition = app.model.homeDugoutPosition;
-			randomizedStartPosition.x += Random.Range (-8, 0);
-			randomizedStartPosition.z += Random.Range (-3, 3);
-			fielderInstance.transform.position = randomizedStartPosition;
-
-			// run them out to their positions
-			fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (playerInstance.idleLocation);
-		}
-
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
@@ -56,10 +62,29 @@ public class AppController : BaseballElement {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		// fielder AI
+		foreach (Player fielder in currentGame.homeTeam.players) {
+			// while the ball is in play
+			if (app.controller.currentGame.currentInning.ballIsInPlay) {
+				// follow ball lol
+				Vector3 ballGroundPosition = app.controller.currentBaseballInstance.transform.position;
+				ballGroundPosition.y = 0;
 
+				Vector3 distanceToBall = ballGroundPosition - fielder.fielderInstance.transform.position;
+
+				if (distanceToBall.magnitude < 4f) {
+					fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (ballGroundPosition);
+				}
+			} else {
+				// go back to idle position
+				fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (fielder.idleLocation);
+			}
+		}
+			
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
-			if (app.model.currentGame.currentInning.ballIsInPlay == false) {
+			if (app.controller.currentGame.currentInning.ballIsInPlay == false) {
 				currentBaseballInstance = Instantiate (Baseball);
 
 				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
@@ -93,13 +118,13 @@ public class AppController : BaseballElement {
 	}
 
 	public void RegisterPitch () {
-		if (app.model.currentGame.currentInning.currentPitchIsStrike) {
-			app.controller.PitchOutcome ("strike");
+		if (currentGame.currentInning.currentPitchIsStrike) {
+			PitchOutcome ("strike");
 		} else {
-			app.controller.PitchOutcome ("ball");				
+			PitchOutcome ("ball");				
 		}
-		Destroy (app.controller.currentBaseballInstance);
-		app.model.currentGame.currentInning.currentPitchIsStrike = false;
+		Destroy (currentBaseballInstance);
+		currentGame.currentInning.currentPitchIsStrike = false;
 	}
 
 	public void PitchOutcome (string pitchOutcome) {
@@ -112,7 +137,7 @@ public class AppController : BaseballElement {
 			break;
 		case "foul":
 			Debug.Log ("foul!");
-			if (app.model.currentGame.currentInning.currentAtBat.strikes < 2) {
+			if (currentGame.currentInning.currentAtBat.strikes < 2) {
 				IncrementStrikes ();				
 			}
 			break;
@@ -123,8 +148,8 @@ public class AppController : BaseballElement {
 	}
 		
 	void ResetCount () {
-		app.model.currentGame.currentInning.currentAtBat.balls = 0;
-		app.model.currentGame.currentInning.currentAtBat.strikes = 0;
+		currentGame.currentInning.currentAtBat.balls = 0;
+		currentGame.currentInning.currentAtBat.strikes = 0;
 	}
 
 	void ResetCountUI () {
@@ -137,33 +162,33 @@ public class AppController : BaseballElement {
 
 	public void UpdateScoreboard () {
 		// text labels
-		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayTeam.teamName.ToUpper ();
-		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeTeam.teamName.ToUpper ();
-		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.awayScore.ToString ();
-		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.homeScore.ToString ();
+		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
+		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
+		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayScore.ToString ();
+		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeScore.ToString ();
 		UpdateInningLabel ();
 	}
 
 	public void UpdateInningLabel () {
-		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = app.model.currentGame.currentInning.half.ToUpper () + " " + app.model.currentGame.currentInning.inningNumber.ToString ();
+		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
 	}
 
 	public void IncrementBalls () {
 
-		switch(app.model.currentGame.currentInning.currentAtBat.balls) {
+		switch(app.controller.currentGame.currentInning.currentAtBat.balls) {
 		case 0:
 			Debug.Log ("ball 1!");
-			app.model.currentGame.currentInning.currentAtBat.balls++;
+			currentGame.currentInning.currentAtBat.balls++;
 			ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.ballDotColor));
 			break;
 		case 1:
 			Debug.Log ("ball 2!");
-			app.model.currentGame.currentInning.currentAtBat.balls++;
+			currentGame.currentInning.currentAtBat.balls++;
 			ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.ballDotColor));
 			break;
 		case 2:
 			Debug.Log ("ball 3!");
-			app.model.currentGame.currentInning.currentAtBat.balls++;
+			currentGame.currentInning.currentAtBat.balls++;
 			ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.ballDotColor));
 			break;
 		case 3:
@@ -176,15 +201,15 @@ public class AppController : BaseballElement {
 
 	public void IncrementStrikes () {
 
-		switch(app.model.currentGame.currentInning.currentAtBat.strikes) {
+		switch(currentGame.currentInning.currentAtBat.strikes) {
 		case 0:
 			Debug.Log ("strike 1!");
-			app.model.currentGame.currentInning.currentAtBat.strikes++;
+			currentGame.currentInning.currentAtBat.strikes++;
 			strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.strikeDotColor));
 			break;
 		case 1:
 			Debug.Log ("strike 2!");
-			app.model.currentGame.currentInning.currentAtBat.strikes++;
+			currentGame.currentInning.currentAtBat.strikes++;
 			strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.strikeDotColor));
 			break;
 		case 2:
@@ -199,30 +224,30 @@ public class AppController : BaseballElement {
 
 	public void IncrementOuts () {
 
-		switch(app.model.currentGame.currentInning.outs) {
+		switch(currentGame.currentInning.outs) {
 		case 0:
 			Debug.Log ("1 out!");
-			app.model.currentGame.currentInning.outs++;
+			currentGame.currentInning.outs++;
 			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.outDotColor));
 			break;
 		case 1:
 			Debug.Log ("2 outs!");
-			app.model.currentGame.currentInning.outs++;
+			currentGame.currentInning.outs++;
 			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.outDotColor));
 			break;
 		case 2:
 			Debug.Log ("CHANGE!");
 			ResetCount ();
 			ResetCountUI ();
-			app.model.currentGame.currentInning.outs = 0;
+			currentGame.currentInning.outs = 0;
 			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
 			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
 
-			if (app.model.currentGame.currentInning.half == "top") {
-				app.model.currentGame.currentInning.half = "bot";
+			if (currentGame.currentInning.half == "top") {
+				currentGame.currentInning.half = "bot";
 			} else {
-				app.model.currentGame.currentInning.half = "top";
-				app.model.currentGame.currentInning.inningNumber++;
+				currentGame.currentInning.half = "top";
+				currentGame.currentInning.inningNumber++;
 			}
 
 			UpdateInningLabel ();

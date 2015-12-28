@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FielderView : MonoBehaviour {
+public class FielderView : BaseballElement {
 
 	public Vector3 targetPosition;
 	public float smoothTime = 0.1f;
@@ -20,6 +20,7 @@ public class FielderView : MonoBehaviour {
 	}
 
 	public void UpdateTargetPosition (Vector3 newTarget) {
+		newTarget.y = 0;
 		targetPosition = newTarget;
 	}
 

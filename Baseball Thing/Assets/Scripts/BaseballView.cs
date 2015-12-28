@@ -20,9 +20,10 @@ public class BaseballView : BaseballElement {
 	// Update is called once per frame
 	void Update () {
 		// kill ball if it goes too far foul
-		if (transform.position.x < -10f || transform.position.z < -10f || transform.position.x > 40f || transform.position.z > 40f) {
+		if (transform.position.x < -6f || transform.position.z < -6f || transform.position.x > 40f || transform.position.z > 40f) {
 			Destroy (gameObject);
-			app.model.currentGame.currentInning.ballIsInPlay = false;
+			app.controller.currentGame.currentInning.ballIsInPlay = false;
+			app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		}
 	}
 
@@ -62,7 +63,7 @@ public class BaseballView : BaseballElement {
 		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().AddForce( hitDirection * hitForce);
 
-		app.model.currentGame.currentInning.ballIsInPlay = true;
+		app.controller.currentGame.currentInning.ballIsInPlay = true;
 	}
 
 	public void ThrowBaseballAt(Transform target) {
