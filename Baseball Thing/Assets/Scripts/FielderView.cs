@@ -4,10 +4,11 @@ using System.Collections;
 public class FielderView : BaseballElement {
 
 	public Vector3 targetPosition;
-	public float smoothTime = 0.1f;
-	public float maxSpeed = 100f;
-
 	private Vector3 transformVelocity;
+	private float smoothTime = 0.25f;
+	private float maxSpeed = 8f;
+
+	public bool hasTheBall = false;
 
 	// Use this for initialization
 	void Start () {

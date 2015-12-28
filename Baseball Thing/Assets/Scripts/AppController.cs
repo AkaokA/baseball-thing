@@ -64,25 +64,31 @@ public class AppController : BaseballElement {
 		
 		// fielder AI
 		foreach (Player fielder in currentGame.homeTeam.players) {
+			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
+
 			// while the ball is in play
 			if (app.controller.currentGame.currentInning.ballIsInPlay) {
+				Vector3 ballPosition = app.controller.currentBaseballInstance.transform.position;
+				Vector3 distanceToBall = ballPosition - fielder.fielderInstance.transform.position;
 
-				Vector3 ballGroundPosition = app.controller.currentBaseballInstance.transform.position;
-				ballGroundPosition.y = 0;
-				
-				Vector3 distanceToBall = ballGroundPosition - fielder.fielderInstance.transform.position;
-				if (distanceToBall.magnitude < 4f) {
-					// follow ball lol
-					Vector3 targetPosition = ballGroundPosition + (currentBaseballInstance.GetComponent<Rigidbody> ().velocity /4);
-
-					fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (targetPosition);
+				if (fielderView.hasTheBall ) {
+					Debug.Log (fielder.fieldingPosition);
+					currentBaseballInstance.GetComponent<Rigidbody> ().velocity = new Vector3(0,0,0);
+					fielderView.UpdateTargetPosition (ballPosition);
 				} else {
-					// go back to idle position
-					fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (fielder.idleLocation);
+					if (distanceToBall.magnitude < 4f) {
+						// follow ball lol
+						Vector3 targetPosition = ballPosition + (currentBaseballInstance.GetComponent<Rigidbody> ().velocity /4);
+
+						fielderView.UpdateTargetPosition (targetPosition);
+					} else {
+						// go back to idle position
+						fielderView.UpdateTargetPosition (fielder.idleLocation);
+					}
 				}
 			} else {
 				// go back to idle position
-				fielder.fielderInstance.GetComponent<FielderView> ().UpdateTargetPosition (fielder.idleLocation);
+				fielderView.UpdateTargetPosition (fielder.idleLocation);
 			}
 		}
 			

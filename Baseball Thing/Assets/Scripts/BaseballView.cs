@@ -52,10 +52,9 @@ public class BaseballView : BaseballElement {
 	}
 
 	public void HitBaseball() {
-		hitDirection = Random.onUnitSphere;
-		hitDirection.x = Mathf.Abs(hitDirection.x);
-		hitDirection.y = Mathf.Abs(hitDirection.y);
-		hitDirection.z = Mathf.Abs(hitDirection.z);
+		hitDirection.x = Random.Range (0f,1f);
+		hitDirection.y = Random.Range (0f,0.5f);
+		hitDirection.z = Random.Range (0f,1f);
 
 		hitForce = Random.Range (hitForceMin, hitForceMax);
 
