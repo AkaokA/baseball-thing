@@ -124,7 +124,7 @@ public class AppController : BaseballElement {
 				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform);
 			}
 
-			// ESC: reset gamestate
+			// ESC: reset gamestate (for ease of testing)
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 				ResetPlay ();
 			}

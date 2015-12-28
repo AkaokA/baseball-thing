@@ -4,6 +4,7 @@ using System.Collections;
 public class BaseballView : BaseballElement {
 
 	public GameObject heightIndicator;
+	private GameObject landingPointView;
 
 	public float hitForceMin = 500f;
 	public float hitForceMax = 1200f;
@@ -12,9 +13,10 @@ public class BaseballView : BaseballElement {
 
 	private float pitchSpeed;
 
+
 	// Use this for initialization
 	void Start () {
-
+		landingPointView = app.views.baseballLandingPoint;
 	}
 	
 	// Update is called once per frame
@@ -102,6 +104,10 @@ public class BaseballView : BaseballElement {
 		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
 	}
 
+	void OnCollisionStay () {
+		landingPointView.SetActive (false);
+	}
+
 	void OnCollisionExit (Collision collision) {
 		if (app.controller.currentGame.currentInning.ballIsInPlay) {
 			StartCoroutine (SetLandingPoint ());
@@ -110,7 +116,7 @@ public class BaseballView : BaseballElement {
 
 	public IEnumerator SetLandingPoint () {
 		yield return 0;
-		GameObject landingPointView = app.views.baseballLandingPoint;
+
 		Vector3 landingPoint = new Vector3 (0, 0, 0);
 		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
 		Vector3 unitVelocity = velocity.normalized;
