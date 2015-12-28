@@ -108,7 +108,6 @@ public class AppController : BaseballElement {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball ();
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
-//				currentBaseballInstance.GetComponent<BaseballView> ().SetLandingPoint ();
 			}
 
 			// ARROW KEYS: Throw to base

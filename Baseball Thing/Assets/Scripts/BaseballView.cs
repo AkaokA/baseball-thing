@@ -29,7 +29,9 @@ public class BaseballView : BaseballElement {
 
 	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound
-		transform.position = new Vector3(5f, 1f, 5f);
+		Vector3 pitcherPosition = app.controller.currentGame.homeTeam.players [1 -1].idleLocation; // fielding positions are 1-indexed; that's why this is ugly
+		pitcherPosition.y = 1f;
+		transform.position = pitcherPosition;
 
 		Vector3 pitchDirection = target.position - transform.position; // get target direction 
 		pitchDirection.y = 0; // retain only the horizontal direction
@@ -46,7 +48,7 @@ public class BaseballView : BaseballElement {
 
 		// set vertical angle
 		pitchDirection = pitchDirection.normalized;
-		pitchDirection.y = Mathf.Tan (pitchAngle);
+		pitchDirection.y = Mathf.Sin (pitchAngle);
 
 		GetComponent<Rigidbody> ().velocity = pitchSpeed * pitchDirection;
 	}
@@ -63,6 +65,7 @@ public class BaseballView : BaseballElement {
 		GetComponent<Rigidbody> ().AddForce( hitDirection * hitForce);
 
 		app.controller.currentGame.currentInning.ballIsInPlay = true;
+		StartCoroutine (SetLandingPoint ());
 	}
 
 	public void ThrowBaseballAt(Transform target) {
@@ -75,7 +78,7 @@ public class BaseballView : BaseballElement {
 		transform.position = tempPosition;
 
 		// This seems wrong...
-		float throwHeight = 10f;
+		float throwHeight = 2f;
 		float throwSpeed = Mathf.Sqrt (2 * throwHeight * Physics.gravity.magnitude);
 
 		Vector3 throwDirection = target.position - transform.position; // get target direction 
@@ -94,26 +97,38 @@ public class BaseballView : BaseballElement {
 			throwSpeed = 10;
 			throwDirection.y = Mathf.Sin (45 * Mathf.Deg2Rad);
 		} else {
-			throwDirection.y = Mathf.Tan (throwAngle);
+			throwDirection.y = Mathf.Sin (throwAngle);
 		}
 
 		GetComponent<Rigidbody> ().WakeUp();
 		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
 	}
 
-//	public Vector3 SetLandingPoint () {
-//		GameObject landingPointView = app.views.baseballLandingPoint;
-//		Vector3 landingPoint = new Vector3 (0, 0, 0);
-//		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
-//		float angle;
-//		float distance;
-//
-//		velocity = velocity.normalized;
-//		angle = Mathf.Asin (velocity.y); // lol I guess?
-//		distance = 0; // lol gotta check the formulas
-//
-//		landingPointView.transform.position = landingPoint;
-//		landingPointView.SetActive (true);
-//	}
+	void OnCollisionExit (Collision collision) {
+		if (app.controller.currentGame.currentInning.ballIsInPlay) {
+			StartCoroutine (SetLandingPoint ());
+		}
+	}
+
+	public IEnumerator SetLandingPoint () {
+		yield return 0;
+		GameObject landingPointView = app.views.baseballLandingPoint;
+		Vector3 landingPoint = new Vector3 (0, 0, 0);
+		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
+		Vector3 unitVelocity = velocity.normalized;
+
+		float angle;
+		float distance;
+
+		angle = Mathf.Asin (unitVelocity.y); // lol I guess?
+
+		distance = (velocity.sqrMagnitude * Mathf.Sin (2 * angle)) / Physics.gravity.magnitude;
+
+		unitVelocity.y = 0;
+		landingPoint = app.controller.currentBaseballInstance.transform.position + (unitVelocity * distance);
+
+		landingPointView.transform.position = landingPoint;
+		landingPointView.SetActive (true);
+	}
 
 }

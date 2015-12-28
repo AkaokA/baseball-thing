@@ -12,7 +12,9 @@ public class LandingPointView : BaseballElement {
 
 	// Update is called once per frame
 	void Update () {
-	
+		Vector3 tempPosition = transform.position;
+		tempPosition.y = yOffset;
+		transform.position = tempPosition;
 	}
 
 }
