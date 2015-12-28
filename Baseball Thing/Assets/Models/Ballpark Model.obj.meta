@@ -12,6 +12,7 @@ ModelImporter:
     100008: MeshBody4
     100010: MeshBody5
     100012: MeshBody8
+    100014: MeshBody12
     400000: //RootNode
     400002: MeshBody1
     400004: MeshBody2
@@ -19,30 +20,35 @@ ModelImporter:
     400008: MeshBody4
     400010: MeshBody5
     400012: MeshBody8
+    400014: MeshBody12
     2300000: MeshBody1
     2300002: MeshBody2
     2300004: MeshBody3
     2300006: MeshBody4
     2300008: MeshBody5
     2300010: MeshBody8
+    2300012: MeshBody12
     3300000: MeshBody1
     3300002: MeshBody2
     3300004: MeshBody3
     3300006: MeshBody4
     3300008: MeshBody5
     3300010: MeshBody8
+    3300012: MeshBody12
     4300000: MeshBody1
     4300002: MeshBody2
     4300004: MeshBody3
     4300006: MeshBody4
     4300008: MeshBody5
     4300010: MeshBody8
+    4300012: MeshBody12
     6400000: MeshBody2
     6400002: MeshBody3
     6400004: MeshBody4
     6400006: MeshBody5
     6400008: MeshBody8
     6400010: MeshBody1
+    6400012: MeshBody12
   materials:
     importMaterials: 0
     materialName: 0
