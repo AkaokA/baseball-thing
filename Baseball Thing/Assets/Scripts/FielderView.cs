@@ -10,10 +10,11 @@ public class FielderView : BaseballElement {
 	private float maxSpeed = 8f;
 
 	public bool hasTheBall = false;
-	public bool isClosestToBall = false;
 	public bool fielderCanMove = true;
 
 	public Vector3 idleLocation;
+
+	private Player closestPlayer;
 
 	// Use this for initialization
 	void Start () {
@@ -31,6 +32,92 @@ public class FielderView : BaseballElement {
 		}
 
 		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);		
+	}
+		
+	public void MoveToward (Vector3 newTarget) {
+		newTarget.y = 0;
+		targetPosition = newTarget;
+	}
+
+	public void Idle () {
+		MoveToward (idleLocation);
+	}
+
+	public void PlayDefense () {
+		Vector3 ballPosition = app.controller.currentBaseballInstance.transform.position;
+
+		if (hasTheBall) {
+			MoveToward (ballPosition);
+		} else {
+			if (IsClosestToBall()) {
+				ChaseBall ();
+			} else {
+				// go back to a useful position
+				BeUseful (fieldingPositionNumber);
+			}
+		}
+	}
+		
+	public bool IsClosestToBall () {
+
+		float minimumDistance = float.MaxValue;
+
+		foreach (Player player in app.controller.fieldingTeam.players) {
+			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
+			Vector3 distanceToBall = app.controller.currentBaseballInstance.transform.position - fielderView.transform.position;
+			distanceToBall.y = 0; // use only horizontal distance
+
+			if ( distanceToBall.magnitude < minimumDistance ) {
+				closestPlayer = player;
+			}
+		}
+
+		if (closestPlayer.fielderInstance.GetComponent<FielderView> () == this) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void ChaseBall () {
+		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
+			MoveToward (app.controller.currentBaseballInstance.transform.position);
+		} else {
+			// go to where the ball will be
+			MoveToward (app.views.baseballLandingPoint.transform.position);
+		}
+	}
+		
+	public void BeUseful(int fieldingPositionNumber) {
+		switch (fieldingPositionNumber) {
+		case 1:
+			MoveToward (idleLocation);
+			break;
+		case 2:
+			MoveToward (app.views.homePlate.transform.position);
+			break;
+		case 3:
+			MoveToward (app.views.firstBase.transform.position);
+			break;
+		case 4:
+			MoveToward (app.views.secondBase.transform.position);
+			break;
+		case 5:
+			MoveToward (app.views.thirdBase.transform.position);
+			break;
+		case 6:
+			MoveToward (idleLocation);
+			break;
+		case 7:
+			MoveToward (idleLocation);
+			break;
+		case 8:
+			MoveToward (idleLocation);
+			break;
+		case 9:
+			MoveToward (idleLocation);
+			break;
+		}
 	}
 
 	public void AssignFieldingPosition (int positionNumber) {
@@ -63,75 +150,6 @@ public class FielderView : BaseballElement {
 			break;
 		case 9: // right field
 			idleLocation = new Vector3 (25f, 0f, 7f);
-			break;
-		}
-
-	}
-
-	public void MoveToward (Vector3 newTarget) {
-		newTarget.y = 0;
-		targetPosition = newTarget;
-	}
-		
-	public void PlayDefense () {
-		Vector3 ballPosition = app.controller.currentBaseballInstance.transform.position;
-		Vector3 distanceToBall = ballPosition - transform.position;
-		distanceToBall.y = 0; // use only horizontal distance
-		Vector3 distanceFromIdlePosition = idleLocation - transform.position;
-
-		if (hasTheBall) {
-			MoveToward (ballPosition);
-		} else {
-			if (distanceToBall.magnitude < 5f && distanceFromIdlePosition.magnitude < 10f) {
-				ChaseBall ();
-			} else {
-				// go back to a useful position
-				BeUseful (fieldingPositionNumber);
-			}
-		}
-	}
-
-	public void Idle () {
-		MoveToward (idleLocation);
-	}
-
-	public void ChaseBall () {
-		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
-			MoveToward (app.controller.currentBaseballInstance.transform.position);
-		} else {
-			// go to where the ball will be
-			MoveToward (app.views.baseballLandingPoint.transform.position);
-		}
-	}
-
-	public void BeUseful(int fieldingPosition) {
-		switch (fieldingPosition) {
-		case 1:
-			MoveToward (idleLocation);
-			break;
-		case 2:
-			MoveToward (app.views.homePlate.transform.position);
-			break;
-		case 3:
-			MoveToward (app.views.firstBase.transform.position);
-			break;
-		case 4:
-			MoveToward (app.views.secondBase.transform.position);
-			break;
-		case 5:
-			MoveToward (app.views.thirdBase.transform.position);
-			break;
-		case 6:
-			MoveToward (idleLocation);
-			break;
-		case 7:
-			MoveToward (idleLocation);
-			break;
-		case 8:
-			MoveToward (idleLocation);
-			break;
-		case 9:
-			MoveToward (idleLocation);
 			break;
 		}
 	}
