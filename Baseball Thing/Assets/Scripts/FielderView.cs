@@ -68,6 +68,7 @@ public class FielderView : BaseballElement {
 			distanceToBall.y = 0; // use only horizontal distance
 
 			if ( distanceToBall.magnitude < minimumDistance ) {
+				minimumDistance = distanceToBall.magnitude;
 				closestPlayer = player;
 			}
 		}
