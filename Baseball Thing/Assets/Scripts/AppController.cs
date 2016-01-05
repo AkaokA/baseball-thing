@@ -30,10 +30,15 @@ public class AppController : BaseballElement {
 	void Start () {
 		// create teams
 		currentGame = new BallGame();
+		fieldingTeam = app.controller.currentGame.homeTeam;
 
-		foreach (Player player in currentGame.homeTeam.players) {
+		// create fielders
+		foreach (Player player in fieldingTeam.players) {
 			// instantiate each fielder's gameobject
 			player.fielderInstance = Instantiate (app.views.fielder);
+			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
+			fielderView.idleLocation = player.idleLocation;
+			fielderView.fieldingPosition = player.fieldingPosition;
 
 			// put fielders in the dugout
 			Vector3 randomizedStartPosition = app.controller.homeDugoutPosition;
@@ -41,10 +46,8 @@ public class AppController : BaseballElement {
 			randomizedStartPosition.z += Random.Range (-3, 3);
 			player.fielderInstance.transform.position = randomizedStartPosition;
 
-			player.fielderInstance.GetComponent<FielderView> ().MoveToward (player.idleLocation);
+			fielderView.Idle ();
 		}
-
-		fieldingTeam = app.controller.currentGame.homeTeam;
 
 		// init variables
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
@@ -65,41 +68,7 @@ public class AppController : BaseballElement {
 	
 	// Update is called once per frame
 	void Update () {
-		
-		// fielder AI
-		foreach (Player fielder in currentGame.homeTeam.players) {
-			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
-
-			// while the ball is in play
-			if (app.controller.currentGame.currentInning.ballIsInPlay) {
-				Vector3 landingPoint = app.views.baseballLandingPoint.transform.position;
-				Vector3 ballPosition = currentBaseballInstance.transform.position;
-				Vector3 distanceToBall = ballPosition - fielder.fielderInstance.transform.position;
-				distanceToBall.y = 0; // use only horizontal distance
-				Vector3 distanceFromIdlePosition = fielder.idleLocation - fielder.fielderInstance.transform.position;
-
-				if (fielderView.hasTheBall ) {
-//					currentBaseballInstance.GetComponent<Rigidbody> ().velocity *= 0.5f;
-					fielderView.MoveToward (ballPosition);
-				} else {
-					if (distanceToBall.magnitude < 5f && distanceFromIdlePosition.magnitude < 10f) {
-						if (currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
-							fielderView.MoveToward (ballPosition);
-						} else {
-							// go to where the ball will be
-							fielderView.MoveToward (landingPoint);
-						}
-					} else {
-						// go back to a useful position
-						fielderView.BeUseful (fielder.fieldingPosition);
-					}
-				}
-			} else {
-				// go back to idle position
-				fielderView.MoveToward (fielder.idleLocation);
-			}
-		}
-			
+					
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
 			if (app.controller.currentGame.currentInning.ballIsInPlay == false) {

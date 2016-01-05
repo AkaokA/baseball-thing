@@ -75,7 +75,6 @@ public class Player {
 			idleLocation = new Vector3 (25f, 0f, 7f);
 			break;
 		}
-
 	}
 }
 
