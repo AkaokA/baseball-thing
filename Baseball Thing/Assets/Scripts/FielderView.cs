@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class FielderView : BaseballElement {
+	public int fieldingPositionNumber;
 
 	public Vector3 targetPosition;
 	private Vector3 transformVelocity;
@@ -13,11 +14,10 @@ public class FielderView : BaseballElement {
 	public bool fielderCanMove = true;
 
 	public Vector3 idleLocation;
-	public int fieldingPosition;
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 
 	// Update is called once per frame
@@ -33,13 +33,47 @@ public class FielderView : BaseballElement {
 		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);		
 	}
 
+	public void AssignFieldingPosition (int positionNumber) {
+		fieldingPositionNumber = positionNumber;
+
+		switch (fieldingPositionNumber) {
+		case 1: // pitcher
+			idleLocation = new Vector3 (5f, 0f, 5f);
+			break;
+		case 2: // catcher
+			idleLocation = new Vector3 (-1.5f, 0f, -1.5f);
+			break;
+		case 3: // 1st base
+			idleLocation = new Vector3 (12.5f, 0f, 2.5f);
+			break;
+		case 4: // 2nd base
+			idleLocation = new Vector3 (12.5f, 0f, 8f);
+			break;
+		case 5: // 3rd base
+			idleLocation = new Vector3 (2.5f, 0f, 12.5f);
+			break;
+		case 6: // shortstop
+			idleLocation = new Vector3 (8f, 0f, 12.5f);
+			break;
+		case 7: // left field
+			idleLocation = new Vector3 (7f, 0f, 25f);
+			break;
+		case 8: // center field
+			idleLocation = new Vector3 (20f, 0f, 20f);
+			break;
+		case 9: // right field
+			idleLocation = new Vector3 (25f, 0f, 7f);
+			break;
+		}
+
+	}
+
 	public void MoveToward (Vector3 newTarget) {
 		newTarget.y = 0;
 		targetPosition = newTarget;
 	}
 		
 	public void PlayDefense () {
-		Vector3 landingPoint = app.views.baseballLandingPoint.transform.position;
 		Vector3 ballPosition = app.controller.currentBaseballInstance.transform.position;
 		Vector3 distanceToBall = ballPosition - transform.position;
 		distanceToBall.y = 0; // use only horizontal distance
@@ -52,7 +86,7 @@ public class FielderView : BaseballElement {
 				ChaseBall ();
 			} else {
 				// go back to a useful position
-				BeUseful (fieldingPosition);
+				BeUseful (fieldingPositionNumber);
 			}
 		}
 	}
@@ -73,7 +107,7 @@ public class FielderView : BaseballElement {
 	public void BeUseful(int fieldingPosition) {
 		switch (fieldingPosition) {
 		case 1:
-			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			MoveToward (idleLocation);
 			break;
 		case 2:
 			MoveToward (app.views.homePlate.transform.position);
@@ -88,16 +122,16 @@ public class FielderView : BaseballElement {
 			MoveToward (app.views.thirdBase.transform.position);
 			break;
 		case 6:
-			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			MoveToward (idleLocation);
 			break;
 		case 7:
-			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			MoveToward (idleLocation);
 			break;
 		case 8:
-			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			MoveToward (idleLocation);
 			break;
 		case 9:
-			MoveToward (app.controller.fieldingTeam.players [fieldingPosition - 1].idleLocation);
+			MoveToward (idleLocation);
 			break;
 		}
 	}

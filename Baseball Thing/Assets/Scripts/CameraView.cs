@@ -3,8 +3,6 @@ using System.Collections;
 
 public class CameraView : BaseballElement {
 
-//	public AnimationCurve cameraCurve;
-
 	public float targetCameraSize = 0f;
 	public float targetCameraHeight = 0f;
 	public float targetCameraDiagPosition = 0f;

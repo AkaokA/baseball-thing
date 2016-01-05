@@ -15,6 +15,9 @@ public class BallGame {
 
 	public Inning currentInning = new Inning(1);
 
+	public Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
+	public Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
+
 }
 
 public class Team {
@@ -37,44 +40,14 @@ public class Team {
 public class Player {
 	public GameObject fielderInstance;
 
-	public int fieldingPosition; // 1 through 9
+	public int fieldingPositionNumber; // 1 through 9
 	public Vector3 idleLocation;
 
 	public float runningSpeed;
 
 	public Player ( int positionNumber ) {
-		fieldingPosition = positionNumber;
+		fieldingPositionNumber = positionNumber;
 		runningSpeed = 6f;
-
-		switch (fieldingPosition) {
-		case 1: // pitcher
-			idleLocation = new Vector3 (5f, 0f, 5f);
-			break;
-		case 2: // catcher
-			idleLocation = new Vector3 (-1.5f, 0f, -1.5f);
-			break;
-		case 3: // 1st base
-			idleLocation = new Vector3 (12.5f, 0f, 2.5f);
-			break;
-		case 4: // 2nd base
-			idleLocation = new Vector3 (12.5f, 0f, 8f);
-			break;
-		case 5: // 3rd base
-			idleLocation = new Vector3 (2.5f, 0f, 12.5f);
-			break;
-		case 6: // shortstop
-			idleLocation = new Vector3 (8f, 0f, 12.5f);
-			break;
-		case 7: // left field
-			idleLocation = new Vector3 (7f, 0f, 25f);
-			break;
-		case 8: // center field
-			idleLocation = new Vector3 (20f, 0f, 20f);
-			break;
-		case 9: // right field
-			idleLocation = new Vector3 (25f, 0f, 7f);
-			break;
-		}
 	}
 }
 

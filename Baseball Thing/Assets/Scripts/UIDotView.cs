@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UIDotView : MonoBehaviour {
+public class UIDotView : BaseballElement {
 
 	public Color disabledColor;
 	public Color ballDotColor;

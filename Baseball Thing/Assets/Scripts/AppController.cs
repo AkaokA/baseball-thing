@@ -15,9 +15,6 @@ public class AppController : BaseballElement {
 	public float pitchAccuracy = 0.5f;
 	public float throwSpeed = 15f;
 
-	private Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
-	private Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
-
 	private UIDotView ball1Dot;
 	private UIDotView ball2Dot;
 	private UIDotView ball3Dot;
@@ -38,10 +35,10 @@ public class AppController : BaseballElement {
 			player.fielderInstance = Instantiate (app.views.fielder);
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
 			fielderView.idleLocation = player.idleLocation;
-			fielderView.fieldingPosition = player.fieldingPosition;
+			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
 
 			// put fielders in the dugout
-			Vector3 randomizedStartPosition = app.controller.homeDugoutPosition;
+			Vector3 randomizedStartPosition = currentGame.homeDugoutPosition;
 			randomizedStartPosition.x += Random.Range (-8, 0);
 			randomizedStartPosition.z += Random.Range (-3, 3);
 			player.fielderInstance.transform.position = randomizedStartPosition;

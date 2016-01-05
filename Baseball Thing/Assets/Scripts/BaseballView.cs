@@ -30,7 +30,7 @@ public class BaseballView : BaseballElement {
 
 	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound
-		Vector3 pitcherPosition = app.controller.currentGame.homeTeam.players [1 -1].idleLocation; // fielding positions are 1-indexed; that's why this is ugly
+		Vector3 pitcherPosition = app.controller.currentGame.homeTeam.players [1 -1].fielderInstance.GetComponent<FielderView> ().idleLocation; // fielding positions are 1-indexed; that's why this is ugly
 		pitcherPosition.y = 1f;
 		transform.position = pitcherPosition;
 
