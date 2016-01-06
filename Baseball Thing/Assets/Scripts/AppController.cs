@@ -43,6 +43,7 @@ public class AppController : BaseballElement {
 			randomizedStartPosition.z += Random.Range (-3, 3);
 			player.fielderInstance.transform.position = randomizedStartPosition;
 
+			// move fielders out to their positions
 			fielderView.Idle ();
 		}
 

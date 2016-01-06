@@ -15,9 +15,15 @@ public class BaseballView : BaseballElement {
 
 	public bool ballIsRolling = false;
 
+	private Rigidbody baseballRigidbody;
+
 	// Use this for initialization
 	void Start () {
 		landingPointView = app.views.baseballLandingPoint;
+	}
+
+	void Awake () {
+		baseballRigidbody = GetComponent<Rigidbody> ();
 	}
 	
 	// Update is called once per frame
@@ -51,7 +57,7 @@ public class BaseballView : BaseballElement {
 		pitchDirection = pitchDirection.normalized;
 		pitchDirection.y = Mathf.Sin (pitchAngle);
 
-		GetComponent<Rigidbody> ().velocity = pitchSpeed * pitchDirection;
+		baseballRigidbody.velocity = pitchSpeed * pitchDirection;
 	}
 
 	public void HitBaseball() {
@@ -61,9 +67,9 @@ public class BaseballView : BaseballElement {
 
 		hitForce = Random.Range (hitForceMin, hitForceMax);
 
-		GetComponent<Rigidbody> ().velocity = new Vector3(0,0,0);
-		GetComponent<Rigidbody> ().WakeUp();
-		GetComponent<Rigidbody> ().AddForce( hitDirection * hitForce);
+		baseballRigidbody.velocity = new Vector3(0,0,0);
+		baseballRigidbody.WakeUp();
+		baseballRigidbody.AddForce( hitDirection * hitForce);
 
 		app.controller.currentGame.currentInning.ballIsInPlay = true;
 		StartCoroutine (SetLandingPoint ());
@@ -93,8 +99,8 @@ public class BaseballView : BaseballElement {
 			throwDirection.y = Mathf.Sin (throwAngle);
 		}
 			
-		GetComponent<Rigidbody> ().WakeUp();
-		GetComponent<Rigidbody> ().velocity = throwSpeed * throwDirection;
+		baseballRigidbody.WakeUp();
+		baseballRigidbody.velocity = throwSpeed * throwDirection;
 	}
 
 	void OnCollisionStay (Collision collision) {

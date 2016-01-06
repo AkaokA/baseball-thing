@@ -4,7 +4,7 @@ using System.Collections;
 public class FielderView : BaseballElement {
 	public int fieldingPositionNumber;
 
-	public Vector3 targetPosition;
+	private Vector3 targetPosition;
 	private Vector3 transformVelocity;
 	private float smoothTime = 0.25f;
 	private float maxSpeed = 8f;
@@ -13,7 +13,6 @@ public class FielderView : BaseballElement {
 	public bool fielderCanMove = true;
 
 	public Vector3 idleLocation;
-
 	private Player closestPlayer;
 
 	// Use this for initialization
@@ -31,7 +30,14 @@ public class FielderView : BaseballElement {
 			Idle ();
 		}
 
-		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);		
+		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);
+
+		if (app.controller.currentBaseballInstance) {
+			transform.LookAt (targetPosition);
+		} else {
+			transform.LookAt (app.views.homePlate.transform.position);
+		}
+
 	}
 		
 	public void MoveToward (Vector3 newTarget) {
@@ -44,31 +50,34 @@ public class FielderView : BaseballElement {
 	}
 
 	public void PlayDefense () {
-		Vector3 ballPosition = app.controller.currentBaseballInstance.transform.position;
-
-		if (hasTheBall) {
-			MoveToward (ballPosition);
+		// whoever's closest to the ball
+		if (IsClosestToBall()) {
+			// go get the ball
+			ChaseBall ();
 		} else {
-			if (IsClosestToBall()) {
-				ChaseBall ();
-			} else {
-				// go back to a useful position
-				BeUseful (fieldingPositionNumber);
-			}
+			// go back to a useful position
+			BeUseful (fieldingPositionNumber);
 		}
 	}
 		
 	public bool IsClosestToBall () {
-
 		float minimumDistance = float.MaxValue;
+		Vector3 targetPosition;
+
+		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
+			targetPosition = app.controller.currentBaseballInstance.transform.position;
+		} else {
+			targetPosition = app.views.baseballLandingPoint.transform.position;
+		}
 
 		foreach (Player player in app.controller.fieldingTeam.players) {
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
-			Vector3 distanceToBall = app.controller.currentBaseballInstance.transform.position - fielderView.transform.position;
-			distanceToBall.y = 0; // use only horizontal distance
 
-			if ( distanceToBall.magnitude < minimumDistance ) {
-				minimumDistance = distanceToBall.magnitude;
+			Vector3 distanceToTarget = targetPosition - fielderView.transform.position;
+			distanceToTarget.y = 0; // use only horizontal distance
+
+			if ( distanceToTarget.magnitude < minimumDistance ) {
+				minimumDistance = distanceToTarget.magnitude;
 				closestPlayer = player;
 			}
 		}
@@ -82,7 +91,7 @@ public class FielderView : BaseballElement {
 
 	public void ChaseBall () {
 		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
-			MoveToward (app.controller.currentBaseballInstance.transform.position);
+			MoveToward (app.controller.currentBaseballInstance.transform.position + (app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity /4));
 		} else {
 			// go to where the ball will be
 			MoveToward (app.views.baseballLandingPoint.transform.position);
@@ -160,8 +169,7 @@ public class FielderView : BaseballElement {
 			hasTheBall = true;
 		}
 	}
-
-
+		
 	void OnTriggerExit (Collider collider) {
 		if (collider.tag == "Baseball") {
 			hasTheBall = false;
