@@ -13,7 +13,7 @@ public class FielderView : BaseballElement {
 	public bool fielderCanMove = true;
 
 	public Vector3 idleLocation;
-	private Player closestPlayer;
+	private Player ActiveFielder;
 
 	// Use this for initialization
 	void Start () {
@@ -80,11 +80,11 @@ public class FielderView : BaseballElement {
 
 			if ( distanceToTarget.magnitude < minimumDistance ) {
 				minimumDistance = distanceToTarget.magnitude;
-				closestPlayer = player;
+				ActiveFielder = player;
 			}
 		}
 
-		if (closestPlayer.fielderInstance.GetComponent<FielderView> () == this) {
+		if (ActiveFielder.fielderInstance.GetComponent<FielderView> () == this) {
 			return true;
 		} else {
 			return false;
@@ -112,13 +112,21 @@ public class FielderView : BaseballElement {
 			MoveToward (app.views.firstBase.transform.position);
 			break;
 		case 4: // 2nd
-			MoveToward (app.views.secondBase.transform.position);
+			if (app.controller.currentBaseballInstance.transform.position.x > app.controller.currentBaseballInstance.transform.position.z) {
+				MoveToward (idleLocation);
+			} else {
+				MoveToward (app.views.secondBase.transform.position);				
+			}
 			break;
 		case 5: // 3rd
 			MoveToward (app.views.thirdBase.transform.position);
 			break;
 		case 6: // Shortstop
-			MoveToward (idleLocation);
+			if (app.controller.currentBaseballInstance.transform.position.x < app.controller.currentBaseballInstance.transform.position.z) {
+				MoveToward (idleLocation);
+			} else {
+				MoveToward (app.views.secondBase.transform.position);				
+			}
 			break;
 		case 7: // Left Field
 			MoveToward (idleLocation);
