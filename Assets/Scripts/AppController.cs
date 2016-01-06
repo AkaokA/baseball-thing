@@ -67,7 +67,7 @@ public class AppController : BaseballElement {
 		UpdateScoreboard ();
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 2f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 	
