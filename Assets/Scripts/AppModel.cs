@@ -21,6 +21,7 @@ public class BallGame {
 	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
 	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);
 
+	public Base[] bases = new Base[4];
 	public Base firstBase = new Base();
 	public Base secondBase = new Base();
 	public Base thirdBase = new Base();
@@ -95,6 +96,7 @@ public class Inning {
 	public bool ballIsInPlay;
 	public bool currentPitchIsStrike = false;
 
+	// constructor
 	public Inning(int number) {
 		inningNumber = number;
 		ballIsInPlay = false;

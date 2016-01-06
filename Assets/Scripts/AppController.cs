@@ -35,10 +35,16 @@ public class AppController : BaseballElement {
 		battingTeam = app.controller.currentGame.awayTeam;
 
 		// set up bases
+		currentGame.bases [0] = currentGame.homePlate;
+		currentGame.bases [1] = currentGame.firstBase;
+		currentGame.bases [2] = currentGame.secondBase;
+		currentGame.bases [3] = currentGame.thirdBase;
+
 		currentGame.firstBase.baseGameObject = app.views.firstBase;
 		currentGame.secondBase.baseGameObject = app.views.secondBase;
 		currentGame.thirdBase.baseGameObject = app.views.thirdBase;
 		currentGame.homePlate.baseGameObject = app.views.homePlate;
+
 
 		// create fielders
 		foreach (Player player in fieldingTeam.players) {

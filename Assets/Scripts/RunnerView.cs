@@ -9,11 +9,12 @@ public class RunnerView : BaseballElement {
 	public float maxSpeed;
 
 	public bool isOnBase = false;
-	public int currentBase = 0;
+	public int currentBaseIndex = 0;
+	public Base targetBase;
 
 	// Use this for initialization
 	void Start () {
-
+		targetBase = app.controller.currentGame.firstBase;
 	}
 
 	// Update is called once per frame
@@ -23,6 +24,8 @@ public class RunnerView : BaseballElement {
 
 		// point runner towards stuff
 		transform.LookAt (targetPosition);
+
+		TouchBase ();
 	}
 		
 	public void MoveToward (Vector3 newTarget) {
@@ -31,37 +34,34 @@ public class RunnerView : BaseballElement {
 	}
 
 	public void advanceToNextBase () {
-		switch (currentBase) {
+		switch (currentBaseIndex) {
 		case 0:
-			MoveToward (app.controller.currentGame.firstBase.baseGameObject.transform.position);
+			targetBase = app.controller.currentGame.firstBase;
 			break;
 		case 1:
-			MoveToward (app.controller.currentGame.secondBase.baseGameObject.transform.position);
+			targetBase = app.controller.currentGame.secondBase;
 			break;
 		case 2:
-			MoveToward (app.controller.currentGame.thirdBase.baseGameObject.transform.position);
+			targetBase = app.controller.currentGame.thirdBase;
 			break;
 		case 3:
-			MoveToward (app.controller.currentGame.homePlate.baseGameObject.transform.position);
+			targetBase = app.controller.currentGame.homePlate;
 			break;
 		}
+
+		MoveToward (targetBase.baseGameObject.transform.position);
 	}
 
-	void onTriggerEnter (Collider collider) {
-		Debug.Log ("hey?");
+	public void TouchBase () {
+		foreach (Base thisBase in app.controller.currentGame.bases) {
+			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
+			if (distanceToBase.magnitude < 1f) {
+				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
 
-		if (collider.tag == "Base") {
-			if (collider == app.views.firstBase) {
-				currentBase = 1;
-				Debug.Log ("made it to 1st!");
-			}
-			if (collider == app.views.secondBase) {
-				currentBase = 2;
-				Debug.Log ("made it to 2nd!");
-			}
-			if (collider == app.views.thirdBase) {
-				currentBase = 3;
-				Debug.Log ("made it to 3rd!");
+				// this doesn't work yet
+				if ( currentBaseIndex != 0 && thisBase == app.controller.currentGame.homePlate ) {
+					MoveToward (app.controller.currentGame.awayDugoutPosition);
+				}
 			}
 		}
 	}
