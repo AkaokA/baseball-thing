@@ -3,8 +3,6 @@ using System.Collections;
 
 public class InfieldCameraTriggerView : BaseballElement {
 
-	private bool triggerIsActive = false;
-
 	// Use this for initialization
 	void Start () {
 	
@@ -15,15 +13,9 @@ public class InfieldCameraTriggerView : BaseballElement {
 	
 	}
 
-	void OnTriggerExit () {
-		triggerIsActive = true;
-	}
-
 	void OnTriggerEnter (Collider otherCollider) {
 		if (otherCollider.tag == "Baseball") {
-			if (triggerIsActive) {
-				app.views.mainCamera.GetComponent<CameraView> ().ChangeCameraState ("infield", 0.5f);
-			}
+			app.views.mainCamera.GetComponent<CameraView> ().ChangeCameraState ("infield", 0.5f);
 		}
 	}
 }

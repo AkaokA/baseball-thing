@@ -29,6 +29,12 @@ public class CameraView : BaseballElement {
 			targetCameraDiagPosition = 15f;
 			targetCameraAngle = 90f;
 			break;
+		case "atbat":
+			targetCameraSize = 3.25f;
+			targetCameraHeight = 2.75f;
+			targetCameraDiagPosition = 0f;
+			targetCameraAngle = 30f;
+			break;
 		case "infield":
 			targetCameraSize = 7f;
 			targetCameraHeight = 6f;

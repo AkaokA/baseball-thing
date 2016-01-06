@@ -41,7 +41,6 @@ public class Player {
 	public GameObject fielderInstance;
 
 	public int fieldingPositionNumber; // 1 through 9
-	public Vector3 idleLocation;
 
 	public float runningSpeed;
 

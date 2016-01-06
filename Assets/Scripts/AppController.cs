@@ -34,7 +34,6 @@ public class AppController : BaseballElement {
 			// instantiate each fielder's gameobject
 			player.fielderInstance = Instantiate (app.views.fielder);
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
-			fielderView.idleLocation = player.idleLocation;
 			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
 
 			// put fielders in the dugout
@@ -60,7 +59,7 @@ public class AppController : BaseballElement {
 		UpdateScoreboard ();
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 	
@@ -83,6 +82,7 @@ public class AppController : BaseballElement {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball ();
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+				app.views.infieldCameraTrigger.SetActive (true);
 			}
 
 			// ARROW KEYS: Throw to base
@@ -109,7 +109,8 @@ public class AppController : BaseballElement {
 	public void ResetPlay () {
 		Destroy (currentBaseballInstance);
 		currentGame.currentInning.ballIsInPlay = false;
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.infieldCameraTrigger.SetActive (false);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
 		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
 	}

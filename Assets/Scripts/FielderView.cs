@@ -52,17 +52,14 @@ public class FielderView : BaseballElement {
 	}
 
 	public void PlayDefense () {
-		// whoever's closest to the ball
-		if ( IsClosestToBall () ) {
-			// go get the ball
-			ChaseBall ();
+		if (GetActiveFielder ().fielderInstance.GetComponent<FielderView> () == this) {
+			ChaseBall ();			
 		} else {
-			// go back to a useful position
 			CoverBases (fieldingPositionNumber);
 		}
 	}
 		
-	public bool IsClosestToBall () {
+	public Player GetActiveFielder () {
 		float minimumDistance = float.MaxValue;
 		Vector3 targetPosition;
 
@@ -84,11 +81,7 @@ public class FielderView : BaseballElement {
 			}
 		}
 
-		if (activeFielder.fielderInstance.GetComponent<FielderView> () == this) {
-			return true;
-		} else {
-			return false;
-		}
+		return activeFielder;
 	}
 
 	public void ChaseBall () {
@@ -105,7 +98,7 @@ public class FielderView : BaseballElement {
 		case 1: // Pitcher
 			switch (activeFielder.fieldingPositionNumber) {
 			case 2:
-				MoveToward (app.views.firstBase.transform.position);
+				MoveToward (app.views.homePlate.transform.position);
 				break;
 			case 3:
 				MoveToward (app.views.firstBase.transform.position);
@@ -128,7 +121,11 @@ public class FielderView : BaseballElement {
 			if (app.controller.currentBaseballInstance.transform.position.x < app.controller.currentBaseballInstance.transform.position.z) {
 				MoveToward (app.views.secondBase.transform.position);
 			} else {
-				MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
+				if ( app.controller.currentBaseballInstance.transform.position.magnitude > 20f ) {
+					MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
+				} else {
+					MoveToward (idleLocation);
+				}
 			}
 			break;
 		case 5: // 3rd
@@ -138,7 +135,7 @@ public class FielderView : BaseballElement {
 			if (app.controller.currentBaseballInstance.transform.position.x > app.controller.currentBaseballInstance.transform.position.z) {
 				MoveToward (app.views.secondBase.transform.position);
 			} else {
-				if ( app.controller.currentBaseballInstance.transform.position.magnitude > 15f ) {
+				if ( app.controller.currentBaseballInstance.transform.position.magnitude > 20f ) {
 					MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
 				} else {
 					MoveToward (idleLocation);
