@@ -118,7 +118,6 @@ public class BaseballView : BaseballElement {
 	}
 
 	public IEnumerator SetLandingPoint () {
-		landingPointView.SetActive (true);
 		yield return 0; // wait one frame so we can get the ball's velocity
 
 		Vector3 landingPoint = new Vector3 (0, 0, 0);

@@ -13,7 +13,7 @@ public class FielderView : BaseballElement {
 	public bool fielderCanMove = true;
 
 	public Vector3 idleLocation;
-	private Player ActiveFielder;
+	private Player activeFielder;
 
 	// Use this for initialization
 	void Start () {
@@ -80,11 +80,11 @@ public class FielderView : BaseballElement {
 
 			if ( distanceToTarget.magnitude < minimumDistance ) {
 				minimumDistance = distanceToTarget.magnitude;
-				ActiveFielder = player;
+				activeFielder = player;
 			}
 		}
 
-		if (ActiveFielder.fielderInstance.GetComponent<FielderView> () == this) {
+		if (activeFielder.fielderInstance.GetComponent<FielderView> () == this) {
 			return true;
 		} else {
 			return false;
@@ -103,7 +103,20 @@ public class FielderView : BaseballElement {
 	public void CoverBases(int fieldingPositionNumber) {
 		switch (fieldingPositionNumber) {
 		case 1: // Pitcher
-			MoveToward (idleLocation);
+			switch (activeFielder.fieldingPositionNumber) {
+			case 2:
+				MoveToward (app.views.firstBase.transform.position);
+				break;
+			case 3:
+				MoveToward (app.views.firstBase.transform.position);
+				break;
+			case 5:
+				MoveToward (app.views.thirdBase.transform.position);
+				break;
+			default:
+				MoveToward (idleLocation);
+				break;
+			}
 			break;
 		case 2: // Catcher
 			MoveToward (app.views.homePlate.transform.position);
@@ -112,20 +125,24 @@ public class FielderView : BaseballElement {
 			MoveToward (app.views.firstBase.transform.position);
 			break;
 		case 4: // 2nd
-			if (app.controller.currentBaseballInstance.transform.position.x > app.controller.currentBaseballInstance.transform.position.z) {
-				MoveToward (idleLocation);
+			if (app.controller.currentBaseballInstance.transform.position.x < app.controller.currentBaseballInstance.transform.position.z) {
+				MoveToward (app.views.secondBase.transform.position);
 			} else {
-				MoveToward (app.views.secondBase.transform.position);				
+				MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
 			}
 			break;
 		case 5: // 3rd
 			MoveToward (app.views.thirdBase.transform.position);
 			break;
 		case 6: // Shortstop
-			if (app.controller.currentBaseballInstance.transform.position.x < app.controller.currentBaseballInstance.transform.position.z) {
-				MoveToward (idleLocation);
+			if (app.controller.currentBaseballInstance.transform.position.x > app.controller.currentBaseballInstance.transform.position.z) {
+				MoveToward (app.views.secondBase.transform.position);
 			} else {
-				MoveToward (app.views.secondBase.transform.position);				
+				if ( app.controller.currentBaseballInstance.transform.position.magnitude > 15f ) {
+					MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
+				} else {
+					MoveToward (idleLocation);
+				}
 			}
 			break;
 		case 7: // Left Field
@@ -171,18 +188,6 @@ public class FielderView : BaseballElement {
 		case 9: // right field
 			idleLocation = new Vector3 (25f, 0f, 7f);
 			break;
-		}
-	}
-
-	void OnTriggerEnter (Collider collider) {
-		if (collider.tag == "Baseball" && !hasTheBall) {
-			hasTheBall = true;
-		}
-	}
-		
-	void OnTriggerExit (Collider collider) {
-		if (collider.tag == "Baseball") {
-			hasTheBall = false;
 		}
 	}
 }
