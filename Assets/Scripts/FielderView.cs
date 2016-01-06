@@ -7,7 +7,7 @@ public class FielderView : BaseballElement {
 	private Vector3 targetPosition;
 	private Vector3 transformVelocity;
 	private float smoothTime = 0.25f;
-	private float maxSpeed = 8f;
+	private float maxSpeed = 6f;
 
 	public bool hasTheBall = false;
 	public bool fielderCanMove = true;
@@ -86,9 +86,11 @@ public class FielderView : BaseballElement {
 
 	public void ChaseBall () {
 		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
-			MoveToward (app.controller.currentBaseballInstance.transform.position + (app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity /4));
+			// skate to where the puck is going to be
+			Vector3 ballVelocity = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
+			MoveToward (app.controller.currentBaseballInstance.transform.position + (ballVelocity/4));
 		} else {
-			// go to where the ball will be
+			// go to where the ball will land
 			MoveToward (app.views.baseballLandingPoint.transform.position);
 		}
 	}

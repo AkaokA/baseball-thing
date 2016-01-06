@@ -12,6 +12,7 @@ public class AppViews : BaseballElement {
 	public GameObject homePlate;
 
 	public GameObject fielder;
+	public GameObject runner;
 
 	public GameObject strikeZone;
 	public GameObject pitchRegister;

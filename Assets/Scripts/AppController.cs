@@ -6,6 +6,7 @@ public class AppController : BaseballElement {
 	public BallGame currentGame;
 	public Inning currentInning;
 	public Team fieldingTeam;
+	public Team battingTeam;
 
 	public GameObject Baseball;
 	public GameObject currentBaseballInstance;
@@ -28,6 +29,7 @@ public class AppController : BaseballElement {
 		// create teams
 		currentGame = new BallGame();
 		fieldingTeam = app.controller.currentGame.homeTeam;
+		battingTeam = app.controller.currentGame.awayTeam;
 
 		// create fielders
 		foreach (Player player in fieldingTeam.players) {
@@ -45,6 +47,12 @@ public class AppController : BaseballElement {
 			// move fielders out to their positions
 			fielderView.Idle ();
 		}
+
+		// create first batter
+		battingTeam.players [0].runnerInstance = Instantiate (app.views.runner);
+		battingTeam.players [0].runnerInstance.transform.position = currentGame.awayDugoutPosition;
+		RunnerView runnerView = battingTeam.players [0].runnerInstance.GetComponent<RunnerView> ();
+		runnerView.MoveToward (currentGame.leftBattersBox);
 
 		// init variables
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
@@ -244,9 +252,11 @@ public class AppController : BaseballElement {
 			if (currentGame.currentInning.half == "top") {
 				currentGame.currentInning.half = "bot";
 				fieldingTeam = app.controller.currentGame.awayTeam;
+				battingTeam = app.controller.currentGame.homeTeam;
 			} else {
 				currentGame.currentInning.half = "top";
 				fieldingTeam = app.controller.currentGame.homeTeam;
+				battingTeam = app.controller.currentGame.awayTeam;
 				currentGame.currentInning.inningNumber++;
 			}
 

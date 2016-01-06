@@ -18,6 +18,8 @@ public class BallGame {
 	public Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
 	public Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
 
+	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
+	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);
 }
 
 public class Team {
@@ -39,6 +41,7 @@ public class Team {
 
 public class Player {
 	public GameObject fielderInstance;
+	public GameObject runnerInstance;
 
 	public int fieldingPositionNumber; // 1 through 9
 
