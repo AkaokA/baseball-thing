@@ -11,7 +11,6 @@ public class AppController : BaseballElement {
 	public GameObject Baseball;
 	public GameObject currentBaseballInstance;
 	public Player currentBatter;
-	private int currentBatterNumber = 1;
 
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
@@ -60,7 +59,7 @@ public class AppController : BaseballElement {
 		}
 
 		// create first batter
-		currentBatter = battingTeam.players [currentBatterNumber - 1];
+		currentBatter = battingTeam.players [battingTeam.currentBatterNumber - 1];
 		NewBatter (currentBatter);
 
 		// init variables
@@ -106,9 +105,7 @@ public class AppController : BaseballElement {
 					if (runner.runnerInstance) {
 						runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
 					}
-
 				}
-
 			}
 
 			// ARROW KEYS: Throw to base
@@ -148,8 +145,8 @@ public class AppController : BaseballElement {
 		app.views.baseballLandingPoint.SetActive (false);
 		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
 
-		currentBatterNumber += 1;
-		currentBatter = battingTeam.players [currentBatterNumber - 1];
+		battingTeam.currentBatterNumber += 1;
+		currentBatter = battingTeam.players [battingTeam.currentBatterNumber - 1];
 		NewBatter (currentBatter);
 	}
 

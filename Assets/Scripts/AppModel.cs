@@ -31,19 +31,26 @@ public class Team {
 	// gameplay variables
 	public bool isHomeTeam;
 	public string teamName;
+	public int currentBatterNumber;
+
+	// players
 	public Player[] players = new Player[9];
 
 	// constructor
 	public Team (string name, bool isHome) {
 		teamName = name;
 		isHomeTeam = isHome;
+		currentBatterNumber = 1;
 
+		// temporary attributes for all players on team
 		float runningSpeed = 5f;
+		float throwStrength = 15f;
 
 		// generate players
 		for (int position = 1; position <= 9; position++) {
-			Player playerInstance = new Player (position, runningSpeed);
+			Player playerInstance = new Player ("person " + position, position, runningSpeed, throwStrength);
 			players [position-1] = playerInstance;
+			Debug.Log (teamName + " " + playerInstance.name);
 		}
 	}
 }
@@ -54,14 +61,27 @@ public class Player {
 	public GameObject runnerInstance;
 	public Base currentBase;
 
-	// player attributes
+	// individual player attributes
+	public string name;
 	public int fieldingPositionNumber; // 1 through 9
 	public float runningSpeed;
+	public float throwStrength;
+
+	public float pitchStrength;
+	public float pitchAccuracy;
 
 	// constructor
-	public Player ( int positionNumber , float speed) {
+	public Player ( string playerName, int positionNumber , float speed, float throwing) {
+		name = playerName;
 		fieldingPositionNumber = positionNumber;
 		runningSpeed = speed;
+		throwStrength = throwing;
+
+		// pitcher attributes; not used yet
+		if (positionNumber == 1)	 {
+			pitchStrength = 20f;
+			pitchAccuracy = 0.5f;
+		}
 	}
 }
 
