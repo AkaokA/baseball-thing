@@ -20,6 +20,11 @@ public class BallGame {
 
 	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
 	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);
+
+	public Base firstBase = new Base();
+	public Base secondBase = new Base();
+	public Base thirdBase = new Base();
+	public Base homePlate = new Base();
 }
 
 public class Team {
@@ -44,8 +49,9 @@ public class Player {
 	public GameObject runnerInstance;
 
 	public int fieldingPositionNumber; // 1 through 9
-
 	public float runningSpeed;
+
+	public Base currentBase;
 
 	public Player ( int positionNumber ) {
 		fieldingPositionNumber = positionNumber;
@@ -63,10 +69,6 @@ public class Inning {
 	public bool ballIsInPlay;
 	public bool currentPitchIsStrike = false;
 
-	public Base firstBase;
-	public Base secondBase;
-	public Base thirdBase;
-
 	public Inning(int number) {
 		inningNumber = number;
 		ballIsInPlay = false;
@@ -81,5 +83,6 @@ public class AtBat {
 }
 
 public class Base {
+	public GameObject baseGameObject;
 	public bool isOccupied = false;
 }

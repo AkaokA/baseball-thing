@@ -26,10 +26,18 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		// create teams
+		// create game
 		currentGame = new BallGame();
+
+		// create teams
 		fieldingTeam = app.controller.currentGame.homeTeam;
 		battingTeam = app.controller.currentGame.awayTeam;
+
+		// set up bases
+		currentGame.firstBase.baseGameObject = app.views.firstBase;
+		currentGame.secondBase.baseGameObject = app.views.secondBase;
+		currentGame.thirdBase.baseGameObject = app.views.thirdBase;
+		currentGame.homePlate.baseGameObject = app.views.homePlate;
 
 		// create fielders
 		foreach (Player player in fieldingTeam.players) {
@@ -88,9 +96,12 @@ public class AppController : BaseballElement {
 
 			// SPACE: hit pitch
 			if (Input.GetKeyDown (KeyCode.Space)) {
+				currentGame.currentInning.ballIsInPlay = true;
 				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball ();
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
 				app.views.infieldCameraTrigger.SetActive (true);
+
+				battingTeam.players [0].runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
 			}
 
 			// ARROW KEYS: Throw to base
@@ -156,6 +167,7 @@ public class AppController : BaseballElement {
 	void ResetCount () {
 		currentGame.currentInning.currentAtBat.balls = 0;
 		currentGame.currentInning.currentAtBat.strikes = 0;
+		ResetCountUI ();
 	}
 
 	void ResetCountUI () {
@@ -180,7 +192,6 @@ public class AppController : BaseballElement {
 	}
 
 	public void IncrementBalls () {
-
 		switch(app.controller.currentGame.currentInning.currentAtBat.balls) {
 		case 0:
 			Debug.Log ("ball 1!");
@@ -200,7 +211,6 @@ public class AppController : BaseballElement {
 		case 3:
 			Debug.Log ("walk!");
 			ResetCount ();
-			ResetCountUI ();
 			break;
 		}
 	}
@@ -221,8 +231,6 @@ public class AppController : BaseballElement {
 		case 2:
 			Debug.Log ("strikeout!");
 			ResetCount ();
-			ResetCountUI ();
-
 			IncrementOuts ();
 			break;
 		}
@@ -244,7 +252,6 @@ public class AppController : BaseballElement {
 		case 2:
 			Debug.Log ("CHANGE!");
 			ResetCount ();
-			ResetCountUI ();
 			currentGame.currentInning.outs = 0;
 			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
 			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));

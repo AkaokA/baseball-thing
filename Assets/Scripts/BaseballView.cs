@@ -71,7 +71,6 @@ public class BaseballView : BaseballElement {
 		baseballRigidbody.WakeUp();
 		baseballRigidbody.AddForce( hitDirection * hitForce);
 
-		app.controller.currentGame.currentInning.ballIsInPlay = true;
 		StartCoroutine (SetLandingPoint ());
 	}
 
