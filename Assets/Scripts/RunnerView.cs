@@ -51,6 +51,8 @@ public class RunnerView : BaseballElement {
 	public void TouchBase () {
 		foreach (Base thisBase in app.controller.currentGame.bases) {
 			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
+			distanceToBase.y = 0; // horizontal distance only
+
 			if (distanceToBase.magnitude < 1f) {
 				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
 

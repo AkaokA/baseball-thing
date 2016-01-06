@@ -34,7 +34,7 @@ public class AppController : BaseballElement {
 		SetUpFielders ();
 
 		// create first batter
-		NewBatter (currentBatter);
+		NewBatter ();
 
 		// init variables
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
@@ -146,7 +146,7 @@ public class AppController : BaseballElement {
 		}
 	}
 
-	void NewBatter (Player currentBatter) {
+	void NewBatter () {
 		// cycle lineup after 9th batter
 		if (battingTeam.currentBatterNumber < 9) {
 			battingTeam.currentBatterNumber++;			
