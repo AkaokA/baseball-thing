@@ -173,7 +173,7 @@ public class AppController : BaseballElement {
 
 		battingTeam.currentBatterNumber += 1;
 		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
-		NewBatter (currentBatter);
+		NewBatter ();
 	}
 
 	public void RegisterPitch () {
