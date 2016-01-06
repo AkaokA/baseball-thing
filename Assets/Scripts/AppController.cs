@@ -2,13 +2,12 @@
 using System.Collections;
 
 public class AppController : BaseballElement {
-
+	
 	public BallGame currentGame;
 	public Inning currentInning;
 	public Team fieldingTeam;
 	public Team battingTeam;
 
-	public GameObject Baseball;
 	public GameObject currentBaseballInstance;
 	public Player currentBatter;
 
@@ -36,7 +35,7 @@ public class AppController : BaseballElement {
 		// create first batter
 		NewBatter ();
 
-		// init variables
+		// init scoreboard variables (scoreboard stuff should go in its own class)
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
 		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
 		ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
@@ -59,7 +58,7 @@ public class AppController : BaseballElement {
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
 			if (app.controller.currentGame.currentInning.ballIsInPlay == false) {
-				currentBaseballInstance = Instantiate (Baseball);
+				currentBaseballInstance = Instantiate (app.views.baseball);
 
 				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
 				currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
