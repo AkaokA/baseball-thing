@@ -34,7 +34,12 @@ public class RunnerView : BaseballElement {
 	}
 
 	public void advanceToNextBase () {
-		targetBase = app.controller.currentGame.bases[currentBaseIndex + 1];
+		if (currentBaseIndex < 3) {
+			targetBase = app.controller.currentGame.bases[currentBaseIndex + 1];
+		} else {
+			targetBase = app.controller.currentGame.homePlate;
+		}
+
 		MoveToward (targetBase.baseGameObject.transform.position);
 	}
 
@@ -50,9 +55,9 @@ public class RunnerView : BaseballElement {
 				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
 
 				// this doesn't work yet
-				if ( currentBaseIndex != 0 && thisBase == app.controller.currentGame.homePlate ) {
-					MoveToward (app.controller.currentGame.awayDugoutPosition);
-				}
+//				if ( currentBaseIndex != 0 && thisBase == app.controller.currentGame.homePlate ) {
+//					MoveToward (app.controller.currentGame.awayDugoutPosition);
+//				}
 			}
 		}
 	}

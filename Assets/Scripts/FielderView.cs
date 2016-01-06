@@ -69,7 +69,7 @@ public class FielderView : BaseballElement {
 			targetPosition = app.views.baseballLandingPoint.transform.position;
 		}
 
-		foreach (Player player in app.controller.fieldingTeam.players) {
+		foreach (Player player in app.controller.fieldingTeam.lineup) {
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
 
 			Vector3 distanceToTarget = targetPosition - fielderView.transform.position;

@@ -10,8 +10,8 @@ public class BallGame {
 	public int awayScore = 0;
 	public int homeScore = 0;
 
-	public Team awayTeam = new Team("Chicago", false);
-	public Team homeTeam = new Team("Toronto", true);
+	public Team awayTeam;
+	public Team homeTeam;
 
 	public Inning currentInning = new Inning(1);
 
@@ -35,7 +35,7 @@ public class Team {
 	public int currentBatterNumber;
 
 	// players
-	public Player[] players = new Player[9];
+	public Player[] lineup = new Player[9];
 
 	// constructor
 	public Team (string name, bool isHome) {
@@ -50,7 +50,7 @@ public class Team {
 		// generate players
 		for (int position = 1; position <= 9; position++) {
 			Player playerInstance = new Player ("person " + position, position, runningSpeed, throwStrength);
-			players [position-1] = playerInstance;
+			lineup [position-1] = playerInstance;
 			// Debug.Log (teamName + " " + playerInstance.name);
 		}
 	}

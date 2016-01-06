@@ -27,45 +27,13 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		// create game
-		currentGame = new BallGame();
-
-		// create teams
-		fieldingTeam = app.controller.currentGame.homeTeam;
-		battingTeam = app.controller.currentGame.awayTeam;
-
-		// set up bases
-		currentGame.bases [0] = currentGame.homePlate;
-		currentGame.bases [1] = currentGame.firstBase;
-		currentGame.bases [2] = currentGame.secondBase;
-		currentGame.bases [3] = currentGame.thirdBase;
-
-		currentGame.firstBase.baseGameObject = app.views.firstBase;
-		currentGame.secondBase.baseGameObject = app.views.secondBase;
-		currentGame.thirdBase.baseGameObject = app.views.thirdBase;
-		currentGame.homePlate.baseGameObject = app.views.homePlate;
-
+		// create ballgame
+		SetUpBallgame ();
 
 		// create fielders
-		foreach (Player player in fieldingTeam.players) {
-			// instantiate each fielder's gameobject
-			player.fielderInstance = Instantiate (app.views.fielder);
-			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
-			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
-			fielderView.maxSpeed = player.runningSpeed;
-
-			// put fielders in the dugout
-			Vector3 randomizedStartPosition = currentGame.homeDugoutPosition;
-			randomizedStartPosition.x += Random.Range (-8, 0);
-			randomizedStartPosition.z += Random.Range (-3, 3);
-			player.fielderInstance.transform.position = randomizedStartPosition;
-
-			// move fielders out to their positions
-			fielderView.Idle ();
-		}
+		SetUpFielders ();
 
 		// create first batter
-		currentBatter = battingTeam.players [battingTeam.currentBatterNumber - 1];
 		NewBatter (currentBatter);
 
 		// init variables
@@ -108,7 +76,7 @@ public class AppController : BaseballElement {
 				app.views.infieldCameraTrigger.SetActive (true);
 
 				// advance all runners
-				foreach (Player runner in battingTeam.players) {
+				foreach (Player runner in battingTeam.lineup) {
 					if (runner.runnerInstance) {
 						runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
 					}
@@ -136,7 +104,58 @@ public class AppController : BaseballElement {
 		}
 	}
 
-	public void NewBatter (Player currentBatter) {
+	void SetUpBallgame () {
+		// create game
+		currentGame = new BallGame();
+	
+		// set up base instances
+		currentGame.bases [0] = currentGame.homePlate;
+		currentGame.bases [1] = currentGame.firstBase;
+		currentGame.bases [2] = currentGame.secondBase;
+		currentGame.bases [3] = currentGame.thirdBase;
+
+		currentGame.firstBase.baseGameObject = app.views.firstBase;
+		currentGame.secondBase.baseGameObject = app.views.secondBase;
+		currentGame.thirdBase.baseGameObject = app.views.thirdBase;
+		currentGame.homePlate.baseGameObject = app.views.homePlate;
+
+		// assign teams
+		currentGame.homeTeam = new Team ("Toronto", true);
+		currentGame.awayTeam = new Team("Chicago", false);
+
+		fieldingTeam = currentGame.homeTeam;
+		battingTeam = currentGame.awayTeam;
+	}
+
+	void SetUpFielders () {
+		foreach (Player player in fieldingTeam.lineup) {
+			// instantiate each fielder's gameobject
+			player.fielderInstance = Instantiate (app.views.fielder);
+			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
+			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
+			fielderView.maxSpeed = player.runningSpeed;
+
+			// put fielders in the dugout
+			Vector3 randomizedStartPosition = currentGame.homeDugoutPosition;
+			randomizedStartPosition.x += Random.Range (-8, 0);
+			randomizedStartPosition.z += Random.Range (-3, 3);
+			player.fielderInstance.transform.position = randomizedStartPosition;
+
+			// move fielders out to their positions
+			fielderView.Idle ();
+		}
+	}
+
+	void NewBatter (Player currentBatter) {
+		// cycle lineup after 9th batter
+		if (battingTeam.currentBatterNumber < 9) {
+			battingTeam.currentBatterNumber++;			
+		} else {
+			battingTeam.currentBatterNumber = 1;
+		}
+
+		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
+
 		currentBatter.runnerInstance = Instantiate (app.views.runner);
 		currentBatter.runnerInstance.transform.position = currentGame.awayDugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
@@ -153,7 +172,7 @@ public class AppController : BaseballElement {
 		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
 
 		battingTeam.currentBatterNumber += 1;
-		currentBatter = battingTeam.players [battingTeam.currentBatterNumber - 1];
+		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
 		NewBatter (currentBatter);
 	}
 
