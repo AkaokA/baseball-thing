@@ -15,9 +15,6 @@ public class BallGame {
 
 	public Inning currentInning = new Inning(1);
 
-	public Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
-	public Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
-
 	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
 	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);
 
@@ -33,6 +30,7 @@ public class Team {
 	public bool isHomeTeam;
 	public string teamName;
 	public int currentBatterNumber;
+	public Vector3 dugoutPosition;
 
 	// players
 	public Player[] lineup = new Player[9];
@@ -42,6 +40,16 @@ public class Team {
 		teamName = name;
 		isHomeTeam = isHome;
 		currentBatterNumber = 1;
+
+		// hard-coded dugout locations
+		Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
+		Vector3 awayDugoutPosition = new Vector3 (5f,0f,-6f);
+
+		if (isHomeTeam) {
+			dugoutPosition = homeDugoutPosition;
+		} else {
+			dugoutPosition = awayDugoutPosition;
+		}
 
 		// temporary attributes for all players on team
 		float runningSpeed = 5f;

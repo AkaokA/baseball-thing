@@ -136,7 +136,7 @@ public class AppController : BaseballElement {
 			fielderView.maxSpeed = player.runningSpeed;
 
 			// put fielders in the dugout
-			Vector3 randomizedStartPosition = currentGame.homeDugoutPosition;
+			Vector3 randomizedStartPosition = fieldingTeam.dugoutPosition;
 			randomizedStartPosition.x += Random.Range (-8, 0);
 			randomizedStartPosition.z += Random.Range (-3, 3);
 			player.fielderInstance.transform.position = randomizedStartPosition;
@@ -157,7 +157,7 @@ public class AppController : BaseballElement {
 		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
 
 		currentBatter.runnerInstance = Instantiate (app.views.runner);
-		currentBatter.runnerInstance.transform.position = currentGame.awayDugoutPosition;
+		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
 		batterView.maxSpeed = currentBatter.runningSpeed;
 		batterView.MoveToward (currentGame.leftBattersBox);
