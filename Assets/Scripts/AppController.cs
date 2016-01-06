@@ -107,6 +107,7 @@ public class AppController : BaseballElement {
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
 				app.views.infieldCameraTrigger.SetActive (true);
 
+				// advance all runners
 				foreach (Player runner in battingTeam.players) {
 					if (runner.runnerInstance) {
 						runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();

@@ -14,7 +14,7 @@ public class RunnerView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		targetBase = app.controller.currentGame.firstBase;
+
 	}
 
 	// Update is called once per frame
@@ -34,21 +34,12 @@ public class RunnerView : BaseballElement {
 	}
 
 	public void advanceToNextBase () {
-		switch (currentBaseIndex) {
-		case 0:
-			targetBase = app.controller.currentGame.firstBase;
-			break;
-		case 1:
-			targetBase = app.controller.currentGame.secondBase;
-			break;
-		case 2:
-			targetBase = app.controller.currentGame.thirdBase;
-			break;
-		case 3:
-			targetBase = app.controller.currentGame.homePlate;
-			break;
-		}
+		targetBase = app.controller.currentGame.bases[currentBaseIndex + 1];
+		MoveToward (targetBase.baseGameObject.transform.position);
+	}
 
+	public void retreatToLastBase () {
+		targetBase = app.controller.currentGame.bases[currentBaseIndex];
 		MoveToward (targetBase.baseGameObject.transform.position);
 	}
 

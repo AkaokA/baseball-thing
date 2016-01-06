@@ -51,7 +51,7 @@ public class Team {
 		for (int position = 1; position <= 9; position++) {
 			Player playerInstance = new Player ("person " + position, position, runningSpeed, throwStrength);
 			players [position-1] = playerInstance;
-			Debug.Log (teamName + " " + playerInstance.name);
+			// Debug.Log (teamName + " " + playerInstance.name);
 		}
 	}
 }
