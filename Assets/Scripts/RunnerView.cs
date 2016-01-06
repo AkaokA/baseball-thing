@@ -6,7 +6,7 @@ public class RunnerView : BaseballElement {
 	private Vector3 targetPosition;
 	private Vector3 transformVelocity;
 	private float smoothTime = 0.25f;
-	private float maxSpeed = 6f;
+	public float maxSpeed;
 
 	public bool isOnBase = false;
 	public int currentBase = 0;
@@ -46,4 +46,24 @@ public class RunnerView : BaseballElement {
 			break;
 		}
 	}
+
+	void onTriggerEnter (Collider collider) {
+		Debug.Log ("hey?");
+
+		if (collider.tag == "Base") {
+			if (collider == app.views.firstBase) {
+				currentBase = 1;
+				Debug.Log ("made it to 1st!");
+			}
+			if (collider == app.views.secondBase) {
+				currentBase = 2;
+				Debug.Log ("made it to 2nd!");
+			}
+			if (collider == app.views.thirdBase) {
+				currentBase = 3;
+				Debug.Log ("made it to 3rd!");
+			}
+		}
+	}
+
 }

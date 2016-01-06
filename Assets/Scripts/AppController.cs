@@ -10,6 +10,8 @@ public class AppController : BaseballElement {
 
 	public GameObject Baseball;
 	public GameObject currentBaseballInstance;
+	public Player currentBatter;
+	private int currentBatterNumber = 1;
 
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
@@ -45,6 +47,7 @@ public class AppController : BaseballElement {
 			player.fielderInstance = Instantiate (app.views.fielder);
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
 			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
+			fielderView.maxSpeed = player.runningSpeed;
 
 			// put fielders in the dugout
 			Vector3 randomizedStartPosition = currentGame.homeDugoutPosition;
@@ -57,10 +60,8 @@ public class AppController : BaseballElement {
 		}
 
 		// create first batter
-		battingTeam.players [0].runnerInstance = Instantiate (app.views.runner);
-		battingTeam.players [0].runnerInstance.transform.position = currentGame.awayDugoutPosition;
-		RunnerView runnerView = battingTeam.players [0].runnerInstance.GetComponent<RunnerView> ();
-		runnerView.MoveToward (currentGame.leftBattersBox);
+		currentBatter = battingTeam.players [currentBatterNumber - 1];
+		NewBatter (currentBatter);
 
 		// init variables
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
@@ -101,7 +102,13 @@ public class AppController : BaseballElement {
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
 				app.views.infieldCameraTrigger.SetActive (true);
 
-				battingTeam.players [0].runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+				foreach (Player runner in battingTeam.players) {
+					if (runner.runnerInstance) {
+						runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+					}
+
+				}
+
 			}
 
 			// ARROW KEYS: Throw to base
@@ -125,6 +132,14 @@ public class AppController : BaseballElement {
 		}
 	}
 
+	public void NewBatter (Player currentBatter) {
+		currentBatter.runnerInstance = Instantiate (app.views.runner);
+		currentBatter.runnerInstance.transform.position = currentGame.awayDugoutPosition;
+		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
+		batterView.maxSpeed = currentBatter.runningSpeed;
+		batterView.MoveToward (currentGame.leftBattersBox);
+	}
+
 	public void ResetPlay () {
 		Destroy (currentBaseballInstance);
 		currentGame.currentInning.ballIsInPlay = false;
@@ -132,6 +147,10 @@ public class AppController : BaseballElement {
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
 		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
+
+		currentBatterNumber += 1;
+		currentBatter = battingTeam.players [currentBatterNumber - 1];
+		NewBatter (currentBatter);
 	}
 
 	public void RegisterPitch () {

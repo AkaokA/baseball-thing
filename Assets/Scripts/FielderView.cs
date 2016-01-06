@@ -7,7 +7,7 @@ public class FielderView : BaseballElement {
 	private Vector3 targetPosition;
 	private Vector3 transformVelocity;
 	private float smoothTime = 0.25f;
-	private float maxSpeed = 6f;
+	public float maxSpeed;
 
 	public bool hasTheBall = false;
 	public bool fielderCanMove = true;
@@ -17,7 +17,7 @@ public class FielderView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 
 	// Update is called once per frame

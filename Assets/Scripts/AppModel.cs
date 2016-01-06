@@ -28,34 +28,40 @@ public class BallGame {
 }
 
 public class Team {
+	// gameplay variables
 	public bool isHomeTeam;
 	public string teamName;
 	public Player[] players = new Player[9];
 
+	// constructor
 	public Team (string name, bool isHome) {
 		teamName = name;
 		isHomeTeam = isHome;
 
+		float runningSpeed = 5f;
+
 		// generate players
 		for (int position = 1; position <= 9; position++) {
-			Player playerInstance = new Player (position);
+			Player playerInstance = new Player (position, runningSpeed);
 			players [position-1] = playerInstance;
 		}
 	}
 }
 
 public class Player {
+	// gameplay variables
 	public GameObject fielderInstance;
 	public GameObject runnerInstance;
+	public Base currentBase;
 
+	// player attributes
 	public int fieldingPositionNumber; // 1 through 9
 	public float runningSpeed;
 
-	public Base currentBase;
-
-	public Player ( int positionNumber ) {
+	// constructor
+	public Player ( int positionNumber , float speed) {
 		fieldingPositionNumber = positionNumber;
-		runningSpeed = 6f;
+		runningSpeed = speed;
 	}
 }
 
