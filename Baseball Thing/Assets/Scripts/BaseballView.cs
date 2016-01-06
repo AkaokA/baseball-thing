@@ -49,7 +49,7 @@ public class BaseballView : BaseballElement {
 		float pitchAngle = Mathf.Asin ( Physics.gravity.magnitude * distanceToTarget / Mathf.Pow (pitchSpeed, 2) ) / 2;
 
 		// add randomness according to accuracy
-		float randomness = 0.25f;
+		float randomness = 0.2f;
 		pitchDirection.x += Random.Range (-randomness, randomness) * (1 - accuracy);
 		pitchDirection.y += Random.Range (-randomness, randomness) * (1 - accuracy);
 
@@ -101,6 +101,7 @@ public class BaseballView : BaseballElement {
 			
 		baseballRigidbody.WakeUp();
 		baseballRigidbody.velocity = throwSpeed * throwDirection;
+		StartCoroutine (SetLandingPoint ());
 	}
 
 	void OnCollisionStay (Collision collision) {
@@ -117,6 +118,7 @@ public class BaseballView : BaseballElement {
 	}
 
 	public IEnumerator SetLandingPoint () {
+		landingPointView.SetActive (true);
 		yield return 0; // wait one frame so we can get the ball's velocity
 
 		Vector3 landingPoint = new Vector3 (0, 0, 0);

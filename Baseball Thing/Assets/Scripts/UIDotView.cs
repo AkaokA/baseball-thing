@@ -19,7 +19,7 @@ public class UIDotView : BaseballElement {
 	}
 
 	public IEnumerator changeColor (Color color) {
-		float time = 0.5f;
+		float time = 0.2f;
 		float currentLerpTime;
 
 		Color initialColor = GetComponent<UnityEngine.UI.RawImage> ().color;

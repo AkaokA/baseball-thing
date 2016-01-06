@@ -29,9 +29,11 @@ public class FielderView : BaseballElement {
 			// go back to idle position
 			Idle ();
 		}
-
+		
+		// move fielder to target
 		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);
 
+		// point fielder towards stuff
 		if (app.controller.currentBaseballInstance) {
 			transform.LookAt (targetPosition);
 		} else {
@@ -51,12 +53,12 @@ public class FielderView : BaseballElement {
 
 	public void PlayDefense () {
 		// whoever's closest to the ball
-		if (IsClosestToBall()) {
+		if ( IsClosestToBall () ) {
 			// go get the ball
 			ChaseBall ();
 		} else {
 			// go back to a useful position
-			BeUseful (fieldingPositionNumber);
+			CoverBases (fieldingPositionNumber);
 		}
 	}
 		
@@ -98,33 +100,33 @@ public class FielderView : BaseballElement {
 		}
 	}
 		
-	public void BeUseful(int fieldingPositionNumber) {
+	public void CoverBases(int fieldingPositionNumber) {
 		switch (fieldingPositionNumber) {
-		case 1:
+		case 1: // Pitcher
 			MoveToward (idleLocation);
 			break;
-		case 2:
+		case 2: // Catcher
 			MoveToward (app.views.homePlate.transform.position);
 			break;
-		case 3:
+		case 3: // 1st
 			MoveToward (app.views.firstBase.transform.position);
 			break;
-		case 4:
+		case 4: // 2nd
 			MoveToward (app.views.secondBase.transform.position);
 			break;
-		case 5:
+		case 5: // 3rd
 			MoveToward (app.views.thirdBase.transform.position);
 			break;
-		case 6:
+		case 6: // Shortstop
 			MoveToward (idleLocation);
 			break;
-		case 7:
+		case 7: // Left Field
 			MoveToward (idleLocation);
 			break;
-		case 8:
+		case 8: // Center Field
 			MoveToward (idleLocation);
 			break;
-		case 9:
+		case 9: // Right Field
 			MoveToward (idleLocation);
 			break;
 		}
