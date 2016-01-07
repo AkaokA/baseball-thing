@@ -5,7 +5,8 @@ public class CameraView : BaseballElement {
 
 	public float targetCameraSize = 0f;
 	public float targetCameraHeight = 0f;
-	public float targetCameraDiagPosition = 0f;
+	public float targetCameraX = 0f;
+	public float targetCameraZ = 0f;
 	public float targetCameraAngle = 0f;
 
 	private float sizeVelocity = 0.0f;
@@ -24,27 +25,31 @@ public class CameraView : BaseballElement {
 
 		switch(state) {
 		case "overhead":
-			targetCameraSize = 40f;
+			targetCameraSize = 27f;
 			targetCameraHeight = 12.5f;
-			targetCameraDiagPosition = 12.5f;
+			targetCameraX = 0f;
+			targetCameraZ = 25f;
 			targetCameraAngle = 90f;
 			break;
 		case "atbat":
 			targetCameraSize = 3.25f;
 			targetCameraHeight = 2.75f;
-			targetCameraDiagPosition = 0f;
+			targetCameraX = 0f;
+			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
 			break;
 		case "infield":
 			targetCameraSize = 5.5f;
 			targetCameraHeight = 5f;
-			targetCameraDiagPosition = 0f;
+			targetCameraX = 0f;
+			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
 			break;
 		case "outfield":
 			targetCameraSize = 13f;
 			targetCameraHeight = 12f;
-			targetCameraDiagPosition = 0f;
+			targetCameraX = 0f;
+			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
 			break;
 		}
@@ -56,7 +61,7 @@ public class CameraView : BaseballElement {
 		float cameraAngle = transform.rotation.eulerAngles.x;
 
 		// set position
-		Vector3 targetPosition = new Vector3(targetCameraDiagPosition, targetCameraHeight, targetCameraDiagPosition);
+		Vector3 targetPosition = new Vector3(targetCameraX, targetCameraHeight, targetCameraZ);
 		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime);
 
 		// change size/angle values with smoothDamp
