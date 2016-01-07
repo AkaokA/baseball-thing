@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 public class CameraView : BaseballElement {
 
@@ -9,9 +10,12 @@ public class CameraView : BaseballElement {
 	public float targetCameraZ = 0f;
 	public float targetCameraAngle = 0f;
 
+	public float targetEffectIntensity = 0f;
+
 	private float sizeVelocity = 0.0f;
 	private Vector3 transformVelocity = new Vector3 (0,0,0);
 	private float angleVelocity = 0.0f;
+	private float effectVelocity = 0.0f;
 
 	public float smoothTime = 0f;
 
@@ -30,6 +34,7 @@ public class CameraView : BaseballElement {
 			targetCameraX = 0f;
 			targetCameraZ = 25f;
 			targetCameraAngle = 90f;
+			targetEffectIntensity = 1f;
 			break;
 		case "atbat":
 			targetCameraSize = 3.25f;
@@ -37,6 +42,7 @@ public class CameraView : BaseballElement {
 			targetCameraX = 0f;
 			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
+			targetEffectIntensity = 0f;
 			break;
 		case "infield":
 			targetCameraSize = 5.5f;
@@ -44,6 +50,7 @@ public class CameraView : BaseballElement {
 			targetCameraX = 0f;
 			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
+			targetEffectIntensity = 0f;
 			break;
 		case "outfield":
 			targetCameraSize = 13f;
@@ -51,6 +58,7 @@ public class CameraView : BaseballElement {
 			targetCameraX = 0f;
 			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
+			targetEffectIntensity = 0f;
 			break;
 		}
 	}
@@ -59,6 +67,7 @@ public class CameraView : BaseballElement {
 	void Update () {
 		float cameraSize = GetComponent<Camera> ().orthographicSize;
 		float cameraAngle = transform.rotation.eulerAngles.x;
+//		float effectIntensity = GetComponent<BloomOptimized> ().intensity;
 
 		// set position
 		Vector3 targetPosition = new Vector3(targetCameraX, targetCameraHeight, targetCameraZ);
@@ -67,6 +76,7 @@ public class CameraView : BaseballElement {
 		// change size/angle values with smoothDamp
 		cameraSize = Mathf.SmoothDamp(cameraSize, targetCameraSize, ref sizeVelocity, smoothTime);
 		cameraAngle = Mathf.SmoothDamp(cameraAngle, targetCameraAngle, ref angleVelocity, smoothTime);
+//		effectIntensity = Mathf.SmoothDamp(effectIntensity, targetEffectIntensity, ref effectVelocity, smoothTime);
 
 		// set size
 		GetComponent<Camera>().orthographicSize = cameraSize;
@@ -77,5 +87,8 @@ public class CameraView : BaseballElement {
 		tempEulerAngles.x = cameraAngle;
 		tempRotation.eulerAngles = tempEulerAngles;
 		transform.rotation = tempRotation;
+
+		// set effect intensity
+//		GetComponent<BloomOptimized> ().intensity = effectIntensity;
 	}
 }
