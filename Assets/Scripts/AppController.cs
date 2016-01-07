@@ -229,28 +229,13 @@ public class AppController : BaseballElement {
 	void ResetCount () {
 		currentGame.currentInning.currentAtBat.balls = 0;
 		currentGame.currentInning.currentAtBat.strikes = 0;
-		ResetCountUI ();
-	}
 
-	void ResetCountUI () {
+		// update scoreboard count
 		ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.disabledColor));
 		ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.disabledColor));
 		ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.disabledColor));
 		strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.disabledColor));
 		strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.disabledColor));
-	}
-
-	public void UpdateScoreboard () {
-		// text labels
-		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
-		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
-		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayScore.ToString ();
-		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeScore.ToString ();
-		UpdateInningLabel ();
-	}
-
-	public void UpdateInningLabel () {
-		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
 	}
 
 	public void IncrementBalls () {
@@ -342,4 +327,14 @@ public class AppController : BaseballElement {
 
 		UpdateScoreboard ();
 	}
+
+	public void UpdateScoreboard () {
+		// text labels
+		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
+		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
+		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayScore.ToString ();
+		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeScore.ToString ();
+		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
+	}
+		
 }
