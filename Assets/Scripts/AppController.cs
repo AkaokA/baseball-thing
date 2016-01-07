@@ -147,6 +147,7 @@ public class AppController : BaseballElement {
 		currentBatter.runnerInstance = Instantiate (app.views.runner);
 		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
+		batterView.batterIndex = battingTeam.currentBatterNumber;
 		batterView.maxSpeed = currentBatter.runningSpeed;
 		batterView.MoveToward (currentGame.leftBattersBox);
 	}
@@ -300,5 +301,15 @@ public class AppController : BaseballElement {
 			UpdateInningLabel ();
 			break;
 		}
+	}
+
+	public void IncrementScore () {
+		if ( battingTeam == currentGame.homeTeam ) {
+			currentGame.homeScore++;
+		} else {
+			currentGame.awayScore++;
+		}
+
+		UpdateScoreboard ();
 	}
 }

@@ -8,13 +8,19 @@ public class RunnerView : BaseballElement {
 	private float smoothTime = 0.25f;
 	public float maxSpeed;
 
+	public int batterIndex;
 	public bool isOnBase = false;
 	public int currentBaseIndex = 0;
 	public Base targetBase;
 
+	public bool hadAnAtBat = false;
+	private bool reachedBase = false;
+	private bool scoreCounted = false;
+	public bool runnerIsOut = false;
+
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 
 	// Update is called once per frame
@@ -24,8 +30,16 @@ public class RunnerView : BaseballElement {
 
 		// point runner towards stuff
 		transform.LookAt (targetPosition);
-
+	
 		TouchingBase ();
+
+		if (hadAnAtBat) {
+			Vector3 distanceToDugout = app.controller.battingTeam.dugoutPosition - transform.position;
+			distanceToDugout.y = 0;
+			if ( distanceToDugout.magnitude < 1f ) {
+				Destroy ( app.controller.battingTeam.lineup[batterIndex - 1].runnerInstance );
+			}
+		}
 	}
 		
 	public void MoveToward (Vector3 newTarget) {
@@ -48,6 +62,10 @@ public class RunnerView : BaseballElement {
 		MoveToward (targetBase.baseGameObject.transform.position);
 	}
 
+	public void goBackToDugout () {
+		MoveToward (app.controller.battingTeam.dugoutPosition);
+	}
+
 	public void TouchingBase () {
 		foreach (Base thisBase in app.controller.currentGame.bases) {
 			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
@@ -57,10 +75,17 @@ public class RunnerView : BaseballElement {
 				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
 				thisBase.isOccupied = true;
 
-//				// this doesn't work yet
-//				if ( currentBaseIndex != 0 && thisBase == app.controller.currentGame.homePlate ) {
-//					MoveToward (app.controller.battingTeam.dugoutPosition);
-//				}
+				if ( thisBase == app.controller.currentGame.homePlate ) {
+					if (reachedBase && !scoreCounted && !runnerIsOut) {
+						goBackToDugout ();
+						app.controller.IncrementScore ();
+						scoreCounted = true;
+					}
+				} else {
+					reachedBase = true;
+					hadAnAtBat = true;
+				}
+
 			} else {
 				thisBase.isOccupied = false;
 			}

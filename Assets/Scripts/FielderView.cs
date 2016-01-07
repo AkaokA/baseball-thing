@@ -78,7 +78,7 @@ public class FielderView : BaseballElement {
 			// stop moving
 			StopMoving ();
 
-			// throw the ball
+			// throw the ball somewhere helpful
 			StartCoroutine ( ThrowBall () );
 		} 
 	}
@@ -130,7 +130,7 @@ public class FielderView : BaseballElement {
 
 	public bool GotBall () {
 		Vector3 distanceToBall = app.controller.currentBaseballInstance.transform.position - transform.position;
-		float proximityThreshold = 1f;
+		float proximityThreshold = 0.5f;
 
 		if ( distanceToBall.magnitude < proximityThreshold ) {
 			hasTheBall = true;
@@ -180,15 +180,15 @@ public class FielderView : BaseballElement {
 		switch (fieldingPositionNumber) {
 		case 1: // Pitcher
 			switch (activeFielder.fieldingPositionNumber) {
-			case 2:
-				MoveToward (app.views.homePlate.transform.position);
-				break;
-			case 3:
-				MoveToward (app.views.firstBase.transform.position);
-				break;
-			case 5:
-				MoveToward (app.views.thirdBase.transform.position);
-				break;
+//			case 2:
+//				MoveToward (app.views.homePlate.transform.position);
+//				break;
+//			case 3:
+//				MoveToward (app.views.firstBase.transform.position);
+//				break;
+//			case 5:
+//				MoveToward (app.views.thirdBase.transform.position);
+//				break;
 			default:
 				MoveToward (idleLocation);
 				break;
