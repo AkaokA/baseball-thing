@@ -70,7 +70,7 @@ public class AppController : BaseballElement {
 			// SPACE: hit pitch
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				currentGame.currentInning.ballIsInPlay = true;
-				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball ();
+				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
 				app.views.infieldCameraTrigger.SetActive (true);
 
@@ -147,8 +147,10 @@ public class AppController : BaseballElement {
 		currentBatter.runnerInstance = Instantiate (app.views.runner);
 		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
+
 		batterView.batterIndex = battingTeam.currentBatterNumber;
 		batterView.maxSpeed = currentBatter.runningSpeed;
+
 		batterView.MoveToward (currentGame.leftBattersBox);
 	}
 

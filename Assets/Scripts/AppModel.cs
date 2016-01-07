@@ -75,6 +75,7 @@ public class Player {
 	public int fieldingPositionNumber; // 1 through 9
 	public float runningSpeed;
 	public float throwStrength;
+	public float hittingPower;
 
 	public float pitchStrength;
 	public float pitchAccuracy;
@@ -85,6 +86,7 @@ public class Player {
 		fieldingPositionNumber = positionNumber;
 		runningSpeed = speed;
 		throwStrength = throwing;
+		hittingPower = 800f;
 
 		// pitcher attributes; not used yet
 		if (positionNumber == 1)	 {

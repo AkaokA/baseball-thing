@@ -6,8 +6,7 @@ public class BaseballView : BaseballElement {
 	public GameObject heightIndicator;
 	private GameObject landingPointView;
 
-	public float hitForceMin = 500f;
-	public float hitForceMax = 1200f;
+	public float hitForceVariance = 400f;
 	public float hitForce;
 	public Vector3 hitDirection = new Vector3(0f,0f,0f);
 
@@ -61,12 +60,12 @@ public class BaseballView : BaseballElement {
 		baseballRigidbody.velocity = pitchSpeed * pitchDirection;
 	}
 
-	public void HitBaseball() {
+	public void HitBaseball(float hittingPower) {
 		hitDirection.x = Random.Range (0f,1f);
 		hitDirection.y = Random.Range (1f,1f);
 		hitDirection.z = Random.Range (0f,1f);
 
-		hitForce = Random.Range (hitForceMin, hitForceMax);
+		hitForce = hittingPower + Random.Range (-hitForceVariance/2, hitForceVariance/2);
 
 		baseballRigidbody.velocity = new Vector3(0,0,0);
 		baseballRigidbody.WakeUp();
