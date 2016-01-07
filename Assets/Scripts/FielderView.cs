@@ -61,7 +61,7 @@ public class FielderView : BaseballElement {
 		// if the ball is coming to this fielder
 		if (GetActiveFielder ().fielderInstance.GetComponent<FielderView> () == this) {
 			// don't move if covering a base
-			if ( CoveringBase () ) { 
+			if ( IsCoveringBase () ) { 
 				StopMoving ();
 			} else { // if not covering a base, go get the ball
 				ChaseBall ();
@@ -172,7 +172,7 @@ public class FielderView : BaseballElement {
 		}
 	}
 
-	public bool CoveringBase () {
+	public bool IsCoveringBase () {
 		foreach (Base thisBase in app.controller.currentGame.bases) {
 			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
 			distanceToBase.y = 0; // horizontal distance only
