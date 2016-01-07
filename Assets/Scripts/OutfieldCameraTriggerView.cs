@@ -17,10 +17,7 @@ public class OutfieldCameraTriggerView : BaseballElement {
 
 	void OnTriggerExit (Collider otherCollider) {
 		if (otherCollider.tag == "Baseball") {
-			if (otherCollider.transform.position.x > 0 && otherCollider.transform.position.z > 0) {
-				app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("outfield", 0.5f);			
-			}
+			app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("outfield", 0.25f);			
 		}
-
 	}
 }
