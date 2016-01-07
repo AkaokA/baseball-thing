@@ -69,7 +69,7 @@ public class BaseballView : BaseballElement {
 
 	public void HitBaseball(float hittingPower) {
 		hitDirection.x = Random.Range (0f,1f);
-		hitDirection.y = Random.Range (1f,1f);
+		hitDirection.y = Random.Range (0f,1f);
 		hitDirection.z = Random.Range (0f,1f);
 
 		hitForce = hittingPower + Random.Range (-hitForceVariance/2, hitForceVariance/2);
@@ -128,6 +128,7 @@ public class BaseballView : BaseballElement {
 	}
 
 	public IEnumerator SetLandingPoint () {
+		landingPointView.SetActive (true);
 		while ( app.controller.currentBaseballInstance != null ) {
 			yield return null; // wait one frame so we can get the ball's velocity
 
@@ -139,12 +140,10 @@ public class BaseballView : BaseballElement {
 			float angle = Mathf.Asin (direction.y);
 			float distance = (velocity.magnitude * Mathf.Cos (angle) / Physics.gravity.magnitude) * ((velocity.magnitude * Mathf.Sin (angle)) + Mathf.Sqrt ( Mathf.Pow (velocity.magnitude * Mathf.Sin (angle), 2f) + (2f * Physics.gravity.magnitude * deltaHeight) ));
 
-			landingPoint = app.controller.currentBaseballInstance.transform.position + (direction * distance * 1.5f);
+			landingPoint = app.controller.currentBaseballInstance.transform.position + (direction * distance);
 			landingPoint.y = 0.005f;
 
 			landingPointView.transform.position = landingPoint;
-			landingPointView.SetActive (true);
 		}
 	}
-
 }

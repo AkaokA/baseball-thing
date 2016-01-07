@@ -310,26 +310,26 @@ public class AppController : BaseballElement {
 			currentGame.currentInning.outs++;
 			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.outDotColor));
 			break;
-		case 2:
-			Debug.Log ("CHANGE!");
-			ResetCount ();
-			currentGame.currentInning.outs = 0;
-			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
-			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
-
-			if (currentGame.currentInning.half == "top") {
-				currentGame.currentInning.half = "bot";
-				fieldingTeam = app.controller.currentGame.awayTeam;
-				battingTeam = app.controller.currentGame.homeTeam;
-			} else {
-				currentGame.currentInning.half = "top";
-				fieldingTeam = app.controller.currentGame.homeTeam;
-				battingTeam = app.controller.currentGame.awayTeam;
-				currentGame.currentInning.inningNumber++;
-			}
-
-			UpdateInningLabel ();
-			break;
+//		case 2:
+//			Debug.Log ("CHANGE!");
+//			ResetCount ();
+//			currentGame.currentInning.outs = 0;
+//			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
+//			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
+//
+//			if (currentGame.currentInning.half == "top") {
+//				currentGame.currentInning.half = "bot";
+//				fieldingTeam = app.controller.currentGame.awayTeam;
+//				battingTeam = app.controller.currentGame.homeTeam;
+//			} else {
+//				currentGame.currentInning.half = "top";
+//				fieldingTeam = app.controller.currentGame.homeTeam;
+//				battingTeam = app.controller.currentGame.awayTeam;
+//				currentGame.currentInning.inningNumber++;
+//			}
+//
+//			UpdateInningLabel ();
+//			break;
 		}
 	}
 

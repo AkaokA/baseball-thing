@@ -101,7 +101,7 @@ public class FielderView : BaseballElement {
 			targetPosition = app.controller.currentBaseballInstance.transform.position + leadTheTarget;
 			targetPosition.y = 0;
 		} else {
-			targetPosition = app.views.baseballLandingPoint.transform.position + leadTheTarget;
+			targetPosition = app.views.baseballLandingPoint.transform.position;
 			targetPosition.y = 0;
 		}
 
@@ -123,7 +123,7 @@ public class FielderView : BaseballElement {
 	public void ChaseBall () {
 		Vector3 leadTheTarget = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
 		leadTheTarget.y = 0;
-		leadTheTarget = leadTheTarget / 8;
+		leadTheTarget = leadTheTarget / 4;
 
 		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
 			// skate to where the puck is going to be
