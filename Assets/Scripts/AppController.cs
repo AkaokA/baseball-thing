@@ -25,6 +25,16 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
+
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("overhead", 2f);
+	}
+
+	public void NewGame () {
+		// create ballgame
+		SetUpBallgame ();
+
+		// show scoreboard
+		ShowUI (app.views.scoreboard);
 		// init scoreboard variables (scoreboard stuff should go in its own class)
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
 		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
@@ -34,10 +44,7 @@ public class AppController : BaseballElement {
 		out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
 		out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
 
-		// create ballgame
-		SetUpBallgame ();
-
-		// draw scoreboard
+		// update scoreboard
 		UpdateScoreboard ();
 
 		// create fielders
@@ -46,11 +53,23 @@ public class AppController : BaseballElement {
 		// create first batter
 		NewBatter ();
 
+		// hide main menu
+		HideUI (app.views.mainMenu);
+
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 2f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
-	
+
+	public void ShowUI (GameObject guiCanvas) {
+		guiCanvas.SetActive (true);
+	}
+
+	public void HideUI (GameObject guiCanvas) {
+		guiCanvas.SetActive (false);
+	}
+
+
 	// Update is called once per frame
 	void Update () {
 					

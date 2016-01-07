@@ -27,6 +27,9 @@ public class AppViews : BaseballElement {
 	public GameObject homeScoreLabel;
 	public GameObject inningLabel;
 
+	public GameObject mainMenu;
+	public GameObject scoreboard;
+
 	public GameObject ball1Dot;
 	public GameObject ball2Dot;
 	public GameObject ball3Dot;
