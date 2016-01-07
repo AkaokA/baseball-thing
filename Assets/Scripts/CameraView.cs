@@ -25,7 +25,7 @@ public class CameraView : BaseballElement {
 
 		switch(state) {
 		case "overhead":
-			targetCameraSize = 27f;
+			targetCameraSize = 30f;
 			targetCameraHeight = 12.5f;
 			targetCameraX = 0f;
 			targetCameraZ = 25f;
