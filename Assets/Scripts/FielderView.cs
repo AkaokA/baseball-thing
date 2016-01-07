@@ -15,7 +15,7 @@ public class FielderView : BaseballElement {
 
 	public Vector3 idleLocation;
 	private Player activeFielder;
-	private Base leadRunnerBase;
+	private Base targetBase;
 
 	// Use this for initialization
 	void Start () {
@@ -147,16 +147,19 @@ public class FielderView : BaseballElement {
 		for ( int baseIndex = 1; baseIndex <= 3; baseIndex++ ) {
 			if (app.controller.currentGame.bases[baseIndex].isOccupied) {
 				if (baseIndex == 3) {
-					leadRunnerBase = app.controller.currentGame.bases[0];
+					targetBase = app.controller.currentGame.bases[0];
 				} else {
-					leadRunnerBase = app.controller.currentGame.bases[baseIndex + 1];
+					targetBase = app.controller.currentGame.bases[baseIndex + 1];
 				}
+			} else {
+				targetBase = app.controller.currentGame.firstBase;
 			}
 		}
 
 		yield return new WaitForSeconds (0.3f);
 
-		baseballView.ThrowBaseballAt (leadRunnerBase.baseGameObject.transform, throwStrength);
+		baseballView.ThrowBaseballAt (targetBase.baseGameObject.transform, throwStrength);
+
 		yield return new WaitForSeconds (0.2f);
 
 		hasTheBall = false;
