@@ -49,6 +49,10 @@ public class FielderView : BaseballElement {
 		targetPosition = newTarget;
 	}
 
+	public void StopMoving () {
+		MoveToward (transform.position);
+	}
+
 	public void Idle () {
 		MoveToward (idleLocation);
 	}
@@ -77,7 +81,6 @@ public class FielderView : BaseballElement {
 			// throw the ball
 			StartCoroutine ( ThrowBall () );
 		} 
-
 	}
 		
 	public Player GetActiveFielder () {
@@ -110,7 +113,7 @@ public class FielderView : BaseballElement {
 
 		return activeFielder;
 	}
-
+		
 	public void ChaseBall () {
 		Vector3 leadTheTarget = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
 		leadTheTarget.y = 0;
@@ -135,10 +138,6 @@ public class FielderView : BaseballElement {
 		} else {
 			return false;
 		}
-	}
-		
-	public void StopMoving () {
-		MoveToward ( transform.position );
 	}
 		
 	public IEnumerator ThrowBall () {
