@@ -48,8 +48,13 @@ public class RunnerView : BaseballElement {
 	}
 
 	public void advanceToNextBase () {
-		if (currentBaseIndex < 3) {
-			targetBase = app.controller.currentGame.bases[currentBaseIndex + 1];
+		if (currentBaseIndex <= 2) {
+			if (currentBaseIndex == 0 && reachedBase) {
+				goBackToDugout ();
+				return;
+			} else {
+				targetBase = app.controller.currentGame.bases[currentBaseIndex + 1];
+			}
 		} else {
 			targetBase = app.controller.currentGame.homePlate;
 		}
@@ -75,6 +80,7 @@ public class RunnerView : BaseballElement {
 				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
 				thisBase.isOccupied = true;
 
+				// crossing the plate
 				if ( thisBase == app.controller.currentGame.homePlate ) {
 					if (reachedBase && !scoreCounted && !runnerIsOut) {
 						goBackToDugout ();

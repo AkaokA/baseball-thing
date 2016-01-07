@@ -4,7 +4,6 @@ using System.Collections;
 public class AppController : BaseballElement {
 	
 	public BallGame currentGame;
-	public Inning currentInning;
 	public Team fieldingTeam;
 	public Team battingTeam;
 
@@ -85,6 +84,7 @@ public class AppController : BaseballElement {
 			// ESC: reset gamestate (for ease of testing)
 			if (Input.GetKeyDown (KeyCode.Escape)) {
 				ResetPlay ();
+				NewBatter ();
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class AppController : BaseballElement {
 		}
 	}
 
-	void NewBatter () {
+	public void NewBatter () {
 		// cycle lineup after 9th batter
 		if (battingTeam.currentBatterNumber < 9) {
 			battingTeam.currentBatterNumber++;			
@@ -160,16 +160,16 @@ public class AppController : BaseballElement {
 		app.views.infieldCameraTrigger.SetActive (false);
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
-		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
 
+		if ( currentBaseballInstance != null ) {
+			currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
+		}
+			
 		if (battingTeam.currentBatterNumber < 9) {
 			battingTeam.currentBatterNumber++;
 		} else {
 			battingTeam.currentBatterNumber = 1;
 		}
-
-		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
-		NewBatter ();
 	}
 
 	public void RegisterPitch () {
@@ -200,6 +200,26 @@ public class AppController : BaseballElement {
 			Debug.Log ("in play!");
 			break;
 		}
+	}
+
+	public void HomeRun () {
+		ResetPlay ();
+		StartCoroutine (CircleTheBases ());
+	}
+
+	IEnumerator CircleTheBases () {
+		bool runnersOnBase = true;
+		while (runnersOnBase) {
+			runnersOnBase = false;
+			foreach ( Player runner in battingTeam.lineup ) {
+				if ( runner.runnerInstance != null ) {
+					runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+					runnersOnBase = true;
+				}
+			}
+			yield return null;
+		}
+		NewBatter ();
 	}
 		
 	void ResetCount () {

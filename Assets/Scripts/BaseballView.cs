@@ -28,9 +28,16 @@ public class BaseballView : BaseballElement {
 	
 	// Update is called once per frame
 	void Update () {
-		// kill ball if it goes too far away
-		if (transform.position.x < -6f || transform.position.z < -6f || transform.position.x > 40f || transform.position.z > 40f) {
+		// kill ball if it goes out of play
+		if ( transform.position.x < -6f || transform.position.z < -6f ) {
 			app.controller.ResetPlay ();
+			app.controller.NewBatter ();
+		}
+
+		// home run!
+		if ( transform.position.x > 32.5f || transform.position.z > 32f ) {
+			Debug.Log ("home run!");
+			app.controller.HomeRun ();
 		}
 	}
 
