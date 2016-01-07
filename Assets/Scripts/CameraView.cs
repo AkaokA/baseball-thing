@@ -21,7 +21,8 @@ public class CameraView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		
+		// game starts with overhead camera
+		ChangeCameraState ("overhead", 0f);
 	}
 
 	public void ChangeCameraState (string state, float time) {

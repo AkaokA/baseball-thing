@@ -15,6 +15,8 @@ public class AppController : BaseballElement {
 	public float pitchAccuracy = 0.5f;
 	public float throwSpeed = 15f;
 
+	public bool gameIsPaused = false;
+
 	private UIDotView ball1Dot;
 	private UIDotView ball2Dot;
 	private UIDotView ball3Dot;
@@ -26,7 +28,6 @@ public class AppController : BaseballElement {
 	// Use this for initialization
 	void Start () {
 
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("overhead", 2f);
 	}
 
 	public void NewGame () {
@@ -57,22 +58,39 @@ public class AppController : BaseballElement {
 		HideUI (app.views.mainMenu);
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 2f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1.5f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
 	public void ShowUI (GameObject guiCanvas) {
-		guiCanvas.SetActive (true);
+		if (guiCanvas.activeInHierarchy == false) {
+			guiCanvas.SetActive (true);
+		}
 	}
 
 	public void HideUI (GameObject guiCanvas) {
-		guiCanvas.SetActive (false);
+		if (guiCanvas.activeInHierarchy == true) {
+			guiCanvas.SetActive (false);
+		}
 	}
-
 
 	// Update is called once per frame
 	void Update () {
-					
+		// ESCAPE: toggle main menu
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			if (gameIsPaused = false) {
+				ShowUI (app.views.mainMenu);
+				app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("overhead", 0.3f);
+				gameIsPaused = true;
+			} else {
+				if ( currentGame != null ) {
+					HideUI (app.views.mainMenu);
+					app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 0.3f);
+					gameIsPaused = false;
+				}
+			}
+		}
+
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
 			if (app.controller.currentGame.currentInning.ballIsInPlay == false) {
@@ -100,11 +118,12 @@ public class AppController : BaseballElement {
 				}
 			}
 
-			// ESC: reset gamestate (for ease of testing)
-			if (Input.GetKeyDown (KeyCode.Escape)) {
+			// BACKSPACE: reset gamestate (for ease of testing)
+			if (Input.GetKeyDown (KeyCode.Backspace)) {
 				ResetPlay ();
 				NewBatter ();
 			}
+
 		}
 	}
 
