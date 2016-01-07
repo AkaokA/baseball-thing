@@ -8,12 +8,14 @@ public class FielderView : BaseballElement {
 	private Vector3 transformVelocity;
 	private float smoothTime = 0.25f;
 	public float maxSpeed;
+	public float throwStrength;
 
 	public bool hasTheBall = false;
-	public bool fielderCanMove = true;
+	public bool coveringBase = false;
 
 	public Vector3 idleLocation;
 	private Player activeFielder;
+	private Base leadRunnerBase;
 
 	// Use this for initialization
 	void Start () {
@@ -52,21 +54,46 @@ public class FielderView : BaseballElement {
 	}
 
 	public void PlayDefense () {
+		// if the ball is coming to this fielder
 		if (GetActiveFielder ().fielderInstance.GetComponent<FielderView> () == this) {
-			ChaseBall ();			
-		} else {
+			// don't move if covering a base
+			if ( CoveringBase () ) { 
+				StopMoving ();
+			} else { // if not covering a base, go get the ball
+				ChaseBall ();
+			}				
+		} else { // if the ball isn't coming to this fielder, cover an appropriate base
 			CoverBases (fieldingPositionNumber);
 		}
+
+		// if fielder doesn't have the ball and just got the ball
+		if ( !hasTheBall && GotBall () ) {
+			// stop the ball
+			app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity = new Vector3(0,0,0);
+
+			// stop moving
+			StopMoving ();
+
+			// throw the ball
+			StartCoroutine ( ThrowBall () );
+		} 
+
 	}
 		
 	public Player GetActiveFielder () {
 		float minimumDistance = float.MaxValue;
 		Vector3 targetPosition;
 
-		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
-			targetPosition = app.controller.currentBaseballInstance.transform.position;
+		Vector3 leadTheTarget = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
+		leadTheTarget.y = 0;
+		leadTheTarget = leadTheTarget / 4;
+
+		if (app.controller.currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling) {
+			targetPosition = app.controller.currentBaseballInstance.transform.position + leadTheTarget;
+			targetPosition.y = 0;
 		} else {
-			targetPosition = app.views.baseballLandingPoint.transform.position;
+			targetPosition = app.views.baseballLandingPoint.transform.position + leadTheTarget;
+			targetPosition.y = 0;
 		}
 
 		foreach (Player player in app.controller.fieldingTeam.lineup) {
@@ -85,14 +112,66 @@ public class FielderView : BaseballElement {
 	}
 
 	public void ChaseBall () {
+		Vector3 leadTheTarget = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
+		leadTheTarget.y = 0;
+		leadTheTarget = leadTheTarget / 100;
+
 		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
 			// skate to where the puck is going to be
-			Vector3 ballVelocity = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
-			MoveToward (app.controller.currentBaseballInstance.transform.position + (ballVelocity/4));
+			MoveToward (app.controller.currentBaseballInstance.transform.position + leadTheTarget);
 		} else {
 			// go to where the ball will land
-			MoveToward (app.views.baseballLandingPoint.transform.position);
+			MoveToward (app.views.baseballLandingPoint.transform.position + leadTheTarget);
 		}
+	}
+
+	public bool GotBall () {
+		Vector3 distanceToBall = app.controller.currentBaseballInstance.transform.position - transform.position;
+		float proximityThreshold = 1f;
+
+		if ( distanceToBall.magnitude < proximityThreshold ) {
+			hasTheBall = true;
+			return true;
+		} else {
+			return false;
+		}
+	}
+		
+	public void StopMoving () {
+		MoveToward ( transform.position );
+	}
+		
+	public IEnumerator ThrowBall () {
+		BaseballView baseballView = app.controller.currentBaseballInstance.GetComponent<BaseballView> ();
+
+		for ( int baseIndex = 1; baseIndex <= 3; baseIndex++ ) {
+			if (app.controller.currentGame.bases[baseIndex].isOccupied) {
+				if (baseIndex == 3) {
+					leadRunnerBase = app.controller.currentGame.bases[0];
+				} else {
+					leadRunnerBase = app.controller.currentGame.bases[baseIndex + 1];
+				}
+			}
+		}
+
+		yield return new WaitForSeconds (0.3f);
+
+		baseballView.ThrowBaseballAt (leadRunnerBase.baseGameObject.transform, throwStrength);
+		yield return new WaitForSeconds (0.2f);
+
+		hasTheBall = false;
+	}
+
+	public bool CoveringBase () {
+		foreach (Base thisBase in app.controller.currentGame.bases) {
+			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
+			distanceToBase.y = 0; // horizontal distance only
+
+			if (distanceToBase.magnitude < 1f) {
+				return true;
+			}
+		}
+		return false;
 	}
 		
 	public void CoverBases(int fieldingPositionNumber) {
@@ -123,11 +202,7 @@ public class FielderView : BaseballElement {
 			if (app.controller.currentBaseballInstance.transform.position.x < app.controller.currentBaseballInstance.transform.position.z) {
 				MoveToward (app.views.secondBase.transform.position);
 			} else {
-				if ( app.controller.currentBaseballInstance.transform.position.magnitude > 20f ) {
-					MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
-				} else {
-					MoveToward (idleLocation);
-				}
+				MoveToward (idleLocation);
 			}
 			break;
 		case 5: // 3rd
@@ -137,11 +212,7 @@ public class FielderView : BaseballElement {
 			if (app.controller.currentBaseballInstance.transform.position.x > app.controller.currentBaseballInstance.transform.position.z) {
 				MoveToward (app.views.secondBase.transform.position);
 			} else {
-				if ( app.controller.currentBaseballInstance.transform.position.magnitude > 20f ) {
-					MoveToward (app.controller.currentBaseballInstance.transform.position - transform.position);
-				} else {
-					MoveToward (idleLocation);
-				}
+				MoveToward (idleLocation);
 			}
 			break;
 		case 7: // Left Field

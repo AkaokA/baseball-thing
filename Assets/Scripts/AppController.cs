@@ -83,18 +83,18 @@ public class AppController : BaseballElement {
 			}
 
 			// ARROW KEYS: Throw to base
-			if (Input.GetKeyDown (KeyCode.RightArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform, throwSpeed);
-			}
-			if (Input.GetKeyDown (KeyCode.UpArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform, throwSpeed);
-			}
-			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform, throwSpeed);
-			}
-			if (Input.GetKeyDown (KeyCode.DownArrow)) {
-				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform, throwSpeed);
-			}
+//			if (Input.GetKeyDown (KeyCode.RightArrow)) {
+//				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.firstBase.transform, throwSpeed);
+//			}
+//			if (Input.GetKeyDown (KeyCode.UpArrow)) {
+//				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.secondBase.transform, throwSpeed);
+//			}
+//			if (Input.GetKeyDown (KeyCode.LeftArrow)) {
+//				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.thirdBase.transform, throwSpeed);
+//			}
+//			if (Input.GetKeyDown (KeyCode.DownArrow)) {
+//				currentBaseballInstance.GetComponent<BaseballView> ().ThrowBaseballAt (app.views.homePlate.transform, throwSpeed);
+//			}
 
 			// ESC: reset gamestate (for ease of testing)
 			if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -133,6 +133,7 @@ public class AppController : BaseballElement {
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
 			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
 			fielderView.maxSpeed = player.runningSpeed;
+			fielderView.throwStrength = player.throwStrength;
 
 			// put fielders in the dugout
 			Vector3 randomizedStartPosition = fieldingTeam.dugoutPosition;

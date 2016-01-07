@@ -25,7 +25,7 @@ public class RunnerView : BaseballElement {
 		// point runner towards stuff
 		transform.LookAt (targetPosition);
 
-		TouchBase ();
+		TouchingBase ();
 	}
 		
 	public void MoveToward (Vector3 newTarget) {
@@ -48,18 +48,21 @@ public class RunnerView : BaseballElement {
 		MoveToward (targetBase.baseGameObject.transform.position);
 	}
 
-	public void TouchBase () {
+	public void TouchingBase () {
 		foreach (Base thisBase in app.controller.currentGame.bases) {
 			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
 			distanceToBase.y = 0; // horizontal distance only
 
 			if (distanceToBase.magnitude < 1f) {
 				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
+				thisBase.isOccupied = true;
 
-				// this doesn't work yet
+//				// this doesn't work yet
 //				if ( currentBaseIndex != 0 && thisBase == app.controller.currentGame.homePlate ) {
-//					MoveToward (app.controller.currentGame.awayDugoutPosition);
+//					MoveToward (app.controller.battingTeam.dugoutPosition);
 //				}
+			} else {
+				thisBase.isOccupied = false;
 			}
 		}
 	}

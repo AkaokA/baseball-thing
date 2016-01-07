@@ -52,11 +52,11 @@ public class Team {
 		}
 
 		// temporary attributes for all players on team
-		float runningSpeed = 5f;
 		float throwStrength = 15f;
 
 		// generate players
 		for (int position = 1; position <= 9; position++) {
+			float runningSpeed = Random.Range (5f, 10f);
 			Player playerInstance = new Player ("person " + position, position, runningSpeed, throwStrength);
 			lineup [position-1] = playerInstance;
 			// Debug.Log (teamName + " " + playerInstance.name);

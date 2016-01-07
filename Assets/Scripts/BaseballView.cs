@@ -127,7 +127,6 @@ public class BaseballView : BaseballElement {
 		float deltaHeight = transform.position.y;
 		float distance;
 
-//		distance = (velocity.sqrMagnitude * Mathf.Sin (2 * angle)) / Physics.gravity.magnitude; // simplified for equal height
 		distance = (velocity.magnitude * Mathf.Cos (angle) / Physics.gravity.magnitude) * ((velocity.magnitude * Mathf.Sin (angle)) + Mathf.Sqrt ( Mathf.Pow (velocity.magnitude * Mathf.Sin (angle), 2f) + (2f * Physics.gravity.magnitude * deltaHeight) ));
 
 		unitVelocity.y = 0;
