@@ -80,6 +80,11 @@ public class FielderView : BaseballElement {
 
 			// throw the ball somewhere helpful
 			StartCoroutine ( ThrowBall () );
+
+			if ( app.controller.currentBaseballInstance.GetComponent<BaseballView> ().hasTouchedTheGround == false ) {
+				app.controller.IncrementOuts ();
+				app.controller.currentBatter.runnerInstance.GetComponent<RunnerView> ().goBackToDugout ();
+			}
 		} 
 	}
 		
@@ -124,7 +129,7 @@ public class FielderView : BaseballElement {
 			MoveToward (app.controller.currentBaseballInstance.transform.position + leadTheTarget);
 		} else {
 			// go to where the ball will land
-			MoveToward (app.views.baseballLandingPoint.transform.position + leadTheTarget);
+			MoveToward (app.views.baseballLandingPoint.transform.position);
 		}
 	}
 
@@ -141,27 +146,29 @@ public class FielderView : BaseballElement {
 	}
 		
 	public IEnumerator ThrowBall () {
-		BaseballView baseballView = app.controller.currentBaseballInstance.GetComponent<BaseballView> ();
+		if ( app.controller.currentBaseballInstance != null ) {
+			BaseballView baseballView = app.controller.currentBaseballInstance.GetComponent<BaseballView> ();
 
-		for ( int baseIndex = 1; baseIndex <= 3; baseIndex++ ) {
-			if (app.controller.currentGame.bases[baseIndex].isOccupied) {
-				if (baseIndex == 3) {
-					targetBase = app.controller.currentGame.bases[0];
+			for ( int baseIndex = 1; baseIndex <= 3; baseIndex++ ) {
+				if (app.controller.currentGame.bases[baseIndex].isOccupied) {
+					if (baseIndex == 3) {
+						targetBase = app.controller.currentGame.bases[0];
+					} else {
+						targetBase = app.controller.currentGame.bases[baseIndex + 1];
+					}
 				} else {
-					targetBase = app.controller.currentGame.bases[baseIndex + 1];
+					targetBase = app.controller.currentGame.firstBase;
 				}
-			} else {
-				targetBase = app.controller.currentGame.firstBase;
 			}
+
+			yield return new WaitForSeconds (0.3f);
+
+			baseballView.ThrowBaseballAt (targetBase.baseGameObject.transform, throwStrength);
+
+			yield return new WaitForSeconds (0.2f);
+
+			hasTheBall = false;
 		}
-
-		yield return new WaitForSeconds (0.3f);
-
-		baseballView.ThrowBaseballAt (targetBase.baseGameObject.transform, throwStrength);
-
-		yield return new WaitForSeconds (0.2f);
-
-		hasTheBall = false;
 	}
 
 	public bool CoveringBase () {

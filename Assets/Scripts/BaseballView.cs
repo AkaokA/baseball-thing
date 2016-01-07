@@ -13,6 +13,7 @@ public class BaseballView : BaseballElement {
 
 	private float pitchSpeed;
 
+	public bool hasTouchedTheGround = false;
 	public bool ballIsRolling = false;
 
 	private Rigidbody baseballRigidbody;
@@ -62,7 +63,7 @@ public class BaseballView : BaseballElement {
 
 	public void HitBaseball() {
 		hitDirection.x = Random.Range (0f,1f);
-		hitDirection.y = Random.Range (0f,0.5f);
+		hitDirection.y = Random.Range (1f,1f);
 		hitDirection.z = Random.Range (0f,1f);
 
 		hitForce = Random.Range (hitForceMin, hitForceMax);
@@ -103,6 +104,10 @@ public class BaseballView : BaseballElement {
 		StartCoroutine (SetLandingPoint ());
 	}
 
+	void OnCollisionEnter () {
+		hasTouchedTheGround = true;
+	}
+
 	void OnCollisionStay (Collision collision) {
 		// get rid of the landing point indicator if the ball is rolling
 		landingPointView.SetActive (false);
@@ -118,6 +123,7 @@ public class BaseballView : BaseballElement {
 
 	public IEnumerator SetLandingPoint () {
 		yield return 0; // wait one frame so we can get the ball's velocity
+		yield return 0;
 
 		Vector3 landingPoint = new Vector3 (0, 0, 0);
 		Vector3 velocity = GetComponent<Rigidbody> ().velocity;

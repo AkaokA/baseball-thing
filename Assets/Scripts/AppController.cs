@@ -160,7 +160,12 @@ public class AppController : BaseballElement {
 		app.views.baseballLandingPoint.SetActive (false);
 		currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
 
-		battingTeam.currentBatterNumber += 1;
+		if (battingTeam.currentBatterNumber < 9) {
+			battingTeam.currentBatterNumber++;
+		} else {
+			battingTeam.currentBatterNumber = 1;
+		}
+
 		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
 		NewBatter ();
 	}
