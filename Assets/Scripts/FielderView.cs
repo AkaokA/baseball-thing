@@ -81,6 +81,7 @@ public class FielderView : BaseballElement {
 			// throw the ball somewhere helpful
 			StartCoroutine ( ThrowBall () );
 
+			// caught in the air
 			if ( app.controller.currentBaseballInstance.GetComponent<BaseballView> ().hasTouchedTheGround == false ) {
 				app.controller.IncrementOuts ();
 				app.controller.currentBatter.runnerInstance.GetComponent<RunnerView> ().goBackToDugout ();
@@ -122,7 +123,7 @@ public class FielderView : BaseballElement {
 	public void ChaseBall () {
 		Vector3 leadTheTarget = app.controller.currentBaseballInstance.GetComponent<Rigidbody> ().velocity;
 		leadTheTarget.y = 0;
-		leadTheTarget = leadTheTarget / 100;
+		leadTheTarget = leadTheTarget / 8;
 
 		if (app.controller.currentBaseballInstance.GetComponent<BaseballView>().ballIsRolling) {
 			// skate to where the puck is going to be
@@ -135,7 +136,7 @@ public class FielderView : BaseballElement {
 
 	public bool GotBall () {
 		Vector3 distanceToBall = app.controller.currentBaseballInstance.transform.position - transform.position;
-		float proximityThreshold = 0.5f;
+		float proximityThreshold = 1f;
 
 		if ( distanceToBall.magnitude < proximityThreshold ) {
 			hasTheBall = true;

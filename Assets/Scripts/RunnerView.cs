@@ -76,7 +76,7 @@ public class RunnerView : BaseballElement {
 			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
 			distanceToBase.y = 0; // horizontal distance only
 
-			if (distanceToBase.magnitude < 1f) {
+			if (distanceToBase.magnitude < 0.5f) {
 				currentBaseIndex = System.Array.IndexOf (app.controller.currentGame.bases, thisBase);
 				thisBase.isOccupied = true;
 

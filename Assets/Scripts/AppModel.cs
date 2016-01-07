@@ -86,7 +86,7 @@ public class Player {
 		fieldingPositionNumber = positionNumber;
 		runningSpeed = speed;
 		throwStrength = throwing;
-		hittingPower = 1000f;
+		hittingPower = 800f;
 
 		// pitcher attributes; not used yet
 		if (positionNumber == 1)	 {

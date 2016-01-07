@@ -24,9 +24,9 @@ public class CameraView : BaseballElement {
 
 		switch(state) {
 		case "overhead":
-			targetCameraSize = 60f;
-			targetCameraHeight = 18f;
-			targetCameraDiagPosition = 18f;
+			targetCameraSize = 40f;
+			targetCameraHeight = 12.5f;
+			targetCameraDiagPosition = 12.5f;
 			targetCameraAngle = 90f;
 			break;
 		case "atbat":
@@ -36,8 +36,8 @@ public class CameraView : BaseballElement {
 			targetCameraAngle = 30f;
 			break;
 		case "infield":
-			targetCameraSize = 7f;
-			targetCameraHeight = 6f;
+			targetCameraSize = 5.5f;
+			targetCameraHeight = 5f;
 			targetCameraDiagPosition = 0f;
 			targetCameraAngle = 30f;
 			break;

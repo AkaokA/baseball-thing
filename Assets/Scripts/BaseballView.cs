@@ -128,24 +128,23 @@ public class BaseballView : BaseballElement {
 	}
 
 	public IEnumerator SetLandingPoint () {
-		yield return 0; // wait one frame so we can get the ball's velocity
-		yield return 0;
+		while ( app.controller.currentBaseballInstance != null ) {
+			yield return null; // wait one frame so we can get the ball's velocity
 
-		Vector3 landingPoint = new Vector3 (0, 0, 0);
-		Vector3 velocity = GetComponent<Rigidbody> ().velocity;
-		Vector3 unitVelocity = velocity.normalized;
+			float deltaHeight = transform.position.y;
+			Vector3 landingPoint;
+			Vector3 velocity = GetComponent<Rigidbody> ().velocity;
+			Vector3 direction = velocity.normalized;
 
-		float angle = Mathf.Asin (unitVelocity.y);
-		float deltaHeight = transform.position.y;
-		float distance;
+			float angle = Mathf.Asin (direction.y);
+			float distance = (velocity.magnitude * Mathf.Cos (angle) / Physics.gravity.magnitude) * ((velocity.magnitude * Mathf.Sin (angle)) + Mathf.Sqrt ( Mathf.Pow (velocity.magnitude * Mathf.Sin (angle), 2f) + (2f * Physics.gravity.magnitude * deltaHeight) ));
 
-		distance = (velocity.magnitude * Mathf.Cos (angle) / Physics.gravity.magnitude) * ((velocity.magnitude * Mathf.Sin (angle)) + Mathf.Sqrt ( Mathf.Pow (velocity.magnitude * Mathf.Sin (angle), 2f) + (2f * Physics.gravity.magnitude * deltaHeight) ));
+			landingPoint = app.controller.currentBaseballInstance.transform.position + (direction * distance * 1.5f);
+			landingPoint.y = 0.005f;
 
-		unitVelocity.y = 0;
-		landingPoint = app.controller.currentBaseballInstance.transform.position + (unitVelocity * distance);
-
-		landingPointView.transform.position = landingPoint;
-		landingPointView.SetActive (true);
+			landingPointView.transform.position = landingPoint;
+			landingPointView.SetActive (true);
+		}
 	}
 
 }

@@ -25,15 +25,6 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		// create ballgame
-		SetUpBallgame ();
-
-		// create fielders
-		SetUpFielders ();
-
-		// create first batter
-		NewBatter ();
-
 		// init scoreboard variables (scoreboard stuff should go in its own class)
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
 		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
@@ -43,8 +34,17 @@ public class AppController : BaseballElement {
 		out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
 		out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
 
+		// create ballgame
+		SetUpBallgame ();
+
 		// draw scoreboard
 		UpdateScoreboard ();
+
+		// create fielders
+		SetUpFielders ();
+
+		// create first batter
+		NewBatter ();
 
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 2f);
@@ -152,6 +152,8 @@ public class AppController : BaseballElement {
 		batterView.maxSpeed = currentBatter.runningSpeed;
 
 		batterView.MoveToward (currentGame.leftBattersBox);
+
+		ResetCount ();
 	}
 
 	public void ResetPlay () {
@@ -204,6 +206,7 @@ public class AppController : BaseballElement {
 
 	public void HomeRun () {
 		ResetPlay ();
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 2f);
 		StartCoroutine (CircleTheBases ());
 	}
 
@@ -220,6 +223,7 @@ public class AppController : BaseballElement {
 			yield return null;
 		}
 		NewBatter ();
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 	}
 		
 	void ResetCount () {
@@ -295,7 +299,6 @@ public class AppController : BaseballElement {
 	}
 
 	public void IncrementOuts () {
-
 		switch(currentGame.currentInning.outs) {
 		case 0:
 			Debug.Log ("1 out!");
