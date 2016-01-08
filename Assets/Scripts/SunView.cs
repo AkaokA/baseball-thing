@@ -13,7 +13,7 @@ public class SunView : BaseballElement {
 	public Color initialColor;
 	public Color finalColor;
 
-	public float sunriseTime = 5f;
+	public float sunriseTime = 3f;
 
 	// Use this for initialization
 	void Start () {

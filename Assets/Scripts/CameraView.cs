@@ -32,8 +32,8 @@ public class CameraView : BaseballElement {
 		case "overhead":
 			targetCameraSize = 30f;
 			targetCameraHeight = 30f;
-			targetCameraX = 0f;
-			targetCameraZ = 25f;
+			targetCameraX = -5f;
+			targetCameraZ = 28f;
 			targetCameraAngle = 90f;
 			targetEffectIntensity = 1f;
 			break;
