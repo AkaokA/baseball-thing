@@ -58,7 +58,7 @@ public class AppController : BaseballElement {
 		HideUI (app.views.mainMenu);
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1.5f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
@@ -78,17 +78,7 @@ public class AppController : BaseballElement {
 	void Update () {
 		// ESCAPE: toggle main menu
 		if (Input.GetKeyUp (KeyCode.Escape)) {
-			if (gameIsPaused = false) {
-				ShowUI (app.views.mainMenu);
-				app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("overhead", 0.3f);
-				gameIsPaused = true;
-			} else {
-				if ( currentGame != null ) {
-					HideUI (app.views.mainMenu);
-					app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 0.3f);
-					gameIsPaused = false;
-				}
-			}
+			
 		}
 
 		// P: throw pitch
