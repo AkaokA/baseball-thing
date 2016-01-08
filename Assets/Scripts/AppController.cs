@@ -27,7 +27,7 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-
+		NewGame (); // autostart for testing
 	}
 
 	public void NewGame () {

@@ -78,9 +78,10 @@ public class FielderView : BaseballElement {
 			// stop moving
 			StopMoving ();
 
-			// throw the ball somewhere helpful
-			StartCoroutine ( ThrowBall () );
-
+			if (IsCoveringBase () == false) {
+				// throw the ball somewhere helpful
+				StartCoroutine ( ThrowBall () );
+			}
 			// caught in the air
 			if ( app.controller.currentBaseballInstance.GetComponent<BaseballView> ().hasTouchedTheGround == false ) {
 				app.controller.IncrementOuts ();
