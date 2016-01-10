@@ -39,7 +39,7 @@ public class Team {
 
 	public bool isHomeTeam;
 	public string teamName;
-	public int currentBatterNumber;
+	public int currentBatterIndex;
 	public Vector3 dugoutPosition;
 
 	// players
@@ -49,7 +49,7 @@ public class Team {
 	public Team (string name, bool isHome) {
 		teamName = name;
 		isHomeTeam = isHome;
-		currentBatterNumber = 1;
+		currentBatterIndex = -1; // NewBatter() increments this; first batter should be index 0
 
 		// hard-coded dugout locations
 		Vector3 homeDugoutPosition = new Vector3 (-6f,0f,5f);
@@ -96,13 +96,7 @@ public class Player {
 		fieldingPositionNumber = positionNumber;
 		runningSpeed = speed;
 		throwStrength = throwing;
-		hittingPower = 800f;
-
-		// pitcher attributes; not used yet
-		if (positionNumber == 1)	 {
-			pitchStrength = 20f;
-			pitchAccuracy = 0.5f;
-		}
+		hittingPower = 1200f;
 	}
 }
 

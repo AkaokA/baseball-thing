@@ -9,14 +9,13 @@ public class RunnerView : BaseballElement {
 	public float maxSpeed;
 
 	public int batterIndex;
-	public bool isOnBase = false;
 	public int currentBaseIndex = 0;
 	public Base targetBase;
 
 	public bool hadAnAtBat = false;
 	private bool reachedBase = false;
 	private bool scoreCounted = false;
-	public bool runnerIsOut = false;
+	public bool isOut = false;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +36,7 @@ public class RunnerView : BaseballElement {
 			Vector3 distanceToDugout = app.controller.battingTeam.dugoutPosition - transform.position;
 			distanceToDugout.y = 0;
 			if ( distanceToDugout.magnitude < 1f ) {
-				Destroy ( app.controller.battingTeam.lineup[batterIndex - 1].runnerInstance );
+				Destroy ( app.controller.battingTeam.lineup[batterIndex].runnerInstance );
 			}
 		}
 	}
@@ -82,7 +81,7 @@ public class RunnerView : BaseballElement {
 
 				// crossing the plate
 				if ( thisBase == app.controller.ballpark.homePlate ) {
-					if (reachedBase && !scoreCounted && !runnerIsOut) {
+					if (reachedBase && !scoreCounted && !isOut) {
 						goBackToDugout ();
 						app.controller.IncrementScore ();
 						scoreCounted = true;

@@ -103,6 +103,7 @@ public class AppController : BaseballElement {
 				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
 				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
 				app.views.infieldCameraTrigger.SetActive (true);
+				currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
 
 				// advance all runners
 				foreach (Player runner in battingTeam.lineup) {
@@ -158,25 +159,25 @@ public class AppController : BaseballElement {
 	}
 
 	public void NewBatter () {
+		ResetCount ();
+
 		// cycle lineup after 9th batter
-		if (battingTeam.currentBatterNumber < 9) {
-			battingTeam.currentBatterNumber++;			
+		if (battingTeam.currentBatterIndex < 8) {
+			battingTeam.currentBatterIndex++;			
 		} else {
-			battingTeam.currentBatterNumber = 1;
+			battingTeam.currentBatterIndex = 0;
 		}
 
-		currentBatter = battingTeam.lineup [battingTeam.currentBatterNumber - 1];
-
+		// create instance
+		currentBatter = battingTeam.lineup [battingTeam.currentBatterIndex];
 		currentBatter.runnerInstance = Instantiate (app.views.runner);
 		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
-
-		batterView.batterIndex = battingTeam.currentBatterNumber;
+		batterView.batterIndex = battingTeam.currentBatterIndex;
 		batterView.maxSpeed = currentBatter.runningSpeed;
 
+		// walk up to the plate
 		batterView.MoveToward (ballpark.leftBattersBox);
-
-		ResetCount ();
 	}
 
 	public void ResetPlay () {
@@ -185,16 +186,6 @@ public class AppController : BaseballElement {
 		app.views.infieldCameraTrigger.SetActive (false);
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
-
-		if ( currentBaseballInstance != null ) {
-			currentBaseballInstance.GetComponent<BaseballView> ().ballIsRolling = false;
-		}
-			
-		if (battingTeam.currentBatterNumber < 9) {
-			battingTeam.currentBatterNumber++;
-		} else {
-			battingTeam.currentBatterNumber = 1;
-		}
 
 		foreach (Player player in fieldingTeam.lineup) {
 			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
@@ -250,10 +241,11 @@ public class AppController : BaseballElement {
 			}
 			yield return null;
 		}
+
 		NewBatter ();
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
 	}
-		
+
 	void ResetCount () {
 		currentGame.currentInning.currentAtBat.balls = 0;
 		currentGame.currentInning.currentAtBat.strikes = 0;

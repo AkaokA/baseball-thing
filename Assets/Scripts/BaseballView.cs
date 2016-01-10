@@ -6,7 +6,7 @@ public class BaseballView : BaseballElement {
 	public GameObject heightIndicator;
 	private GameObject landingPointView;
 
-	public float hitForceVariance = 400f;
+	public float hitForceVariance = 0f;
 	public float hitForce;
 	public Vector3 hitDirection = new Vector3(0f,0f,0f);
 
@@ -37,7 +37,7 @@ public class BaseballView : BaseballElement {
 		// home run!
 		if ( transform.position.x > 32.5f || transform.position.z > 32f ) {
 			Debug.Log ("home run!");
-			app.controller.HomeRun ();
+			app.controller.HomeRun();
 		}
 	}
 
