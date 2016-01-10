@@ -36,8 +36,15 @@ public class BaseballView : BaseballElement {
 
 		// home run!
 		if ( transform.position.x > 32.5f || transform.position.z > 32f ) {
-			Debug.Log ("home run!");
-			app.controller.HomeRun();
+			if (hasTouchedTheGround) {
+				// ground rule double
+				app.controller.ResetPlay ();
+				app.controller.NewBatter ();
+			} else {
+				// home run!
+				Debug.Log ("home run!");
+				app.controller.HomeRun();
+			}
 		}
 	}
 
