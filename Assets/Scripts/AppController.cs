@@ -27,7 +27,7 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		NewGame (); // autostart for testing
+		NewGame (); // DEBUG: automatically start a new game
 	}
 
 	public void NewGame () {
@@ -159,6 +159,7 @@ public class AppController : BaseballElement {
 
 			// move fielders out to their positions
 			fielderView.Idle ();
+			player.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
 		}
 	}
 
