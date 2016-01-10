@@ -6,15 +6,7 @@ public class AppModel : BaseballElement {
 
 }
 
-public class BallGame {
-	public int awayScore = 0;
-	public int homeScore = 0;
-
-	public Team awayTeam;
-	public Team homeTeam;
-
-	public Inning currentInning = new Inning(1);
-
+public class Ballpark {
 	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
 	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);
 
@@ -23,10 +15,28 @@ public class BallGame {
 	public Base secondBase = new Base();
 	public Base thirdBase = new Base();
 	public Base homePlate = new Base();
+
+	// constructor
+	public Ballpark () {
+		// set up base instances
+		bases [0] = homePlate;
+		bases [1] = firstBase;
+		bases [2] = secondBase;
+		bases [3] = thirdBase;
+	}
+}
+
+public class BallGame {
+	public Team awayTeam;
+	public Team homeTeam;
+
+	public Inning currentInning = new Inning(1);
 }
 
 public class Team {
 	// gameplay variables
+	public int score = 0;
+
 	public bool isHomeTeam;
 	public string teamName;
 	public int currentBatterNumber;

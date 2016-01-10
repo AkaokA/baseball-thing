@@ -152,14 +152,14 @@ public class FielderView : BaseballElement {
 			BaseballView baseballView = app.controller.currentBaseballInstance.GetComponent<BaseballView> ();
 
 			for ( int baseIndex = 1; baseIndex <= 3; baseIndex++ ) {
-				if (app.controller.currentGame.bases[baseIndex].isOccupied) {
+				if (app.controller.ballpark.bases[baseIndex].isOccupied) {
 					if (baseIndex == 3) {
-						targetBase = app.controller.currentGame.bases[0];
+						targetBase = app.controller.ballpark.bases[0];
 					} else {
-						targetBase = app.controller.currentGame.bases[baseIndex + 1];
+						targetBase = app.controller.ballpark.bases[baseIndex + 1];
 					}
 				} else {
-					targetBase = app.controller.currentGame.firstBase;
+					targetBase = app.controller.ballpark.firstBase;
 				}
 			}
 
@@ -174,7 +174,7 @@ public class FielderView : BaseballElement {
 	}
 
 	public bool IsCoveringBase () {
-		foreach (Base thisBase in app.controller.currentGame.bases) {
+		foreach (Base thisBase in app.controller.ballpark.bases) {
 			Vector3 distanceToBase = thisBase.baseGameObject.transform.position - transform.position;
 			distanceToBase.y = 0; // horizontal distance only
 

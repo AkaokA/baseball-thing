@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class AppController : BaseballElement {
-	
+	public Ballpark ballpark;
 	public BallGame currentGame;
 	public Team fieldingTeam;
 	public Team battingTeam;
@@ -15,8 +15,6 @@ public class AppController : BaseballElement {
 	public float pitchAccuracy = 0.5f;
 	public float throwSpeed = 15f;
 
-	public bool gameIsPaused = false;
-
 	private UIDotView ball1Dot;
 	private UIDotView ball2Dot;
 	private UIDotView ball3Dot;
@@ -27,6 +25,12 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
+		ballpark = new Ballpark ();
+		ballpark.firstBase.baseGameObject = app.views.firstBase;
+		ballpark.secondBase.baseGameObject = app.views.secondBase;
+		ballpark.thirdBase.baseGameObject = app.views.thirdBase;
+		ballpark.homePlate.baseGameObject = app.views.homePlate;
+
 		NewGame (); // DEBUG: automatically start a new game
 	}
 
@@ -121,21 +125,11 @@ public class AppController : BaseballElement {
 		// create game
 		currentGame = new BallGame();
 	
-		// set up base instances
-		currentGame.bases [0] = currentGame.homePlate;
-		currentGame.bases [1] = currentGame.firstBase;
-		currentGame.bases [2] = currentGame.secondBase;
-		currentGame.bases [3] = currentGame.thirdBase;
-
-		currentGame.firstBase.baseGameObject = app.views.firstBase;
-		currentGame.secondBase.baseGameObject = app.views.secondBase;
-		currentGame.thirdBase.baseGameObject = app.views.thirdBase;
-		currentGame.homePlate.baseGameObject = app.views.homePlate;
-
 		// assign teams
 		currentGame.homeTeam = new Team ("Toronto", true);
 		currentGame.awayTeam = new Team("Chicago", false);
 
+		// home team on the field first
 		fieldingTeam = currentGame.homeTeam;
 		battingTeam = currentGame.awayTeam;
 	}
@@ -180,7 +174,7 @@ public class AppController : BaseballElement {
 		batterView.batterIndex = battingTeam.currentBatterNumber;
 		batterView.maxSpeed = currentBatter.runningSpeed;
 
-		batterView.MoveToward (currentGame.leftBattersBox);
+		batterView.MoveToward (ballpark.leftBattersBox);
 
 		ResetCount ();
 	}
@@ -354,9 +348,9 @@ public class AppController : BaseballElement {
 
 	public void IncrementScore () {
 		if ( battingTeam == currentGame.homeTeam ) {
-			currentGame.homeScore++;
+			currentGame.homeTeam.score++;
 		} else {
-			currentGame.awayScore++;
+			currentGame.awayTeam.score++;
 		}
 
 		UpdateScoreboard ();
@@ -366,8 +360,8 @@ public class AppController : BaseballElement {
 		// text labels
 		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
 		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
-		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayScore.ToString ();
-		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeScore.ToString ();
+		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.score.ToString ();
+		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.score.ToString ();
 		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
 	}
 		
