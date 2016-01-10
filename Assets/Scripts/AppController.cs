@@ -200,6 +200,11 @@ public class AppController : BaseballElement {
 		} else {
 			battingTeam.currentBatterNumber = 1;
 		}
+
+		foreach (Player player in fieldingTeam.lineup) {
+			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
+			fielderView.hasTheBall = false;
+		}
 	}
 
 	public void RegisterPitch () {

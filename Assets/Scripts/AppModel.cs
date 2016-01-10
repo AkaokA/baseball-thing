@@ -56,7 +56,7 @@ public class Team {
 
 		// generate players
 		for (int position = 1; position <= 9; position++) {
-			float runningSpeed = Random.Range (5f, 10f);
+			float runningSpeed = Random.Range (4f, 6f);
 			Player playerInstance = new Player ("person " + position, position, runningSpeed, throwStrength);
 			lineup [position-1] = playerInstance;
 			// Debug.Log (teamName + " " + playerInstance.name);
