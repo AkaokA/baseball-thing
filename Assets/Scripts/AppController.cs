@@ -163,7 +163,7 @@ public class AppController : BaseballElement {
 
 			// move fielders out to their positions
 			fielderView.Idle ();
-//			fielder.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
+			fielder.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
 		}
 		playersAreOnTheField = true;
 	}
@@ -197,9 +197,10 @@ public class AppController : BaseballElement {
 			}
 			yield return null;
 		}
-
+			
 		Debug.Log ("players are off the field.");
 		ChangeSides ();
+		betweenInnings = false;
 		SetUpFielders ();
 		NewBatter ();
 		yield return null;

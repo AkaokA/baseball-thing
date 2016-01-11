@@ -16,6 +16,7 @@ public class FielderView : BaseballElement {
 	public Vector3 idleLocation;
 	private Player activeFielder;
 	private Base targetBase;
+	private Transform throwTargetPosition;
 
 	// Use this for initialization
 	void Start () {
@@ -150,24 +151,27 @@ public class FielderView : BaseballElement {
 	}
 		
 	public IEnumerator ThrowBall () {
-		if ( app.controller.currentBaseballInstance != null ) {
-			BaseballView baseballView = app.controller.currentBaseballInstance.GetComponent<BaseballView> ();
 
+		if ( app.controller.currentBaseballInstance != null ) {
+			
 			for ( int baseIndex = 1; baseIndex <= 3; baseIndex++ ) {
 				if (app.controller.ballpark.bases[baseIndex].isOccupied) {
 					if (baseIndex == 3) {
 						targetBase = app.controller.ballpark.bases[0];
+						throwTargetPosition = targetBase.baseGameObject.transform;
 					} else {
 						targetBase = app.controller.ballpark.bases[baseIndex + 1];
+						throwTargetPosition = targetBase.baseGameObject.transform;
 					}
 				} else {
-					targetBase = app.controller.ballpark.firstBase;
+					throwTargetPosition = app.controller.fieldingTeam.lineup[0].fielderInstance.transform;
 				}
 			}
+				
+			yield return new WaitForSeconds (0.5f);
 
-			yield return new WaitForSeconds (0.3f);
-
-			baseballView.ThrowBaseballAt (targetBase.baseGameObject.transform, throwStrength);
+			BaseballView baseballView = app.controller.currentBaseballInstance.GetComponent<BaseballView> ();
+			baseballView.ThrowBaseballAt (throwTargetPosition, throwStrength);
 
 			yield return new WaitForSeconds (0.2f);
 

@@ -12,6 +12,9 @@ public class CameraView : BaseballElement {
 
 	public float targetEffectIntensity = 0f;
 
+	private float xVelocity = 0.0f;
+	private float zVelocity = 0.0f;
+	private float heightVelocity = 0.0f;
 	private float sizeVelocity = 0.0f;
 	private Vector3 transformVelocity = new Vector3 (0,0,0);
 	private float angleVelocity = 0.0f;
@@ -61,27 +64,33 @@ public class CameraView : BaseballElement {
 
 	// Update is called once per frame
 	void Update () {
-		float cameraSize = GetComponent<Camera> ().orthographicSize;
-		float cameraAngle = transform.rotation.eulerAngles.x;
 
 		// set position
-		Vector3 targetPosition = new Vector3(targetCameraX, targetCameraHeight, targetCameraZ);
-		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime);
+		float cameraX = transform.position.x;
+		float cameraZ = transform.position.z;
+		float cameraHeight = transform.position.y;
 
-		// change size/angle values with smoothDamp
-		cameraSize = Mathf.SmoothDamp(cameraSize, targetCameraSize, ref sizeVelocity, smoothTime);
-		cameraAngle = Mathf.SmoothDamp(cameraAngle, targetCameraAngle, ref angleVelocity, smoothTime);
+		cameraX = Mathf.SmoothDamp(cameraX, targetCameraX, ref xVelocity, smoothTime);
+		cameraZ = Mathf.SmoothDamp(cameraZ, targetCameraZ, ref zVelocity, smoothTime/2);
+		cameraHeight = Mathf.SmoothDamp(cameraHeight, targetCameraHeight, ref heightVelocity, smoothTime);
+
+		Vector3 cameraPosition = new Vector3 (cameraX, cameraHeight, cameraZ);
+		transform.position = cameraPosition;
 
 		// set size
+		float cameraSize = GetComponent<Camera> ().orthographicSize;
+		cameraSize = Mathf.SmoothDamp(cameraSize, targetCameraSize, ref sizeVelocity, smoothTime);
 		GetComponent<Camera>().orthographicSize = cameraSize;
 
 		// set angle
+		float cameraAngle = transform.rotation.eulerAngles.x;
+		cameraAngle = Mathf.SmoothDamp(cameraAngle, targetCameraAngle, ref angleVelocity, smoothTime);
+
 		Quaternion tempRotation = transform.rotation;
 		Vector3 tempEulerAngles = tempRotation.eulerAngles;
 		tempEulerAngles.x = cameraAngle;
 		tempRotation.eulerAngles = tempEulerAngles;
 		transform.rotation = tempRotation;
 
-		// set effect intensity
 	}
 }
