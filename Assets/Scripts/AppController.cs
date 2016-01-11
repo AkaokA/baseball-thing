@@ -10,6 +10,9 @@ public class AppController : BaseballElement {
 	public GameObject currentBaseballInstance;
 	public Player currentBatter;
 
+	public bool betweenInnings = false;
+	public bool playersAreOnTheField = false;
+
 	public float minPitchSpeed = 8.5f;
 	public float maxPitchSpeed = 20f;
 	public float pitchAccuracy = 0.5f;
@@ -80,6 +83,12 @@ public class AppController : BaseballElement {
 
 	// Update is called once per frame
 	void Update () {
+		// C: DEBUG: clear the field
+		if (Input.GetKeyUp (KeyCode.C)) {
+			StartCoroutine (ClearTheField ());
+		}
+
+
 		// ESCAPE: toggle main menu
 		if (Input.GetKeyUp (KeyCode.Escape)) {
 			
@@ -87,7 +96,7 @@ public class AppController : BaseballElement {
 
 		// P: throw pitch
 		if (Input.GetKeyDown (KeyCode.P)) {
-			if (app.controller.currentGame.currentInning.ballIsInPlay == false) {
+			if (currentGame.currentInning.ballIsInPlay == false) {
 				currentBaseballInstance = Instantiate (app.views.baseball);
 
 				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
@@ -136,26 +145,64 @@ public class AppController : BaseballElement {
 	}
 
 	void SetUpFielders () {
-		foreach (Player player in fieldingTeam.lineup) {
+		foreach (Player fielder in fieldingTeam.lineup) {
 			// instantiate each fielder's gameobject
-			player.fielderInstance = Instantiate (app.views.fielder);
-			FielderView fielderView = player.fielderInstance.GetComponent<FielderView> ();
+			fielder.fielderInstance = Instantiate (app.views.fielder);
+			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
 
 			// assign positions and attributes from model
-			fielderView.AssignFieldingPosition (player.fieldingPositionNumber);
-			fielderView.maxSpeed = player.runningSpeed;
-			fielderView.throwStrength = player.throwStrength;
+			fielderView.AssignFieldingPosition (fielder.fieldingPositionNumber);
+			fielderView.maxSpeed = fielder.runningSpeed;
+			fielderView.throwStrength = fielder.throwStrength;
 
 			// put fielders in the dugout
 			Vector3 randomizedStartPosition = fieldingTeam.dugoutPosition;
 			randomizedStartPosition.x += Random.Range (-8, 0);
 			randomizedStartPosition.z += Random.Range (-3, 3);
-			player.fielderInstance.transform.position = randomizedStartPosition;
+			fielder.fielderInstance.transform.position = randomizedStartPosition;
 
 			// move fielders out to their positions
 			fielderView.Idle ();
-			player.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
+//			fielder.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
 		}
+		playersAreOnTheField = true;
+	}
+
+	IEnumerator ClearTheField () {
+		betweenInnings = true;
+		while (playersAreOnTheField) {
+			playersAreOnTheField = false;
+			foreach ( Player runner in battingTeam.lineup ) {
+				if (runner.runnerInstance != null) {
+					RunnerView runnerView = runner.runnerInstance.GetComponent<RunnerView> ();
+					runnerView.MoveToward (battingTeam.dugoutPosition);
+					playersAreOnTheField = true;
+
+					if (runnerView.RunnerIsInDugout ()) {
+						Destroy (runner.runnerInstance);
+					}
+				}
+			}
+
+			foreach (Player fielder in fieldingTeam.lineup) {
+				if (fielder.fielderInstance != null) {
+					FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
+					fielderView.MoveToward (fieldingTeam.dugoutPosition);
+					playersAreOnTheField = true;
+
+					if (fielderView.FielderIsInDugout ()) {
+						Destroy (fielder.fielderInstance);
+					}
+				}
+			}
+			yield return null;
+		}
+
+		Debug.Log ("players are off the field.");
+		ChangeSides ();
+		SetUpFielders ();
+		NewBatter ();
+		yield return null;
 	}
 
 	public void NewBatter () {
@@ -315,27 +362,34 @@ public class AppController : BaseballElement {
 			currentGame.currentInning.outs++;
 			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.outDotColor));
 			break;
-//		case 2:
-//			Debug.Log ("CHANGE!");
-//			ResetCount ();
-//			currentGame.currentInning.outs = 0;
-//			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
-//			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
-//
-//			if (currentGame.currentInning.half == "top") {
-//				currentGame.currentInning.half = "bot";
-//				fieldingTeam = app.controller.currentGame.awayTeam;
-//				battingTeam = app.controller.currentGame.homeTeam;
-//			} else {
-//				currentGame.currentInning.half = "top";
-//				fieldingTeam = app.controller.currentGame.homeTeam;
-//				battingTeam = app.controller.currentGame.awayTeam;
-//				currentGame.currentInning.inningNumber++;
-//			}
-//
-//			UpdateInningLabel ();
-//			break;
+		case 2:
+			Debug.Log ("CHANGE!");
+			// reset B/S/O
+			ResetCount ();
+			currentGame.currentInning.outs = 0;
+			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
+			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
+
+			StartCoroutine (ClearTheField ());
+			break;
 		}
+	}
+
+	public void ChangeSides () {
+		// switch batting/fielding teams and set inning indicator
+		if (currentGame.currentInning.half == "top") {
+			currentGame.currentInning.half = "bot";
+			fieldingTeam = app.controller.currentGame.awayTeam;
+			battingTeam = app.controller.currentGame.homeTeam;
+		} else {
+			currentGame.currentInning.half = "top";
+			fieldingTeam = app.controller.currentGame.homeTeam;
+			battingTeam = app.controller.currentGame.awayTeam;
+			currentGame.currentInning.inningNumber++;
+		}
+
+		// update scoreboard
+		UpdateScoreboard ();
 	}
 
 	public void IncrementScore () {

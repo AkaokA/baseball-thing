@@ -28,8 +28,10 @@ public class FielderView : BaseballElement {
 		if (app.controller.currentGame.currentInning.ballIsInPlay) {
 			PlayDefense ();
 		} else {
-			// go back to idle position
-			Idle ();
+			if (app.controller.betweenInnings = false) {
+				// go back to idle position
+				Idle ();
+			}
 		}
 		
 		// move fielder to target
@@ -170,6 +172,17 @@ public class FielderView : BaseballElement {
 			yield return new WaitForSeconds (0.2f);
 
 			hasTheBall = false;
+		}
+	}
+
+	public bool FielderIsInDugout () {
+		Vector3 distanceToDugout = app.controller.fieldingTeam.dugoutPosition - transform.position;
+		distanceToDugout.y = 0;
+		if ( distanceToDugout.magnitude < 1f ) {
+			return true;
+			Debug.Log (fieldingPositionNumber + " is in the dugout");
+		} else {
+			return false;
 		}
 	}
 

@@ -32,18 +32,24 @@ public class RunnerView : BaseballElement {
 	
 		TouchingBase ();
 
-		if (hadAnAtBat) {
-			Vector3 distanceToDugout = app.controller.battingTeam.dugoutPosition - transform.position;
-			distanceToDugout.y = 0;
-			if ( distanceToDugout.magnitude < 1f ) {
-				Destroy ( app.controller.battingTeam.lineup[batterIndex].runnerInstance );
-			}
+		if (hadAnAtBat && RunnerIsInDugout ()) {
+			Destroy ( app.controller.battingTeam.lineup[batterIndex].runnerInstance );
 		}
 	}
 		
 	public void MoveToward (Vector3 newTarget) {
 		newTarget.y = 0;
 		targetPosition = newTarget;
+	}
+
+	public bool RunnerIsInDugout () {
+		Vector3 distanceToDugout = app.controller.battingTeam.dugoutPosition - transform.position;
+		distanceToDugout.y = 0;
+		if ( distanceToDugout.magnitude < 1f ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void advanceToNextBase () {
