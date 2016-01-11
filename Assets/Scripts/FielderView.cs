@@ -28,7 +28,7 @@ public class FielderView : BaseballElement {
 		if (app.controller.currentGame.currentInning.ballIsInPlay) {
 			PlayDefense ();
 		} else {
-			if (app.controller.betweenInnings = false) {
+			if (app.controller.betweenInnings == false) {
 				// go back to idle position
 				Idle ();
 			}
