@@ -183,8 +183,8 @@ public class FielderView : BaseballElement {
 		Vector3 distanceToDugout = app.controller.fieldingTeam.dugoutPosition - transform.position;
 		distanceToDugout.y = 0;
 		if ( distanceToDugout.magnitude < 1f ) {
-			return true;
 			Debug.Log (fieldingPositionNumber + " is in the dugout");
+			return true;
 		} else {
 			return false;
 		}

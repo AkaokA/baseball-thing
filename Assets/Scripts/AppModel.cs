@@ -3,7 +3,8 @@ using System.Collections;
 
 // Contains all data related to the app.
 public class AppModel : BaseballElement {
-
+	public Material redTeamMaterial;
+	public Material blueTeamMaterial;
 }
 
 public class Ballpark {
@@ -36,18 +37,21 @@ public class BallGame {
 public class Team {
 	// gameplay variables
 	public int score = 0;
-
 	public bool isHomeTeam;
-	public string teamName;
 	public int currentBatterIndex;
 	public Vector3 dugoutPosition;
+
+	// team attributes
+	public string teamName;
+	public Material teamMaterial;
 
 	// players
 	public Player[] lineup = new Player[9];
 
 	// constructor
-	public Team (string name, bool isHome) {
+	public Team (string name, Material material, bool isHome) {
 		teamName = name;
+		teamMaterial = material;
 		isHomeTeam = isHome;
 		currentBatterIndex = -1; // NewBatter() increments this; first batter should be index 0
 

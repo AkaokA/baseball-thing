@@ -16,7 +16,6 @@ public class CameraView : BaseballElement {
 	private float zVelocity = 0.0f;
 	private float heightVelocity = 0.0f;
 	private float sizeVelocity = 0.0f;
-	private Vector3 transformVelocity = new Vector3 (0,0,0);
 	private float angleVelocity = 0.0f;
 
 	public float smoothTime = 0f;

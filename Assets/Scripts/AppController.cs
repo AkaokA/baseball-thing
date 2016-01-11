@@ -136,8 +136,8 @@ public class AppController : BaseballElement {
 		currentGame = new BallGame();
 	
 		// assign teams
-		currentGame.homeTeam = new Team ("Toronto", true);
-		currentGame.awayTeam = new Team("Chicago", false);
+		currentGame.homeTeam = new Team ("Toronto", app.model.blueTeamMaterial, true);
+		currentGame.awayTeam = new Team ("Boston", app.model.redTeamMaterial, false);
 
 		// home team on the field first
 		fieldingTeam = currentGame.homeTeam;
@@ -149,6 +149,9 @@ public class AppController : BaseballElement {
 			// instantiate each fielder's gameobject
 			fielder.fielderInstance = Instantiate (app.views.fielder);
 			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
+
+			// assign team material to model
+			fielder.fielderInstance.GetComponent<MeshRenderer> ().material = fieldingTeam.teamMaterial;
 
 			// assign positions and attributes from model
 			fielderView.AssignFieldingPosition (fielder.fieldingPositionNumber);
@@ -163,7 +166,7 @@ public class AppController : BaseballElement {
 
 			// move fielders out to their positions
 			fielderView.Idle ();
-			fielder.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
+//			fielder.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
 		}
 		playersAreOnTheField = true;
 	}
@@ -222,6 +225,11 @@ public class AppController : BaseballElement {
 		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
 		batterView.batterIndex = battingTeam.currentBatterIndex;
+
+		// assign team material to model
+		currentBatter.runnerInstance.GetComponent<MeshRenderer> ().material = battingTeam.teamMaterial;
+
+		// set runner attributes
 		batterView.maxSpeed = currentBatter.runningSpeed;
 
 		// walk up to the plate
