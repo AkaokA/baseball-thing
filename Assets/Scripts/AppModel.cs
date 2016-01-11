@@ -91,9 +91,6 @@ public class Player {
 	public float throwStrength;
 	public float hittingPower;
 
-	public float pitchStrength;
-	public float pitchAccuracy;
-
 	// constructor
 	public Player ( string playerName, int positionNumber , float speed, float throwing) {
 		name = playerName;
@@ -102,6 +99,11 @@ public class Player {
 		throwStrength = throwing;
 		hittingPower = 1200f;
 	}
+}
+
+public class Pitcher : Player {
+	public float pitchStrength;
+	public float pitchAccuracy;
 }
 
 public class Inning {
