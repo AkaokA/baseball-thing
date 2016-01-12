@@ -5,7 +5,8 @@ public class FielderView : BaseballElement {
 	public int fieldingPositionNumber;
 
 	private Vector3 targetPosition;
-	private Vector3 transformVelocity;
+	private Vector3 positionVelocity;
+	private Vector3 angleVelocity;
 	private float smoothTime = 0.25f;
 	public float maxSpeed;
 	public float throwStrength;
@@ -36,7 +37,7 @@ public class FielderView : BaseballElement {
 		}
 		
 		// move fielder to target
-		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);
+		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
 
 		// point fielder towards stuff
 		if (app.controller.currentBaseballInstance) {
