@@ -173,6 +173,8 @@ public class AppController : BaseballElement {
 
 	IEnumerator ClearTheField () {
 		betweenInnings = true;
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("outfield", 1f);
+
 		while (playersAreOnTheField) {
 			playersAreOnTheField = false;
 			foreach ( Player runner in battingTeam.lineup ) {
@@ -204,6 +206,8 @@ public class AppController : BaseballElement {
 		Debug.Log ("players are off the field.");
 		ChangeSides ();
 		betweenInnings = false;
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
+
 		SetUpFielders ();
 		NewBatter ();
 		yield return null;
