@@ -151,7 +151,7 @@ public class AppController : BaseballElement {
 			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
 
 			// assign team material to model
-			fielder.fielderInstance.GetComponent<MeshRenderer> ().material = fieldingTeam.teamMaterial;
+//			fielder.fielderInstance.GetComponent<MeshRenderer> ().material = fieldingTeam.teamMaterial;
 
 			// assign positions and attributes from model
 			fielderView.AssignFieldingPosition (fielder.fieldingPositionNumber);
@@ -227,7 +227,7 @@ public class AppController : BaseballElement {
 		batterView.batterIndex = battingTeam.currentBatterIndex;
 
 		// assign team material to model
-		currentBatter.runnerInstance.GetComponent<MeshRenderer> ().material = battingTeam.teamMaterial;
+//		currentBatter.runnerInstance.GetComponent<MeshRenderer> ().material = battingTeam.teamMaterial;
 
 		// set runner attributes
 		batterView.maxSpeed = currentBatter.runningSpeed;
