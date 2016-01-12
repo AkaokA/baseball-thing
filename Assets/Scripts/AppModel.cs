@@ -101,10 +101,10 @@ public class Player {
 	}
 }
 
-public class Pitcher : Player {
-	public float pitchStrength;
-	public float pitchAccuracy;
-}
+//public class Pitcher : Player {
+//	public float pitchStrength;
+//	public float pitchAccuracy;
+//}
 
 public class Inning {
 	public int inningNumber = 0;
