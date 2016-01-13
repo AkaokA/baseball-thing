@@ -110,11 +110,7 @@ public class Player {
 		hittingPower = 1200f;
 
 		// randomize gender
-		if (Random.Range (0,2) == 0) {
-			gender = "female";
-		} else {
-			gender = "male";
-		}
+		gender = Random.Range (0,2) == 0 ? "female" : "male";
 	}
 }
 

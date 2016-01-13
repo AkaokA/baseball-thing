@@ -146,7 +146,7 @@ public class BaseballView : BaseballElement {
 			Vector3 velocity = GetComponent<Rigidbody> ().velocity;
 			Vector3 direction = velocity.normalized;
 
-			float angle = Mathf.Tan (direction.y);
+			float angle = Mathf.Asin (direction.y);
 			float distance = (velocity.magnitude * Mathf.Cos (angle) / Physics.gravity.magnitude) * ((velocity.magnitude * Mathf.Sin (angle)) + Mathf.Sqrt ( Mathf.Pow (velocity.magnitude * Mathf.Sin (angle), 2f) + (2f * Physics.gravity.magnitude * deltaHeight) ));
 
 			landingPoint = app.controller.currentBaseballInstance.transform.position + (direction * distance);
