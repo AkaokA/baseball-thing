@@ -160,7 +160,7 @@ public class AppController : BaseballElement {
 
 			// put fielders in the dugout
 			Vector3 randomizedStartPosition = fieldingTeam.dugoutPosition;
-			randomizedStartPosition.x += Random.Range (-8, 0);
+			randomizedStartPosition.x += Random.Range (-1, 0);
 			randomizedStartPosition.z += Random.Range (-3, 3);
 			fielder.fielderInstance.transform.position = randomizedStartPosition;
 
