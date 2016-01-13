@@ -3,8 +3,14 @@ using System.Collections;
 
 // Contains all data related to the app.
 public class AppModel : BaseballElement {
-	public Material redTeamMaterial;
-	public Material blueTeamMaterial;
+	public Mesh femaleMesh;
+	public Mesh maleMesh;
+
+	public Texture blueFemaleTexture;
+	public Texture blueMaleTexture;
+
+	public Texture redFemaleTexture;
+	public Texture redMaleTexture;
 }
 
 public class Ballpark {
@@ -43,15 +49,17 @@ public class Team {
 
 	// team attributes
 	public string teamName;
-	public Material teamMaterial;
+	public Texture teamTextureFemale;
+	public Texture teamTextureMale;
 
 	// players
 	public Player[] lineup = new Player[9];
 
 	// constructor
-	public Team (string name, Material material, bool isHome) {
+	public Team (string name, Texture femaleTexture, Texture maleTexture, bool isHome) {
 		teamName = name;
-		teamMaterial = material;
+		teamTextureFemale = femaleTexture;
+		teamTextureMale = maleTexture;
 		isHomeTeam = isHome;
 		currentBatterIndex = -1; // NewBatter() increments this; first batter should be index 0
 
@@ -71,9 +79,9 @@ public class Team {
 		// generate players
 		for (int position = 1; position <= 9; position++) {
 			float runningSpeed = Random.Range (4f, 6f);
-			Player playerInstance = new Player ("person " + position, position, runningSpeed, throwStrength);
+			Player playerInstance = new Player ("person " + position, "male", position, runningSpeed, throwStrength);
 			lineup [position-1] = playerInstance;
-			// Debug.Log (teamName + " " + playerInstance.name);
+			Debug.Log (teamName + " " + playerInstance.name + " " + playerInstance.gender);
 		}
 	}
 }
@@ -86,18 +94,27 @@ public class Player {
 
 	// individual player attributes
 	public string name;
+	public string gender;
 	public int fieldingPositionNumber; // 1 through 9
 	public float runningSpeed;
 	public float throwStrength;
 	public float hittingPower;
 
 	// constructor
-	public Player ( string playerName, int positionNumber , float speed, float throwing) {
+	public Player ( string playerName, string playerGender, int positionNumber , float speed, float throwing) {
 		name = playerName;
+		gender = playerGender;
 		fieldingPositionNumber = positionNumber;
 		runningSpeed = speed;
 		throwStrength = throwing;
 		hittingPower = 1200f;
+
+		// randomize gender
+		if (Random.Range (0,2) == 0) {
+			gender = "female";
+		} else {
+			gender = "male";
+		}
 	}
 }
 

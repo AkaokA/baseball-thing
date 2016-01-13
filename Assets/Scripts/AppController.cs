@@ -136,8 +136,8 @@ public class AppController : BaseballElement {
 		currentGame = new BallGame();
 	
 		// assign teams
-		currentGame.homeTeam = new Team ("Toronto", app.model.blueTeamMaterial, true);
-		currentGame.awayTeam = new Team ("Boston", app.model.redTeamMaterial, false);
+		currentGame.homeTeam = new Team ("Toronto", app.model.blueFemaleTexture, app.model.blueMaleTexture, true);
+		currentGame.awayTeam = new Team ("Boston", app.model.redFemaleTexture, app.model.redMaleTexture, false);
 
 		// home team on the field first
 		fieldingTeam = currentGame.homeTeam;
@@ -150,8 +150,17 @@ public class AppController : BaseballElement {
 			fielder.fielderInstance = Instantiate (app.views.fielder);
 			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
 
-			// assign team material to model
-			fielder.fielderInstance.GetComponentsInChildren<MeshRenderer> ()[0].material = fieldingTeam.teamMaterial;
+			// assign team texture to model
+			switch (fielder.gender) {
+			case "female":
+				fielder.fielderInstance.GetComponentsInChildren<MeshFilter> () [0].mesh = app.model.femaleMesh;
+				fielder.fielderInstance.GetComponentsInChildren<MeshRenderer> ()[0].material.mainTexture = fieldingTeam.teamTextureFemale;
+				break;
+			case "male":
+				fielder.fielderInstance.GetComponentsInChildren<MeshFilter> () [0].mesh = app.model.maleMesh;
+				fielder.fielderInstance.GetComponentsInChildren<MeshRenderer> () [0].material.mainTexture = fieldingTeam.teamTextureMale;
+				break;
+			}
 
 			// assign positions and attributes from model
 			fielderView.AssignFieldingPosition (fielder.fieldingPositionNumber);
@@ -169,6 +178,42 @@ public class AppController : BaseballElement {
 //			fielder.fielderInstance.transform.position = fielderView.idleLocation; // DEBUG: skip running out to the field
 		}
 		playersAreOnTheField = true;
+	}
+		
+	public void NewBatter () {
+		ResetCount ();
+
+		// cycle lineup after 9th batter
+		if (battingTeam.currentBatterIndex < 8) {
+			battingTeam.currentBatterIndex++;			
+		} else {
+			battingTeam.currentBatterIndex = 0;
+		}
+
+		// create instance
+		currentBatter = battingTeam.lineup [battingTeam.currentBatterIndex];
+		currentBatter.runnerInstance = Instantiate (app.views.runner);
+		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
+		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
+		batterView.batterIndex = battingTeam.currentBatterIndex;
+
+		// assign team texture to model
+		switch (currentBatter.gender) {
+		case "female":
+			currentBatter.runnerInstance.GetComponentsInChildren<MeshFilter> () [0].mesh = app.model.femaleMesh;
+			currentBatter.runnerInstance.GetComponentsInChildren<MeshRenderer> ()[0].material.mainTexture = battingTeam.teamTextureFemale;
+			break;
+		case "male":
+			currentBatter.runnerInstance.GetComponentsInChildren<MeshFilter> () [0].mesh = app.model.maleMesh;
+			currentBatter.runnerInstance.GetComponentsInChildren<MeshRenderer> () [0].material.mainTexture = battingTeam.teamTextureMale;
+			break;
+		}
+
+		// set runner attributes
+		batterView.maxSpeed = currentBatter.runningSpeed;
+
+		// walk up to the plate
+		batterView.MoveToward (ballpark.leftBattersBox);
 	}
 
 	IEnumerator ClearTheField () {
@@ -202,7 +247,7 @@ public class AppController : BaseballElement {
 			}
 			yield return null;
 		}
-			
+
 		Debug.Log ("players are off the field.");
 		ChangeSides ();
 		betweenInnings = false;
@@ -211,33 +256,6 @@ public class AppController : BaseballElement {
 		SetUpFielders ();
 		NewBatter ();
 		yield return null;
-	}
-
-	public void NewBatter () {
-		ResetCount ();
-
-		// cycle lineup after 9th batter
-		if (battingTeam.currentBatterIndex < 8) {
-			battingTeam.currentBatterIndex++;			
-		} else {
-			battingTeam.currentBatterIndex = 0;
-		}
-
-		// create instance
-		currentBatter = battingTeam.lineup [battingTeam.currentBatterIndex];
-		currentBatter.runnerInstance = Instantiate (app.views.runner);
-		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
-		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
-		batterView.batterIndex = battingTeam.currentBatterIndex;
-
-		// assign team material to model
-		currentBatter.runnerInstance.GetComponentsInChildren<MeshRenderer> ()[0].material = battingTeam.teamMaterial;
-
-		// set runner attributes
-		batterView.maxSpeed = currentBatter.runningSpeed;
-
-		// walk up to the plate
-		batterView.MoveToward (ballpark.leftBattersBox);
 	}
 
 	public void ResetPlay () {
