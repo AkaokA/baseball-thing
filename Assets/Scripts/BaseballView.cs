@@ -75,9 +75,9 @@ public class BaseballView : BaseballElement {
 	}
 
 	public void HitBaseball(float hittingPower) {
-		hitDirection.x = Random.Range (0f,1f);
-		hitDirection.y = Random.Range (0f,1f);
-		hitDirection.z = Random.Range (0f,1f);
+		hitDirection.x = Random.Range (-0.25f,1.25f);
+		hitDirection.y = Random.Range (-0.5f,1.5f);
+		hitDirection.z = Random.Range (-0.25f,1.25f);
 
 		hitForce = hittingPower + Random.Range (-hitForceVariance/2, hitForceVariance/2);
 

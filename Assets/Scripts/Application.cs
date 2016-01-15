@@ -12,6 +12,7 @@ public class Application : MonoBehaviour
 	// Reference to the root instances of the MVC.
 	public AppModel model;
 	public AppViews views;
+	public GridViews gridViews;
 	public AppController controller;
 
 	// Init things here
