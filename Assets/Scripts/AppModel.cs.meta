@@ -1,10 +1,16 @@
 fileFormatVersion: 2
 guid: a3a2e01ee59d44490892edb6c1397d58
-timeCreated: 1450289708
+timeCreated: 1452837403
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - femaleMesh: {fileID: 4300000, guid: 6ec8d90b32997461eb23a4e3a6bb95d9, type: 3}
+  - maleMesh: {fileID: 4300000, guid: 5856a3046005d4c8394e9880c191e4a8, type: 3}
+  - blueFemaleTexture: {fileID: 2800000, guid: d6b7d86a32daa4872a1e4c4d16bd2a9a, type: 3}
+  - blueMaleTexture: {fileID: 2800000, guid: aa50a3f8778024438a4f71e85d4953f3, type: 3}
+  - redFemaleTexture: {fileID: 2800000, guid: 226c9daec1f934a84afa929b1dee0890, type: 3}
+  - redMaleTexture: {fileID: 2800000, guid: fa1be2ade6db4400480874cf1467c61d, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

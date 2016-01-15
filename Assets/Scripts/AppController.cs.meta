@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 451a82e98cee44de3ba70b25f206bbfd
-timeCreated: 1450289718
+timeCreated: 1452837330
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - currentBaseballInstance: {fileID: 174166, guid: 0ca634bf279694e7b8939f1fb44db3a1,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
