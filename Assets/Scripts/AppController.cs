@@ -98,6 +98,7 @@ public class AppController : BaseballElement {
 		if (Input.GetKeyDown (KeyCode.P)) {
 			if (currentGame.currentInning.ballIsInPlay == false) {
 				currentBaseballInstance = Instantiate (app.views.baseball);
+				currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
 
 				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
 				currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
@@ -148,6 +149,7 @@ public class AppController : BaseballElement {
 		foreach (Player fielder in fieldingTeam.lineup) {
 			// instantiate each fielder's gameobject
 			fielder.fielderInstance = Instantiate (app.views.fielder);
+			fielder.fielderInstance.transform.parent = GameObject.Find ("Players").transform;
 			FielderView fielderView = fielder.fielderInstance.GetComponent<FielderView> ();
 
 			// assign team texture to model
@@ -193,6 +195,8 @@ public class AppController : BaseballElement {
 		// create instance
 		currentBatter = battingTeam.lineup [battingTeam.currentBatterIndex];
 		currentBatter.runnerInstance = Instantiate (app.views.runner);
+		currentBatter.runnerInstance.transform.parent = GameObject.Find ("Players").transform;
+
 		currentBatter.runnerInstance.transform.position = battingTeam.dugoutPosition;
 		RunnerView batterView = currentBatter.runnerInstance.GetComponent<RunnerView> ();
 		batterView.batterIndex = battingTeam.currentBatterIndex;
