@@ -28,6 +28,10 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
+		while (Application.isShowingSplashScreen) {
+			
+		}
+
 		ballpark = new Ballpark ();
 		ballpark.firstBase.baseGameObject = app.views.firstBase;
 		ballpark.secondBase.baseGameObject = app.views.secondBase;
