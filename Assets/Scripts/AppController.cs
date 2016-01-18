@@ -28,9 +28,9 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-		while (Application.isShowingSplashScreen) {
-			
-		}
+//		while (Application.isShowingSplashScreen) {
+//			
+//		}
 
 		ballpark = new Ballpark ();
 		ballpark.firstBase.baseGameObject = app.views.firstBase;
@@ -38,7 +38,7 @@ public class AppController : BaseballElement {
 		ballpark.thirdBase.baseGameObject = app.views.thirdBase;
 		ballpark.homePlate.baseGameObject = app.views.homePlate;
 
-		NewGame (); // DEBUG: automatically start a new game
+//		NewGame (); // DEBUG: automatically start a new game
 	}
 
 	public void NewGame () {
