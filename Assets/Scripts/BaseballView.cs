@@ -27,7 +27,7 @@ public class BaseballView : BaseballElement {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		// kill ball if it goes out of play
 		if ( transform.position.x < -6f || transform.position.z < -6f ) {
 			app.controller.ResetPlay ();

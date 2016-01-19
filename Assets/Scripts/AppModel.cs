@@ -74,14 +74,14 @@ public class Team {
 		}
 
 		// temporary attributes for all players on team
-		float throwStrength = 15f;
+		float throwStrength = 10f;
 
 		// generate players
 		for (int position = 1; position <= 9; position++) {
 			float runningSpeed = Random.Range (4f, 6f);
 			Player playerInstance = new Player ("person " + position, "male", position, runningSpeed, throwStrength);
 			lineup [position-1] = playerInstance;
-			Debug.Log (teamName + " " + playerInstance.name + " " + playerInstance.gender);
+//			Debug.Log (teamName + " " + playerInstance.name + " " + playerInstance.gender);
 		}
 	}
 }
@@ -107,7 +107,7 @@ public class Player {
 		fieldingPositionNumber = positionNumber;
 		runningSpeed = speed;
 		throwStrength = throwing;
-		hittingPower = 1200f;
+		hittingPower = 800f;
 
 		// randomize gender
 		gender = Random.Range (0,2) == 0 ? "female" : "male";
@@ -126,7 +126,7 @@ public class Inning {
 	public int outs = 0;
 	public int runsScored = 0;
 
-	public bool ballIsInPlay;
+	public bool ballIsInPlay = false;
 	public bool currentPitchIsStrike = false;
 
 	// constructor

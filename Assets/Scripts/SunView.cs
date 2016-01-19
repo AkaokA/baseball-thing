@@ -6,9 +6,9 @@ public class SunView : BaseballElement {
 	public AnimationCurve sunCurve;
 
 	public float initialAngle = 0f;
-	public float finalAngle = 45f;
+	public float finalAngle = 60f;
 	public float initialIntensity = 0f;
-	public float finalIntensity = 1f;
+	public float finalIntensity = 1.5f;
 
 	public Color initialColor;
 	public Color finalColor;
@@ -17,7 +17,8 @@ public class SunView : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-	
+		StartCoroutine (Sunrise (initialAngle, initialAngle, initialIntensity, initialIntensity, initialColor, initialColor, 0.01f));
+		GetComponent<Light> ().intensity = 0;
 	}
 	
 	// Update is called once per frame

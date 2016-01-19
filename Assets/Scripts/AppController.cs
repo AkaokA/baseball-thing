@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class AppController : BaseballElement {
+	public AnimationCurve easingCurve;
+
 	public Ballpark ballpark;
 	public BallGame currentGame;
 	public Team fieldingTeam;
@@ -26,8 +28,11 @@ public class AppController : BaseballElement {
 	private UIDotView out1Dot;
 	private UIDotView out2Dot;
 
+
+
 	// Use this for initialization
 	void Start () {
+
 		// create ballgame
 		SetUpBallgame ();
 
@@ -64,7 +69,7 @@ public class AppController : BaseballElement {
 		NewBatter ();
 
 		// hide main menu
-		HideUI (app.views.mainMenu);
+		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
 
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
@@ -77,14 +82,71 @@ public class AppController : BaseballElement {
 		}
 	}
 
-	public void HideUI (GameObject guiCanvas) {
+	public IEnumerator HideMainMenu (GameObject guiCanvas) {
 		if (guiCanvas.activeInHierarchy == true) {
+			float time = 0.5f;
+			float initialYAngle = 0f;
+			float finalYAngle = -112f;
+				
+			float currentLerpTime;
+
+			for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
+
+				foreach (GameObject menuElement in GameObject.FindGameObjectsWithTag ("Menu Element")) {
+					float perc = currentLerpTime / time;
+					float angle;
+					angle = Mathf.LerpUnclamped(initialYAngle, finalYAngle, easingCurve.Evaluate (perc));
+
+					Quaternion newRotation = menuElement.transform.rotation;
+					Vector3 newEulerAngles = newRotation.eulerAngles;
+					newEulerAngles.y = angle;
+					newRotation.eulerAngles = newEulerAngles;
+					menuElement.transform.rotation = newRotation;
+
+				}
+				yield return null;
+			}
+
 			guiCanvas.SetActive (false);
 		}
 	}
 
 	// Update is called once per frame
 	void Update () {
+
+		// mouse/tap controls
+		if (Input.GetMouseButtonDown (0) && currentBatter != null) {
+			if (currentGame.currentInning.ballIsInPlay == false && currentBaseballInstance == null) {
+				currentBaseballInstance = Instantiate (app.views.baseball);
+				currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
+
+				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
+				currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
+			
+			} else {
+				
+				if (currentBaseballInstance && currentGame.currentInning.ballIsInPlay == false) {
+					currentGame.currentInning.ballIsInPlay = true;
+					currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
+					currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+					app.views.infieldCameraTrigger.SetActive (true);
+					currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
+
+					// advance all runners
+					foreach (Player runner in battingTeam.lineup) {
+						if (runner.runnerInstance) {
+							runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+						}
+					}
+				} else {
+					ResetPlay ();
+					NewBatter ();
+				}
+
+			}
+		}
+
+
 		// C: DEBUG: clear the field
 		if (Input.GetKeyUp (KeyCode.C)) {
 			StartCoroutine (ClearTheField ());
@@ -327,7 +389,7 @@ public class AppController : BaseballElement {
 		}
 
 		NewBatter ();
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 	}
 
 	void ResetCount () {
