@@ -28,9 +28,17 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
-//		while (Application.isShowingSplashScreen) {
-//			
-//		}
+		// create ballgame
+		SetUpBallgame ();
+
+		// init scoreboard variables (scoreboard stuff should go in its own class)
+		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
+		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
+		ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
+		strike1Dot = app.views.strike1Dot.GetComponent<UIDotView> ();
+		strike2Dot = app.views.strike2Dot.GetComponent<UIDotView> ();
+		out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
+		out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
 
 		ballpark = new Ballpark ();
 		ballpark.firstBase.baseGameObject = app.views.firstBase;
@@ -42,19 +50,9 @@ public class AppController : BaseballElement {
 	}
 
 	public void NewGame () {
-		// create ballgame
-		SetUpBallgame ();
 
 		// show scoreboard
 		ShowUI (app.views.scoreboard);
-		// init scoreboard variables (scoreboard stuff should go in its own class)
-		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
-		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
-		ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
-		strike1Dot = app.views.strike1Dot.GetComponent<UIDotView> ();
-		strike2Dot = app.views.strike2Dot.GetComponent<UIDotView> ();
-		out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
-		out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
 
 		// update scoreboard
 		UpdateScoreboard ();
@@ -69,7 +67,7 @@ public class AppController : BaseballElement {
 		HideUI (app.views.mainMenu);
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
@@ -259,7 +257,7 @@ public class AppController : BaseballElement {
 		Debug.Log ("players are off the field.");
 		ChangeSides ();
 		betweenInnings = false;
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 
 		SetUpFielders ();
 		NewBatter ();
@@ -270,7 +268,7 @@ public class AppController : BaseballElement {
 		Destroy (currentBaseballInstance);
 		currentGame.currentInning.ballIsInPlay = false;
 		app.views.infieldCameraTrigger.SetActive (false);
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 1f);
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
 
 		foreach (Player player in fieldingTeam.lineup) {
