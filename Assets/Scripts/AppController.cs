@@ -108,6 +108,7 @@ public class AppController : BaseballElement {
 			}
 
 			guiCanvas.SetActive (false);
+			app.views.duelGrid.SetActive (true);
 		}
 	}
 

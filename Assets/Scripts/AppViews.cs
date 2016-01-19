@@ -6,6 +6,8 @@ public class AppViews : BaseballElement {
 	public GameObject mainCamera;
 	public GameObject sun;
 
+	public GameObject duelGrid;
+
 	public GameObject baseball;
 
 	public GameObject firstBase;
