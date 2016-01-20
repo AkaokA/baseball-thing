@@ -5,14 +5,13 @@ public class DuelGrid : BaseballElement {
 
 	public AnimationCurve easingCurve;
 
-	private int gridRows = 7;
+	private int gridRows = 9;
 	private int gridColumns = 7;
-	private float gridPadding = 1f;
+	private float gridPadding = 44f;
 
 	private float cellWidth;
 	private float cellHeight;
-	private float cellDepth = 0.01f;
-	private float cellPadding = 0.2f;
+	private float cellPadding = 0;
 
 	private RectTransform duelGridRectTransform;
 
@@ -39,19 +38,20 @@ public class DuelGrid : BaseballElement {
 				// each column
 				currentCell = Instantiate (gridCell);
 				currentCell.transform.parent = app.views.duelGrid.transform;
-				currentCell.transform.localScale = new Vector3(cellWidth - cellPadding/2, cellHeight - cellPadding/2, cellDepth);
+				currentCell.transform.localScale = new Vector3(cellWidth - cellPadding/2, cellHeight - cellPadding/2, 1);
 				gridCells [row, column] = currentCell;
 
 				Vector3 cellPosition = new Vector3(0,0,0);
-				cellPosition.y = cellHeight * row - cellHeight * gridRows/2 + cellHeight/2;
+				cellPosition.y = -cellHeight * row + cellHeight * gridRows/2 - cellHeight/2;
 				cellPosition.x = cellWidth * column - cellWidth * gridColumns/2 + cellWidth/2;
 				currentCell.transform.localPosition = cellPosition;
 
-				currentCell.transform.localRotation = Quaternion.identity;
+//				Quaternion cellRotation;
+//				currentCell.transform.rotation = Quaternion.identity;
 			}
 		}
 
-		app.views.duelGrid.SetActive (false);
+//		app.views.duelGrid.SetActive (false);
 	}
 
 
