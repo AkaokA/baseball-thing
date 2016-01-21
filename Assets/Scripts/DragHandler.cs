@@ -8,7 +8,7 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 	Vector3 startPosition;
 	Vector3 startScale;
 
-	private Vector3 targetPosition;
+	public Vector3 targetPosition;
 	private Vector3 positionVelocity;
 
 	private Vector3 targetScale;

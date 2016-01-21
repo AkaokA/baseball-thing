@@ -1,29 +1,28 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class DuelGrid : BaseballElement {
 
 	public AnimationCurve easingCurve;
 
-	private int gridRows = 9;
-	private int gridColumns = 7;
-	private float gridPadding = 44f;
+	private int gridRows = 7;
+	private int gridColumns = 5;
 
 	private float cellWidth;
 	private float cellHeight;
-	private float cellPadding = 0;
 
-	private RectTransform duelGridRectTransform;
+	private RectTransform duelGridRect;
 
 	private GameObject[,] gridCells;
 	public GameObject gridCell;
 
 	void Start () {
-		gridCells = new GameObject[gridRows, gridColumns];
+		gridCells = new GameObject[gridColumns, gridRows];
 
-		duelGridRectTransform = app.views.duelGrid.GetComponent<RectTransform> ();
+		duelGridRect = app.views.duelGrid.GetComponent<RectTransform> ();
 
-		cellHeight = (duelGridRectTransform.rect.height - gridPadding) / gridRows;
+		cellHeight = duelGridRect.rect.height / gridRows;
 		cellWidth = cellHeight;
 
 		GameObject currentCell;
@@ -37,53 +36,32 @@ public class DuelGrid : BaseballElement {
 			for (column = 0; column < gridColumns; column++) {
 				// each column
 				currentCell = Instantiate (gridCell);
-				currentCell.transform.parent = app.views.duelGrid.transform;
-				currentCell.transform.localScale = new Vector3(cellWidth - cellPadding/2, cellHeight - cellPadding/2, 1);
-				gridCells [row, column] = currentCell;
+				currentCell.transform.SetParent (app.views.duelGrid.transform);
+				gridCells [column, row] = currentCell;
+
+				RectTransform cellRect = currentCell.GetComponent<RectTransform> ();
+				cellRect.localScale = new Vector3 (1, 1, 1);
 
 				Vector3 cellPosition = new Vector3(0,0,0);
 				cellPosition.y = -cellHeight * row + cellHeight * gridRows/2 - cellHeight/2;
 				cellPosition.x = cellWidth * column - cellWidth * gridColumns/2 + cellWidth/2;
-				currentCell.transform.localPosition = cellPosition;
+				cellRect.localPosition = cellPosition;
 
-//				Quaternion cellRotation;
-//				currentCell.transform.rotation = Quaternion.identity;
+				int strikeZonePadding = 1;
+				Color normalDotColor = new Color (0f, 0f, 0f, 0.25f);
+				Color darkerDotColor = new Color (0f, 0f, 0f, 0.5f);
+				if (row >= strikeZonePadding && row < gridRows - strikeZonePadding && column >= strikeZonePadding && column < gridColumns - strikeZonePadding) {
+					cellRect.transform.GetComponentInChildren<RawImage> ().color = darkerDotColor;
+				} else {
+					cellRect.transform.GetComponentInChildren<RawImage> ().color = normalDotColor;
+				}
+
+
 			}
 		}
 
+//		GameObject.Find ("Swing Marker").GetComponent<DragHandler> ().targetPosition = gridCells [3,4].GetComponent<RectTransform> ().localPosition;
+
 //		app.views.duelGrid.SetActive (false);
 	}
-
-
-
-
-
-
-
-
-//	IEnumerator DropCells () {
-//		float time = 10f;
-//
-//		for ( float currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
-//			float perc = currentLerpTime / time;
-//			float cellAltitude;
-//
-//			foreach (GameObject cell in gridCells) {
-//				float initialAltitude = 0;
-//
-//				bool first = true;
-//				if (first) {
-//					initialAltitude = cell.transform.localPosition.z;
-//					first = false;
-//				}
-//
-//				cellAltitude = Mathf.LerpUnclamped (initialAltitude, 0f, easingCurve.Evaluate (perc));
-//				Vector3 cellPosition = cell.transform.localPosition;
-//				cellPosition.z = cellAltitude;
-//
-//				cell.transform.localPosition = cellPosition;
-//			}
-//			yield return null;
-//		}
-//	}
 }

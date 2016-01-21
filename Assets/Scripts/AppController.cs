@@ -56,20 +56,20 @@ public class AppController : BaseballElement {
 
 	public void NewGame () {
 
-		// show scoreboard
-		ShowUI (app.views.scoreboard);
-
-		// update scoreboard
-		UpdateScoreboard ();
-
-		// create fielders
-		SetUpFielders ();
-
-		// create first batter
-		NewBatter ();
-
-		// hide main menu
-		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
+//		// show scoreboard
+//		ShowUI (app.views.scoreboard);
+//
+//		// update scoreboard
+//		UpdateScoreboard ();
+//
+//		// create fielders
+//		SetUpFielders ();
+//
+//		// create first batter
+//		NewBatter ();
+//
+//		// hide main menu
+//		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
 
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
