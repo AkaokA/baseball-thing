@@ -6,11 +6,6 @@ public class BaseballHeightIndicatorView: BaseballElement {
 	public float markerScaleFactor = 6.4f;
 	public float yOffset = 0.005f;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
 	// Update is called once per frame
 	void Update () {
 

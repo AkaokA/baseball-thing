@@ -17,11 +17,6 @@ public class RunnerView : BaseballElement {
 	private bool scoreCounted = false;
 	public bool isOut = false;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-
 	// Update is called once per frame
 	void Update () {
 		// move runner to target

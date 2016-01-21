@@ -15,14 +15,9 @@ public class FielderView : BaseballElement {
 	public bool coveringBase = false;
 
 	public Vector3 idleLocation;
-	private Player activeFielder;
+	private static Player activeFielder;
 	private Base targetBase;
 	private Transform throwTargetPosition;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 
 	// Update is called once per frame
 	void Update () {

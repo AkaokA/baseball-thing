@@ -21,11 +21,6 @@ public class SunView : BaseballElement {
 		GetComponent<Light> ().intensity = 0;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public void BeginSunrise () {
 		StartCoroutine (Sunrise (initialAngle, finalAngle, initialIntensity, finalIntensity, initialColor, finalColor, sunriseTime));
 	}

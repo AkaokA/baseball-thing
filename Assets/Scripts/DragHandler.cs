@@ -6,31 +6,40 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 
 	public static GameObject objectBeingDragged;
 	Vector3 startPosition;
+	Vector3 startScale;
 
 	private Vector3 targetPosition;
-	private Vector3 transformVelocity;
+	private Vector3 positionVelocity;
+
+	private Vector3 targetScale;
+	private Vector3 scaleVelocity;
+
 	private static float smoothTime = 0.1f;
 	private static float maxSpeed = Mathf.Infinity;
 
-	private float liftHeight = -20f;
+	private Vector3 scaleUp = new Vector3(2, 2, 2);
 
 	void Start () {
-		targetPosition = transform.localPosition;
+		startPosition = transform.localPosition;
+		startScale = transform.localScale;
+
+		targetPosition = startPosition;
+		targetScale = startScale;
 	}
 
 	void Update () {
-		transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref transformVelocity, smoothTime, maxSpeed);
+		transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
+		transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleVelocity, smoothTime, maxSpeed);
 	}
  
 	public void OnPointerDown (PointerEventData eventData)
 	{
-		targetPosition.z = liftHeight;
+		targetScale = scaleUp;
 	}
 		
 	public void OnBeginDrag (PointerEventData eventData)
 	{
 		objectBeingDragged = gameObject;
-		startPosition = transform.localPosition;
 	}
 
 	public void OnDrag (PointerEventData eventData)
@@ -40,7 +49,6 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 		RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
 
 		targetPosition = posInParent;
-		targetPosition.z = liftHeight;
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
@@ -50,7 +58,7 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 
 	public void OnPointerUp (PointerEventData eventData)
 	{
-		targetPosition.z = 0f;
+		targetScale = new Vector3(1,1,1);
 	}
 
 }

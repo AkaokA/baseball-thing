@@ -8,16 +8,6 @@ public class UIDotView : BaseballElement {
 	public Color strikeDotColor;
 	public Color outDotColor;
 
-	// Use this for initialization
-	void Start () {
-		StartCoroutine (changeColor (disabledColor));
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public IEnumerator changeColor (Color color) {
 		float time = 0.2f;
 		float currentLerpTime;
