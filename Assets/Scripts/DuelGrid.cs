@@ -18,7 +18,7 @@ public class DuelGrid : BaseballElement {
 	private GameObject[,] gridCells;
 	public GameObject gridCell;
 
-	public void Start () {
+	void Start () {
 		gridCells = new GameObject[gridRows, gridColumns];
 
 		duelGridRectTransform = app.views.duelGrid.GetComponent<RectTransform> ();
