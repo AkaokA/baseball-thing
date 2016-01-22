@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler {
@@ -34,21 +35,29 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
  
 	public void OnPointerDown (PointerEventData eventData)
 	{
+		objectBeingDragged = gameObject;
+		objectBeingDragged.GetComponent<RawImage> ().raycastTarget = false;
 		targetScale = scaleUp;
 	}
 		
 	public void OnBeginDrag (PointerEventData eventData)
 	{
-		objectBeingDragged = gameObject;
+
 	}
 
 	public void OnDrag (PointerEventData eventData)
 	{
 		RectTransform parentRect = (RectTransform)transform.parent;
 		Vector2 posInParent;
-		RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
 
+
+		if (eventData.pointerEnter != null) {
+			posInParent = eventData.pointerEnter.GetComponent<RectTransform> ().localPosition;
+		} else {
+			RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
+		}
 		targetPosition = posInParent;
+
 	}
 
 	public void OnEndDrag (PointerEventData eventData)
@@ -58,6 +67,7 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 
 	public void OnPointerUp (PointerEventData eventData)
 	{
+		objectBeingDragged.GetComponent<RawImage> ().raycastTarget = true;
 		targetScale = new Vector3(1,1,1);
 	}
 

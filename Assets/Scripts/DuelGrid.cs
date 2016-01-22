@@ -6,8 +6,9 @@ public class DuelGrid : BaseballElement {
 
 	public AnimationCurve easingCurve;
 
-	private int gridRows = 7;
-	private int gridColumns = 5;
+	private int gridRows = 9;
+	private int gridColumns = 7;
+	private int strikeZonePadding = 2;
 
 	private float cellWidth;
 	private float cellHeight;
@@ -40,6 +41,7 @@ public class DuelGrid : BaseballElement {
 				gridCells [column, row] = currentCell;
 
 				RectTransform cellRect = currentCell.GetComponent<RectTransform> ();
+				cellRect.sizeDelta = new Vector2 (cellWidth, cellHeight);
 				cellRect.localScale = new Vector3 (1, 1, 1);
 
 				Vector3 cellPosition = new Vector3(0,0,0);
@@ -47,7 +49,6 @@ public class DuelGrid : BaseballElement {
 				cellPosition.x = cellWidth * column - cellWidth * gridColumns/2 + cellWidth/2;
 				cellRect.localPosition = cellPosition;
 
-				int strikeZonePadding = 1;
 				Color normalDotColor = new Color (0f, 0f, 0f, 0.25f);
 				Color darkerDotColor = new Color (0f, 0f, 0f, 0.5f);
 				if (row >= strikeZonePadding && row < gridRows - strikeZonePadding && column >= strikeZonePadding && column < gridColumns - strikeZonePadding) {
@@ -55,8 +56,6 @@ public class DuelGrid : BaseballElement {
 				} else {
 					cellRect.transform.GetComponentInChildren<RawImage> ().color = normalDotColor;
 				}
-
-
 			}
 		}
 
