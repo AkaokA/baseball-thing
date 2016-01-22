@@ -3,9 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler {
-
-	public static GameObject objectBeingDragged;
+public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, IPointerUpHandler {
+	public DuelGrid duelGrid;
+	public GameObject objectBeingDragged;
 	Vector3 startPosition;
 	Vector3 startScale;
 
@@ -20,12 +20,19 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 
 	private Vector3 scaleUp = new Vector3(2, 2, 2);
 
+	private int highlightColumn;
+	private int highlightRow;
+	private Color highlightColor = new Color (0, 0, 0, 0.75f);
+
 	void Start () {
+		duelGrid = app.views.duelGrid.GetComponent<DuelGrid> ();
+
 		startPosition = transform.localPosition;
 		startScale = transform.localScale;
 
 		targetPosition = startPosition;
 		targetScale = startScale;
+
 	}
 
 	void Update () {
@@ -40,19 +47,16 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 		targetScale = scaleUp;
 	}
 		
-	public void OnBeginDrag (PointerEventData eventData)
-	{
-
-	}
-
 	public void OnDrag (PointerEventData eventData)
 	{
 		RectTransform parentRect = (RectTransform)transform.parent;
 		Vector2 posInParent;
 
-
 		if (eventData.pointerEnter != null) {
 			posInParent = eventData.pointerEnter.GetComponent<RectTransform> ().localPosition;
+
+			HighlightCells (eventData.pointerEnter);
+
 		} else {
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
 		}
@@ -60,15 +64,41 @@ public class DragHandler : BaseballElement, IBeginDragHandler, IDragHandler, IEn
 
 	}
 
-	public void OnEndDrag (PointerEventData eventData)
-	{
-
-	}
-
 	public void OnPointerUp (PointerEventData eventData)
 	{
 		objectBeingDragged.GetComponent<RawImage> ().raycastTarget = true;
 		targetScale = new Vector3(1,1,1);
+
+		foreach (GameObject cell in duelGrid.gridCells) {
+			cell.GetComponentInChildren<RawImage> ().color = cell.GetComponentInChildren<DuelGridCell> ().originalDotColor;
+		}
+	}
+
+	void HighlightCells (GameObject pointerEnter) {
+		// find the current column and row
+		for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
+			for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
+
+				if (duelGrid.gridCells[column, row] == pointerEnter) {
+					// Debug.Log (column + ", " + row);
+					highlightColumn = column;
+					highlightRow = row;
+				}
+			}		
+		}
+
+		// highlight current column and row
+
+		for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
+			for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
+				if (column == highlightColumn || row == highlightRow) {
+					duelGrid.gridCells [column, row].GetComponentInChildren<RawImage> ().color = highlightColor;
+				} else {
+					duelGrid.gridCells [column, row].GetComponentInChildren<RawImage> ().color = duelGrid.gridCells [column, row].GetComponentInChildren<DuelGridCell> ().originalDotColor;
+				}
+			}		
+		}
+
 	}
 
 }

@@ -1,12 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.EventSystems;
 
-public class DuelGridCell : BaseballElement, IDropHandler {
+public class DuelGridCell : BaseballElement {
 
-	public void OnDrop (PointerEventData eventData)
-	{
-		
-	}
+	public Color originalDotColor;
 
 }

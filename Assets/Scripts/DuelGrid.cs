@@ -15,7 +15,7 @@ public class DuelGrid : BaseballElement {
 
 	private RectTransform duelGridRect;
 
-	private GameObject[,] gridCells;
+	public GameObject[,] gridCells;
 	public GameObject gridCell;
 
 	void Start () {
@@ -52,8 +52,10 @@ public class DuelGrid : BaseballElement {
 				Color normalDotColor = new Color (0f, 0f, 0f, 0.25f);
 				Color darkerDotColor = new Color (0f, 0f, 0f, 0.5f);
 				if (row >= strikeZonePadding && row < gridRows - strikeZonePadding && column >= strikeZonePadding && column < gridColumns - strikeZonePadding) {
+					cellRect.transform.GetComponentInChildren<DuelGridCell> ().originalDotColor = darkerDotColor;
 					cellRect.transform.GetComponentInChildren<RawImage> ().color = darkerDotColor;
 				} else {
+					cellRect.transform.GetComponentInChildren<DuelGridCell> ().originalDotColor = normalDotColor;
 					cellRect.transform.GetComponentInChildren<RawImage> ().color = normalDotColor;
 				}
 			}
