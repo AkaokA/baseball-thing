@@ -55,10 +55,11 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		if (eventData.pointerEnter != null) {
 			posInParent = eventData.pointerEnter.GetComponent<RectTransform> ().localPosition;
 
-			HighlightCells (eventData.pointerEnter);
+			HighlightCells (eventData.pointerEnter, true);
 
 		} else {
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
+			HighlightCells (eventData.pointerEnter, false);
 		}
 		targetPosition = posInParent;
 
@@ -69,34 +70,42 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		objectBeingDragged.GetComponent<RawImage> ().raycastTarget = true;
 		targetScale = new Vector3(1,1,1);
 
-		foreach (GameObject cell in duelGrid.gridCells) {
-			cell.GetComponentInChildren<RawImage> ().color = cell.GetComponentInChildren<DuelGridCell> ().originalDotColor;
-		}
+		HighlightCells (eventData.pointerEnter, false);
 	}
 
-	void HighlightCells (GameObject pointerEnter) {
-		// find the current column and row
-		for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
-			for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
 
-				if (duelGrid.gridCells[column, row] == pointerEnter) {
-					// Debug.Log (column + ", " + row);
-					highlightColumn = column;
-					highlightRow = row;
-				}
-			}		
-		}
 
-		// highlight current column and row
 
-		for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
-			for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
-				if (column == highlightColumn || row == highlightRow) {
-					duelGrid.gridCells [column, row].GetComponentInChildren<RawImage> ().color = highlightColor;
-				} else {
-					duelGrid.gridCells [column, row].GetComponentInChildren<RawImage> ().color = duelGrid.gridCells [column, row].GetComponentInChildren<DuelGridCell> ().originalDotColor;
-				}
-			}		
+
+	void HighlightCells (GameObject pointerEnter, bool highlightActive) {
+		if (highlightActive) {
+			// find the current column and row
+			for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
+				for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
+
+					if (duelGrid.gridCells[column, row] == pointerEnter) {
+						// Debug.Log (column + ", " + row);
+						highlightColumn = column;
+						highlightRow = row;
+					}
+				}		
+			}
+
+			// highlight current column and row
+			for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
+				for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
+					if (column == highlightColumn || row == highlightRow) {
+						duelGrid.gridCells [column, row].transform.FindChild ("Highlight").gameObject.SetActive (true);
+					} else {
+						duelGrid.gridCells [column, row].transform.FindChild ("Highlight").gameObject.SetActive (false);
+					}
+				}		
+			}
+
+		} else {
+			foreach (GameObject cell in duelGrid.gridCells) {
+				cell.transform.FindChild ("Highlight").gameObject.SetActive (false);
+			}
 		}
 
 	}
