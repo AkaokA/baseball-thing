@@ -8,7 +8,7 @@ public class DuelGrid : BaseballElement {
 
 	private int gridRows = 9;
 	private int gridColumns = 7;
-	private int strikeZonePadding = 1;
+	private int strikeZonePadding = 2;
 
 	private float cellWidth;
 	private float cellHeight;
@@ -18,10 +18,14 @@ public class DuelGrid : BaseballElement {
 	public GameObject[,] gridCells;
 	public GameObject gridCell;
 
-	private Color normalDotColor = new Color (0f, 0f, 0f, 0.25f);
-	private Color darkerDotColor = new Color (0f, 0f, 0f, 0.75f);
+	private Color normalDotColor = new Color (1f, 1f, 1f, 0.5f);
+	private Color darkerDotColor = new Color (1f, 1f, 1f, 1f);
 
 	void Start () {
+		SetUpDuelGrid ();
+	}
+
+	void SetUpDuelGrid () {
 		gridCells = new GameObject[gridColumns, gridRows];
 
 		duelGridRect = app.views.duelGrid.GetComponent<RectTransform> ();
@@ -41,6 +45,7 @@ public class DuelGrid : BaseballElement {
 				// each column
 				currentCell = Instantiate (gridCell);
 				currentCell.transform.SetParent (app.views.duelGrid.transform);
+				currentCell.transform.SetAsFirstSibling ();
 				gridCells [column, row] = currentCell;
 
 				RectTransform cellRect = currentCell.GetComponent<RectTransform> ();
@@ -61,9 +66,5 @@ public class DuelGrid : BaseballElement {
 				}
 			}
 		}
-
-//		GameObject.Find ("Swing Marker").GetComponent<DragHandler> ().targetPosition = gridCells [3,4].GetComponent<RectTransform> ().localPosition;
-
-//		app.views.duelGrid.SetActive (false);
 	}
 }
