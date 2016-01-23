@@ -30,13 +30,12 @@ public class DuelGrid : BaseballElement {
 
 		duelGridRect = app.views.duelGrid.GetComponent<RectTransform> ();
 
-		if (duelGridRect.rect.width > duelGridRect.rect.height) {
+		if (duelGridRect.rect.width < duelGridRect.rect.height) {
 			cellHeight = duelGridRect.rect.height / gridRows;
 			cellWidth = cellHeight;
 		} else {
 			cellWidth = duelGridRect.rect.width / gridColumns;
 			cellHeight = cellWidth;
-
 		}
 
 		GameObject currentCell;
@@ -73,4 +72,7 @@ public class DuelGrid : BaseballElement {
 			}
 		}
 	}
+
+
+
 }
