@@ -51,22 +51,29 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 	{
 		RectTransform parentRect = (RectTransform)transform.parent;
 		Vector2 posInParent;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
+		if (eventData.pointerEnter != null) {
+			HighlightCells (eventData.pointerEnter, true);
+		} else {
+			HighlightCells (eventData.pointerEnter, false);
+		}
+		targetPosition = posInParent;
+	}
+
+	public void OnPointerUp (PointerEventData eventData)
+	{
+		RectTransform parentRect = (RectTransform)transform.parent;
+		Vector2 posInParent;
 
 		if (eventData.pointerEnter != null) {
 			posInParent = eventData.pointerEnter.GetComponent<RectTransform> ().localPosition;
-
 			HighlightCells (eventData.pointerEnter, true);
-
 		} else {
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
 			HighlightCells (eventData.pointerEnter, false);
 		}
 		targetPosition = posInParent;
 
-	}
-
-	public void OnPointerUp (PointerEventData eventData)
-	{
 		objectBeingDragged.GetComponent<RawImage> ().raycastTarget = true;
 		targetScale = new Vector3(1,1,1);
 

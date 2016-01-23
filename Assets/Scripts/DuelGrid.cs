@@ -8,7 +8,7 @@ public class DuelGrid : BaseballElement {
 
 	private int gridRows = 9;
 	private int gridColumns = 7;
-	private int strikeZonePadding = 2;
+	private int strikeZonePadding = 1;
 
 	private float cellWidth;
 	private float cellHeight;
