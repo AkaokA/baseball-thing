@@ -68,7 +68,6 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 	public void OnPointerUp (PointerEventData eventData)
 	{
 		RectTransform parentRect = (RectTransform)transform.parent;
-		Vector2 posInParent;
 
 		if (eventData.pointerEnter != null) {
 			if (eventData.pointerEnter.tag == "Duel Grid Cell") {
