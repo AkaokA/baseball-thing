@@ -63,11 +63,9 @@ public class DuelGrid : BaseballElement {
 				cellRect.localPosition = cellPosition;
 
 				if (row >= strikeZonePadding && row < gridRows - strikeZonePadding && column >= strikeZonePadding && column < gridColumns - strikeZonePadding) {
-					cellRect.transform.GetComponentInChildren<DuelGridCell> ().dotColor = darkerDotColor;
-					cellRect.transform.GetComponentInChildren<RawImage> ().color = darkerDotColor;
+					cellRect.transform.FindChild ("Dot").GetComponent<Image> ().color = darkerDotColor;
 				} else {
-					cellRect.transform.GetComponentInChildren<DuelGridCell> ().dotColor = normalDotColor;
-					cellRect.transform.GetComponentInChildren<RawImage> ().color = normalDotColor;
+					cellRect.transform.FindChild ("Dot").GetComponent<Image> ().color = normalDotColor;
 				}
 			}
 		}

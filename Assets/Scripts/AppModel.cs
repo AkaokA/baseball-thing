@@ -19,9 +19,9 @@ public class DuelGridLocation {
 	public int column;
 	public int row;
 
-	public DuelGridLocation () {
-		column = Mathf.FloorToInt ( DuelGrid.gridColumns / 2 );
-		row = Mathf.FloorToInt ( DuelGrid.gridRows / 2 );
+	public DuelGridLocation (int columnIndex, int rowIndex) {
+		column = columnIndex;
+		row = rowIndex;
 	}
 }
 

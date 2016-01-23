@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 public class AppController : BaseballElement {
 	public AnimationCurve easingCurve;
@@ -33,9 +34,6 @@ public class AppController : BaseballElement {
 	// Use this for initialization
 	void Start () {
 
-		// create ballgame
-		SetUpBallgame ();
-
 		// init scoreboard variables (scoreboard stuff should go in its own class)
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
 		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
@@ -51,25 +49,42 @@ public class AppController : BaseballElement {
 		ballpark.thirdBase.baseGameObject = app.views.thirdBase;
 		ballpark.homePlate.baseGameObject = app.views.homePlate;
 
-		NewGame (); // DEBUG: automatically start a new game
+//		NewGame (); // DEBUG: automatically start a new game
+	}
+
+	public void ActivateGrid () {
+		// blur camera
+		Camera.main.GetComponent<Blur> ().enabled = true;
+
+		// hide main menu
+		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
+
+		// show grid canvas
+		app.views.duelGridCanvas.SetActive (true);
+
+		// Intro animations
+		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
 	public void NewGame () {
+		// create ballgame
+		SetUpBallgame ();
 
-//		// show scoreboard
-//		ShowUI (app.views.scoreboard);
-//
-//		// update scoreboard
-//		UpdateScoreboard ();
-//
-//		// create fielders
-//		SetUpFielders ();
-//
-//		// create first batter
-//		NewBatter ();
-//
-//		// hide main menu
-//		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
+		// show scoreboard
+		ShowUI (app.views.scoreboard);
+
+		// update scoreboard
+		UpdateScoreboard ();
+
+		// create fielders
+		SetUpFielders ();
+
+		// create first batter
+		NewBatter ();
+
+		// hide main menu
+		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
 
 		// Intro animations
 		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
@@ -115,86 +130,91 @@ public class AppController : BaseballElement {
 	// Update is called once per frame
 	void Update () {
 
-		// mouse/tap controls
-//		if (Input.GetMouseButtonDown (0) && currentBatter != null) {
-//			if (currentGame.currentInning.ballIsInPlay == false && currentBaseballInstance == null) {
-//				currentBaseballInstance = Instantiate (app.views.baseball);
-//				currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
-//
-//				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
-//				currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
-//			
-//			} else {
-//				
-//				if (currentBaseballInstance && currentGame.currentInning.ballIsInPlay == false) {
-//					currentGame.currentInning.ballIsInPlay = true;
-//					currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
-//					currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
-//					app.views.infieldCameraTrigger.SetActive (true);
-//					currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
-//
-//					// advance all runners
-//					foreach (Player runner in battingTeam.lineup) {
-//						if (runner.runnerInstance) {
-//							runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
-//						}
-//					}
-//				} else {
-//					ResetPlay ();
-//					NewBatter ();
-//				}
-//
-//			}
-//		}
-
-
-		// C: DEBUG: clear the field
-		if (Input.GetKeyUp (KeyCode.C)) {
-			StartCoroutine (ClearTheField ());
-		}
-
-
-		// ESCAPE: toggle main menu
-		if (Input.GetKeyUp (KeyCode.Escape)) {
+		if (currentBatter != null) {
 			
-		}
+			// mouse/tap controls
+			if (Input.GetMouseButtonDown (0) && currentBatter != null) {
+				if (currentGame.currentInning.ballIsInPlay == false && currentBaseballInstance == null) {
+					currentBaseballInstance = Instantiate (app.views.baseball);
+					currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
 
-		// P: throw pitch
-		if (Input.GetKeyDown (KeyCode.P)) {
-			if (currentGame.currentInning.ballIsInPlay == false) {
-				currentBaseballInstance = Instantiate (app.views.baseball);
-				currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
+					float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
+					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
 
-				float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
-				currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
-			}
-		}
+				} else {
 
-		if (currentBaseballInstance) {
+					if (currentBaseballInstance && currentGame.currentInning.ballIsInPlay == false) {
+						currentGame.currentInning.ballIsInPlay = true;
+						currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
+						currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+						app.views.infieldCameraTrigger.SetActive (true);
+						currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
 
-			// SPACE: hit pitch
-			if (Input.GetKeyDown (KeyCode.Space)) {
-				currentGame.currentInning.ballIsInPlay = true;
-				currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
-				currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
-				app.views.infieldCameraTrigger.SetActive (true);
-				currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
-
-				// advance all runners
-				foreach (Player runner in battingTeam.lineup) {
-					if (runner.runnerInstance) {
-						runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+						// advance all runners
+						foreach (Player runner in battingTeam.lineup) {
+							if (runner.runnerInstance) {
+								runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+							}
+						}
+					} else {
+						ResetPlay ();
+						NewBatter ();
 					}
+
 				}
 			}
 
-			// BACKSPACE: reset gamestate (for ease of testing)
-			if (Input.GetKeyDown (KeyCode.Backspace)) {
-				ResetPlay ();
-				NewBatter ();
+
+			// C: DEBUG: clear the field
+			if (Input.GetKeyUp (KeyCode.C)) {
+				StartCoroutine (ClearTheField ());
+			}
+
+
+			// ESCAPE: toggle main menu
+			if (Input.GetKeyUp (KeyCode.Escape)) {
+
+			}
+
+			// P: throw pitch
+			if (Input.GetKeyDown (KeyCode.P)) {
+				if (currentGame.currentInning.ballIsInPlay == false) {
+					currentBaseballInstance = Instantiate (app.views.baseball);
+					currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
+
+					float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
+					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
+				}
+			}
+
+			if (currentBaseballInstance) {
+
+				// SPACE: hit pitch
+				if (Input.GetKeyDown (KeyCode.Space)) {
+					currentGame.currentInning.ballIsInPlay = true;
+					currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
+					currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+					app.views.infieldCameraTrigger.SetActive (true);
+					currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
+
+					// advance all runners
+					foreach (Player runner in battingTeam.lineup) {
+						if (runner.runnerInstance) {
+							runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+						}
+					}
+				}
+
+				// BACKSPACE: reset gamestate (for ease of testing)
+				if (Input.GetKeyDown (KeyCode.Backspace)) {
+					ResetPlay ();
+					NewBatter ();
+				}
+
 			}
 
 		}
+
 	}
 
 	void SetUpBallgame () {

@@ -40,6 +40,7 @@ public class AppViews : BaseballElement {
 	public GameObject out2Dot;
 
 	// Duel Grid
+	public GameObject duelGridCanvas;
 	public GameObject duelGrid;
 	public GameObject duelGridCell;
 
@@ -49,4 +50,5 @@ public class AppViews : BaseballElement {
 	public GameObject duelBatterPhase1;
 	public GameObject duelPitcherPhase1;
 	public GameObject duelBatterPhase2;
+	public GameObject duelOutcomePhase;
 }

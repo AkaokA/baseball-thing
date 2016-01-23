@@ -7,10 +7,16 @@ public class DuelController : BaseballElement {
 	public DuelGridLocation currentPitchLocation;
 	public DuelGridLocation currentSwingLocation;
 
+	private int centerColumn;
+	private int centerRow;
+
 	// Use this for initialization
 	void Start () {
-		currentPitchLocation = new DuelGridLocation ();
-		currentSwingLocation = new DuelGridLocation ();
+		centerColumn = Mathf.FloorToInt (DuelGrid.gridColumns / 2);
+		centerRow = Mathf.FloorToInt (DuelGrid.gridRows / 2);
+
+		currentPitchLocation = new DuelGridLocation (centerColumn, centerRow);
+		currentSwingLocation = new DuelGridLocation (centerColumn, centerRow);
 
 		app.views.duelSwingMarker.SetActive (true);
 		app.views.duelPitchMarker.SetActive (false);
@@ -18,6 +24,7 @@ public class DuelController : BaseballElement {
 		app.views.duelBatterPhase1.SetActive (true);
 		app.views.duelPitcherPhase1.SetActive (false);
 		app.views.duelBatterPhase2.SetActive (false);
+		app.views.duelOutcomePhase.SetActive (false);
 	}
 
 	public void OnConfirmSwing () {
@@ -28,6 +35,10 @@ public class DuelController : BaseballElement {
 		// show pitcher phase 1
 		app.views.duelPitcherPhase1.SetActive (true);
 		app.views.duelPitchMarker.SetActive (true);
+
+		// (re-)enable raycasts on pitch marker
+		app.views.duelPitchMarker.GetComponent<Image> ().raycastTarget = true;
+
 
 		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
 	}
@@ -47,13 +58,38 @@ public class DuelController : BaseballElement {
 	}
 
 	public void OnFollowThrough () {
-		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
-		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+		StartCoroutine (ResolvePitch (true));
 	}
 
 	public void OnLayOffPitch () {
-
+		StartCoroutine (ResolvePitch (false));
 	}
 
+	IEnumerator ResolvePitch (bool didSwing) {
+		app.views.duelBatterPhase2.SetActive (false);
+		app.views.duelOutcomePhase.SetActive (true);
 
+		// move pitch marker according to selected pitch
+		app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToCell (currentPitchLocation.column - 1, currentPitchLocation.row + 4);
+
+		// determine outcome based on marker proximity
+		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
+		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+
+		if (didSwing) {
+			// batter swung
+		} else {
+			// batter didn't swing
+		}
+
+
+		yield return new WaitForSeconds (5.0f);
+
+		app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToCell (centerColumn, centerRow);
+		app.views.duelSwingMarker.GetComponent<DuelMarker> ().MoveToCell (centerColumn, centerRow);
+
+		app.views.duelOutcomePhase.SetActive (false);
+		app.views.duelBatterPhase1.SetActive (true);
+		app.views.duelPitchMarker.SetActive (false);
+	}
 }
