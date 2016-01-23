@@ -45,6 +45,7 @@ public class AppViews : BaseballElement {
 	public GameObject duelGridCell;
 
 	public GameObject duelPitchMarker;
+	public GameObject duelPitchEndMarker;
 	public GameObject duelSwingMarker;
 
 	public GameObject duelBatterPhase1;

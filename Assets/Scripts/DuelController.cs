@@ -20,6 +20,7 @@ public class DuelController : BaseballElement {
 
 		app.views.duelSwingMarker.SetActive (true);
 		app.views.duelPitchMarker.SetActive (false);
+		app.views.duelPitchEndMarker.SetActive (false);
 
 		app.views.duelBatterPhase1.SetActive (true);
 		app.views.duelPitcherPhase1.SetActive (false);
@@ -35,10 +36,13 @@ public class DuelController : BaseballElement {
 		// show pitcher phase 1
 		app.views.duelPitcherPhase1.SetActive (true);
 		app.views.duelPitchMarker.SetActive (true);
+		app.views.duelPitchEndMarker.SetActive (true);
 
 		// (re-)enable raycasts on pitch marker
 		app.views.duelPitchMarker.GetComponent<Image> ().raycastTarget = true;
 
+		// move pitch destination
+		app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToCell (currentPitchLocation.column - 1, currentPitchLocation.row + 4);
 
 		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
 	}
@@ -46,6 +50,7 @@ public class DuelController : BaseballElement {
 	public void OnConfirmPitch () {
 		// hide pitcher phase 1
 		app.views.duelPitcherPhase1.SetActive (false);
+		app.views.duelPitchEndMarker.SetActive (false);
 
 		// show batter phase 2
 		app.views.duelBatterPhase2.SetActive (true);

@@ -52,6 +52,12 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 		if (eventData.pointerEnter != null) {
 			if (eventData.pointerEnter.tag == "Duel Grid Cell") {
 				targetPosition = eventData.pointerEnter.GetComponent<RectTransform> ().anchoredPosition;
+
+				ReportMarkerPosition ();
+				if (app.views.duelPitchEndMarker.activeInHierarchy) {
+					app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToCell (ClampToGridEdges(app.duelController.currentPitchLocation.column - 1, app.duelController.currentPitchLocation.row + 4).column, ClampToGridEdges(app.duelController.currentPitchLocation.column - 1, app.duelController.currentPitchLocation.row + 4).row);
+				}
+
 				HighlightCells (eventData.pointerEnter, true);
 			}
 		} else {
