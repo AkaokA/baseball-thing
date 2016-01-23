@@ -6,9 +6,11 @@ public class AppModel : BaseballElement {
 	public Mesh femaleMesh;
 	public Mesh maleMesh;
 
+	public Color blueTeamColor;
 	public Texture blueFemaleTexture;
 	public Texture blueMaleTexture;
 
+	public Color redTeamColor;
 	public Texture redFemaleTexture;
 	public Texture redMaleTexture;
 }

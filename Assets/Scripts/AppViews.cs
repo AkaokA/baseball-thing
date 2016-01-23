@@ -7,6 +7,7 @@ public class AppViews : BaseballElement {
 	public GameObject sun;
 
 	public GameObject duelGrid;
+	public GameObject duelGridCell;
 
 	public GameObject baseball;
 

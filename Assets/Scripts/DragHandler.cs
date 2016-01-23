@@ -9,7 +9,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 	Vector3 startPosition;
 	Vector3 startScale;
 
-	public Vector3 targetPosition;
+	private Vector3 targetPosition;
 	private Vector3 positionVelocity;
 
 	private Vector3 targetScale;
@@ -22,7 +22,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 
 	private int highlightColumn;
 	private int highlightRow;
-	private Color highlightColor = new Color (0, 0, 0, 0.75f);
+	public Color highlightColor;
 
 	void Start () {
 		duelGrid = app.views.duelGrid.GetComponent<DuelGrid> ();
@@ -55,7 +55,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		if (eventData.pointerEnter != null) {
 			HighlightCells (eventData.pointerEnter, true);
 		} else {
-			HighlightCells (eventData.pointerEnter, false);
+			HighlightCells (null, false);
 		}
 		targetPosition = posInParent;
 	}
@@ -70,7 +70,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 			HighlightCells (eventData.pointerEnter, true);
 		} else {
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
-			HighlightCells (eventData.pointerEnter, false);
+			HighlightCells (null, false);
 		}
 		targetPosition = posInParent;
 
@@ -85,6 +85,13 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 
 
 	void HighlightCells (GameObject pointerEnter, bool highlightActive) {
+
+		if (objectBeingDragged.name == "Pitch Marker") {
+			highlightColor = app.model.redTeamColor;
+		} else {
+			highlightColor = app.model.blueTeamColor;
+		}
+
 		if (highlightActive) {
 			// find the current column and row
 			for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
@@ -103,6 +110,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 				for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
 					if (column == highlightColumn || row == highlightRow) {
 						duelGrid.gridCells [column, row].transform.FindChild ("Highlight").gameObject.SetActive (true);
+						duelGrid.gridCells [column, row].transform.FindChild ("Highlight").gameObject.GetComponent<RawImage> ().color = highlightColor;
 					} else {
 						duelGrid.gridCells [column, row].transform.FindChild ("Highlight").gameObject.SetActive (false);
 					}

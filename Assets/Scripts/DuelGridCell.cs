@@ -3,6 +3,6 @@ using System.Collections;
 
 public class DuelGridCell : BaseballElement {
 
-	public Color originalDotColor;
+	public Color dotColor;
 
 }
