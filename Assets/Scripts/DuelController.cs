@@ -2,10 +2,19 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class DuelGridController : BaseballElement {
+public class DuelController : BaseballElement {
+
+	public DuelGridLocation currentPitchLocation;
+	public DuelGridLocation currentSwingLocation;
 
 	// Use this for initialization
 	void Start () {
+		currentPitchLocation = new DuelGridLocation ();
+		currentSwingLocation = new DuelGridLocation ();
+
+		app.views.duelSwingMarker.SetActive (true);
+		app.views.duelPitchMarker.SetActive (false);
+
 		app.views.duelBatterPhase1.SetActive (true);
 		app.views.duelPitcherPhase1.SetActive (false);
 		app.views.duelBatterPhase2.SetActive (false);
@@ -19,6 +28,8 @@ public class DuelGridController : BaseballElement {
 		// show pitcher phase 1
 		app.views.duelPitcherPhase1.SetActive (true);
 		app.views.duelPitchMarker.SetActive (true);
+
+		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
 	}
 
 	public void OnConfirmPitch () {
@@ -31,10 +42,13 @@ public class DuelGridController : BaseballElement {
 
 		// disable raycasts on pitch marker
 		app.views.duelPitchMarker.GetComponent<Image> ().raycastTarget = false;
+
+		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
 	}
 
 	public void OnFollowThrough () {
-		
+		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
+		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
 	}
 
 	public void OnLayOffPitch () {

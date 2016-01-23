@@ -15,6 +15,16 @@ public class AppModel : BaseballElement {
 	public Texture redMaleTexture;
 }
 
+public class DuelGridLocation {
+	public int column;
+	public int row;
+
+	public DuelGridLocation () {
+		column = Mathf.FloorToInt ( DuelGrid.gridColumns / 2 );
+		row = Mathf.FloorToInt ( DuelGrid.gridRows / 2 );
+	}
+}
+
 public class Ballpark {
 	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
 	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);

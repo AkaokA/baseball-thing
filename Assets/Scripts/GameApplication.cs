@@ -13,6 +13,7 @@ public class GameApplication : MonoBehaviour
 	public AppModel model;
 	public AppViews views;
 	public AppController controller;
+	public DuelController duelController;
 
 	// Init things here
 	void Start() {

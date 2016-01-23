@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, IPointerUpHandler {
+public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IPointerUpHandler {
 	public DuelGrid duelGrid;
 	public GameObject objectBeingDragged;
 	Vector3 startPosition;
@@ -49,7 +49,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		
 	public void OnDrag (PointerEventData eventData)
 	{
-		if (eventData.pointerEnter != null) {
+		if (eventData.pointerEnter.tag == "Duel Grid Cell") {
 			targetPosition = eventData.pointerEnter.GetComponent<RectTransform> ().anchoredPosition;
 			HighlightCells (eventData.pointerEnter, true);
 		} else {
@@ -62,7 +62,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		RectTransform parentRect = (RectTransform)transform.parent;
 		Vector2 posInParent;
 
-		if (eventData.pointerEnter != null) {
+		if (eventData.pointerEnter.tag == "Duel Grid Cell") {
 			targetPosition = eventData.pointerEnter.GetComponent<RectTransform> ().anchoredPosition;
 		} else {
 			RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, eventData.position, Camera.allCameras[1], out posInParent);
@@ -73,11 +73,31 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		targetScale = new Vector3(1,1,1);
 
 		HighlightCells (null, false);
+
+		// report current marker position
+		if ( gameObject == app.views.duelSwingMarker ) {
+			app.duelController.currentSwingLocation.column = highlightColumn;
+			app.duelController.currentSwingLocation.row = highlightRow;
+		}
+		if ( gameObject == app.views.duelPitchMarker ) {
+			app.duelController.currentPitchLocation.column = highlightColumn;
+			app.duelController.currentPitchLocation.row = highlightRow;
+		}
 	}
 
+	void GetCurrentGridPosition (GameObject pointerEnter) {
+		// find the current column and row
+		for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
+			for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
 
-
-
+				if (duelGrid.gridCells[column, row] == pointerEnter) {
+					// Debug.Log (column + ", " + row);
+					highlightColumn = column;
+					highlightRow = row;
+				}
+			}		
+		}
+	}
 
 	void HighlightCells (GameObject pointerEnter, bool highlightActive) {
 
@@ -88,17 +108,7 @@ public class DragHandler : BaseballElement, IPointerDownHandler, IDragHandler, I
 		}
 
 		if (highlightActive) {
-			// find the current column and row
-			for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {
-				for (int row = 0; row < duelGrid.gridCells.GetLength (1); row++) {
-
-					if (duelGrid.gridCells[column, row] == pointerEnter) {
-						// Debug.Log (column + ", " + row);
-						highlightColumn = column;
-						highlightRow = row;
-					}
-				}		
-			}
+			GetCurrentGridPosition (pointerEnter);
 
 			// highlight current column and row
 			for (int column = 0; column < duelGrid.gridCells.GetLength (0); column++) {

@@ -6,9 +6,9 @@ public class DuelGrid : BaseballElement {
 
 	public AnimationCurve easingCurve;
 
-	private int gridRows = 9;
-	private int gridColumns = 7;
-	private int strikeZonePadding = 2;
+	public static int gridRows = 9;
+	public static int gridColumns = 7;
+	public static int strikeZonePadding = 2;
 
 	private float cellWidth;
 	private float cellHeight;
