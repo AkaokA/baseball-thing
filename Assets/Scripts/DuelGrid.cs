@@ -18,7 +18,7 @@ public class DuelGrid : BaseballElement {
 	public GameObject[,] gridCells;
 	public GameObject gridCell;
 
-	private Color normalDotColor = new Color (1f, 1f, 1f, 0.5f);
+	private Color normalDotColor = new Color (1f, 1f, 1f, 0.33f);
 	private Color darkerDotColor = new Color (1f, 1f, 1f, 1f);
 
 	void Start () {
@@ -30,8 +30,14 @@ public class DuelGrid : BaseballElement {
 
 		duelGridRect = app.views.duelGrid.GetComponent<RectTransform> ();
 
-		cellHeight = duelGridRect.rect.height / gridRows;
-		cellWidth = cellHeight;
+		if (duelGridRect.rect.width > duelGridRect.rect.height) {
+			cellHeight = duelGridRect.rect.height / gridRows;
+			cellWidth = cellHeight;
+		} else {
+			cellWidth = duelGridRect.rect.width / gridColumns;
+			cellHeight = cellWidth;
+
+		}
 
 		GameObject currentCell;
 		int row;
