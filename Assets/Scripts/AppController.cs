@@ -34,7 +34,7 @@ public class AppController : BaseballElement {
 	// Use this for initialization
 	void Start () {
 		app.views.mainMenu.SetActive (true);
-		Camera.main.GetComponent<Blur> ().enabled = false;
+		app.views.fieldCamera.GetComponent<Blur> ().enabled = false;
 		app.views.duelGridCanvas.SetActive (false);
 
 		// init scoreboard variables (scoreboard stuff should go in its own class)
@@ -58,7 +58,7 @@ public class AppController : BaseballElement {
 
 	public void ActivateDuelGrid () {
 		// blur camera
-		Camera.main.GetComponent<Blur> ().enabled = true;
+		app.views.fieldCamera.GetComponent<Blur> ().enabled = true;
 
 		// hide main menu
 		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
@@ -67,7 +67,7 @@ public class AppController : BaseballElement {
 		app.views.duelGridCanvas.SetActive (true);
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
@@ -91,7 +91,7 @@ public class AppController : BaseballElement {
 		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
 
 		// Intro animations
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
@@ -311,7 +311,7 @@ public class AppController : BaseballElement {
 
 	IEnumerator ClearTheField () {
 		betweenInnings = true;
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("outfield", 1f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("outfield", 1f);
 
 		while (playersAreOnTheField) {
 			playersAreOnTheField = false;
@@ -344,7 +344,7 @@ public class AppController : BaseballElement {
 		Debug.Log ("players are off the field.");
 		ChangeSides ();
 		betweenInnings = false;
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 
 		SetUpFielders ();
 		NewBatter ();
@@ -355,7 +355,7 @@ public class AppController : BaseballElement {
 		Destroy (currentBaseballInstance);
 		currentGame.currentInning.ballIsInPlay = false;
 		app.views.infieldCameraTrigger.SetActive (false);
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.baseballLandingPoint.SetActive (false);
 
 		foreach (Player player in fieldingTeam.lineup) {
@@ -396,7 +396,7 @@ public class AppController : BaseballElement {
 
 	public void HomeRun () {
 		ResetPlay ();
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 2f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 2f);
 		StartCoroutine (CircleTheBases ());
 	}
 
@@ -414,7 +414,7 @@ public class AppController : BaseballElement {
 		}
 
 		NewBatter ();
-		app.views.mainCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 	}
 
 	void ResetCount () {

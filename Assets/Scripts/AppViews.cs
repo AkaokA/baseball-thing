@@ -3,7 +3,8 @@ using System.Collections;
 
 public class AppViews : BaseballElement {
 
-	public GameObject mainCamera;
+	public GameObject fieldCamera;
+	public GameObject duelCamera;
 	public GameObject sun;
 
 	public GameObject baseball;
