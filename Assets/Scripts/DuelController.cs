@@ -85,6 +85,7 @@ public class DuelController : BaseballElement {
 		// set scrollview content height
 		RectTransform pitchInventoryRect = app.views.pitchInventory.GetComponent<RectTransform> ();
 		pitchInventoryRect.sizeDelta = new Vector2(0, 44 * pitches.Length);
+		app.views.pitchInventoryScrollView.GetComponent<ScrollRect> ().verticalNormalizedPosition = 1;
 
 		currentPitch = pitches [0];
 		Button firstButton = app.views.pitchInventory.transform.GetChild (0).GetComponent<Button> ();
