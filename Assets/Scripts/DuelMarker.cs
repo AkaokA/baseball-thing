@@ -34,6 +34,11 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 		targetScale = startScale;
 	}
 		
+	public void ResetPosition () {
+		transform.localPosition = startPosition;
+		targetPosition = startPosition;
+	}
+
 	void Update () {
 		transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
 		transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleVelocity, smoothTime, maxSpeed);

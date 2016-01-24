@@ -145,8 +145,8 @@ public class DuelController : BaseballElement {
 
 		yield return new WaitForSeconds (5.0f);
 
-		app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToCell (centerColumn, centerRow);
-		app.views.duelSwingMarker.GetComponent<DuelMarker> ().MoveToCell (centerColumn, centerRow);
+		app.views.duelPitchMarker.GetComponent<DuelMarker> ().ResetPosition ();
+		app.views.duelSwingMarker.GetComponent<DuelMarker> ().ResetPosition ();
 
 		app.views.duelOutcomePhase.SetActive (false);
 		app.views.duelBatterPhase1.SetActive (true);
