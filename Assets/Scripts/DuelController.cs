@@ -39,7 +39,7 @@ public class DuelController : BaseballElement {
 		pitches [1] = new Pitch ("Curveball", 0, 4);
 		pitches [2] = new Pitch ("Slider", 3, 1);
 		pitches [3] = new Pitch ("2-Seam", -2, 0);
-		pitches [4] = new Pitch ("Rise Ball", 0, -2);
+		pitches [4] = new Pitch ("Riser", 0, -2);
 		pitches [5] = new Pitch ("Slurve", 2, 3);
 
 		// create pitch buttons
@@ -57,7 +57,23 @@ public class DuelController : BaseballElement {
 
 			int localIndex = index;
 			pitchButton.GetComponent<Button> ().onClick.AddListener (delegate {
-				OnSelectPitch (localIndex);
+				currentPitch = pitches [localIndex];
+				Debug.Log (currentPitch.name);
+
+				ColorBlock allButtonColors = app.views.pitchInventory.GetComponentInChildren<Button> ().colors;
+				allButtonColors.normalColor = app.model.redTeamColor;
+				allButtonColors.highlightedColor = allButtonColors.normalColor;
+
+				foreach (Button button in app.views.pitchInventory.GetComponentsInChildren<Button> ()) {
+					button.colors = allButtonColors;
+				}
+
+				Button thisButton = app.views.pitchInventory.transform.GetChild (localIndex).GetComponent<Button> ();
+				ColorBlock thisButtonColors = thisButton.colors;
+				thisButtonColors.normalColor = new Color (1,1,1,1);
+				thisButtonColors.highlightedColor = thisButtonColors.normalColor;
+
+				thisButton.colors = thisButtonColors;
 			});
 
 			index++;
@@ -68,11 +84,6 @@ public class DuelController : BaseballElement {
 		pitchInventoryRect.sizeDelta = new Vector2(0, 44 * pitches.Length);
 
 		currentPitch = pitches [0];
-	}
-
-	void OnSelectPitch (int index) {
-		currentPitch = pitches [index];
-		Debug.Log (currentPitch.name);
 	}
 
 	public void OnConfirmSwing () {
