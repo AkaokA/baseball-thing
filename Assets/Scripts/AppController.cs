@@ -33,6 +33,9 @@ public class AppController : BaseballElement {
 
 	// Use this for initialization
 	void Start () {
+		app.views.mainMenu.SetActive (true);
+		Camera.main.GetComponent<Blur> ().enabled = false;
+		app.views.duelGridCanvas.SetActive (false);
 
 		// init scoreboard variables (scoreboard stuff should go in its own class)
 		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();

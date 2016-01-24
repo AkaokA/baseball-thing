@@ -142,7 +142,6 @@ public class DuelController : BaseballElement {
 			// batter didn't swing
 		}
 
-
 		yield return new WaitForSeconds (5.0f);
 
 		app.views.duelPitchMarker.GetComponent<DuelMarker> ().ResetPosition ();
