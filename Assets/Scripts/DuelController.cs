@@ -35,7 +35,7 @@ public class DuelController : BaseballElement {
 
 	void SetUpPitchInventory () {
 		pitches = new Pitch[6];
-		pitches [0] = new Pitch ("Fastball", 0, 0);
+		pitches [0] = new Pitch ("Fastball", 0, 1);
 		pitches [1] = new Pitch ("Curveball", 0, 4);
 		pitches [2] = new Pitch ("Slider", 3, 1);
 		pitches [3] = new Pitch ("2-Seam", -2, 0);
@@ -60,6 +60,7 @@ public class DuelController : BaseballElement {
 				currentPitch = pitches [localIndex];
 				Debug.Log (currentPitch.name);
 
+				// highlight selected pitch button
 				ColorBlock allButtonColors = app.views.pitchInventory.GetComponentInChildren<Button> ().colors;
 				allButtonColors.normalColor = app.model.redTeamColor;
 				allButtonColors.highlightedColor = allButtonColors.normalColor;
@@ -70,10 +71,12 @@ public class DuelController : BaseballElement {
 
 				Button thisButton = app.views.pitchInventory.transform.GetChild (localIndex).GetComponent<Button> ();
 				ColorBlock thisButtonColors = thisButton.colors;
-				thisButtonColors.normalColor = new Color (1,1,1,1);
+				thisButtonColors.normalColor = app.model.buttonHighlightColor;
 				thisButtonColors.highlightedColor = thisButtonColors.normalColor;
-
 				thisButton.colors = thisButtonColors;
+
+				// move pitch destination marker
+				StartCoroutine (app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 			});
 
 			index++;
@@ -84,6 +87,11 @@ public class DuelController : BaseballElement {
 		pitchInventoryRect.sizeDelta = new Vector2(0, 44 * pitches.Length);
 
 		currentPitch = pitches [0];
+		Button firstButton = app.views.pitchInventory.transform.GetChild (0).GetComponent<Button> ();
+		ColorBlock firstButtonColors = firstButton.colors;
+		firstButtonColors.normalColor = app.model.buttonHighlightColor;
+		firstButtonColors.highlightedColor = firstButtonColors.normalColor;
+		firstButton.colors = firstButtonColors;
 	}
 
 	public void OnConfirmSwing () {
@@ -98,6 +106,9 @@ public class DuelController : BaseballElement {
 
 		// (re-)enable raycasts on pitch marker
 		app.views.duelPitchMarker.GetComponent<Image> ().raycastTarget = true;
+
+		// move pitch destination marker
+		StartCoroutine (app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 
 		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
 	}
@@ -129,8 +140,11 @@ public class DuelController : BaseballElement {
 		app.views.duelBatterPhase2.SetActive (false);
 		app.views.duelOutcomePhase.SetActive (true);
 
+		// disable raycasts on swing marker
+		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = false;
+
 		// move pitch marker according to selected pitch
-		app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToCell (currentPitchLocation.column + currentPitch.movement.column, currentPitchLocation.row + currentPitch.movement.row);
+		StartCoroutine (app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 
 		// determine outcome based on marker proximity
 		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
@@ -146,6 +160,9 @@ public class DuelController : BaseballElement {
 
 		app.views.duelPitchMarker.GetComponent<DuelMarker> ().ResetPosition ();
 		app.views.duelSwingMarker.GetComponent<DuelMarker> ().ResetPosition ();
+
+		// enable raycasts on swing marker
+		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = true;
 
 		app.views.duelOutcomePhase.SetActive (false);
 		app.views.duelBatterPhase1.SetActive (true);

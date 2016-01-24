@@ -13,6 +13,8 @@ public class AppModel : BaseballElement {
 	public Color redTeamColor;
 	public Texture redFemaleTexture;
 	public Texture redMaleTexture;
+
+	public Color buttonHighlightColor;
 }
 
 public class DuelGridCoordinates {
