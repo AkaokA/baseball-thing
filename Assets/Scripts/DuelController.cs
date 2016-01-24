@@ -13,24 +13,16 @@ public class DuelController : BaseballElement {
 	private int centerColumn;
 	private int centerRow;
 
+	// game state variables
+	private bool batterDidSwing = false;
+
 	// Use this for initialization
 	void Start () {
 		centerColumn = Mathf.FloorToInt (DuelGrid.gridColumns / 2);
 		centerRow = Mathf.FloorToInt (DuelGrid.gridRows / 2);
-
-		currentPitchLocation = new DuelGridCoordinates (centerColumn, centerRow);
-		currentSwingLocation = new DuelGridCoordinates (centerColumn, centerRow);
-
-		app.views.duelSwingMarker.SetActive (true);
-		app.views.duelPitchMarker.SetActive (false);
-		app.views.duelPitchEndMarker.SetActive (false);
-
-		app.views.duelBatterPhase1.SetActive (true);
-		app.views.duelPitcherPhase1.SetActive (false);
-		app.views.duelBatterPhase2.SetActive (false);
-		app.views.duelOutcomePhase.SetActive (false);
-	
+			
 		SetUpPitchInventory ();
+		SetUpNewDuel ();
 	}
 
 	void SetUpPitchInventory () {
@@ -95,6 +87,28 @@ public class DuelController : BaseballElement {
 		firstButton.colors = firstButtonColors;
 	}
 
+	public void SetUpNewDuel () {
+		currentPitchLocation = new DuelGridCoordinates (centerColumn, centerRow);
+		currentSwingLocation = new DuelGridCoordinates (centerColumn, centerRow);
+
+		// show batter phase 1
+		app.views.duelBatterPhase1.SetActive (true);
+		app.views.duelSwingMarker.SetActive (true);
+
+		app.views.duelPitchMarker.GetComponent<DuelMarker> ().ResetPosition ();
+		app.views.duelSwingMarker.GetComponent<DuelMarker> ().ResetPosition ();
+
+		// hide everything else
+		app.views.duelPitchMarker.SetActive (false);
+		app.views.duelPitchEndMarker.SetActive (false);
+		app.views.duelPitcherPhase1.SetActive (false);
+		app.views.duelBatterPhase2.SetActive (false);
+		app.views.duelOutcomePhase.SetActive (false);
+
+		// enable raycasts on swing marker
+		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = true;
+	}
+
 	public void OnConfirmSwing () {
 		// hide batter phase 1
 		app.views.duelBatterPhase1.SetActive (false);
@@ -134,6 +148,7 @@ public class DuelController : BaseballElement {
 	}
 
 	public void OnLayOffPitch () {
+		app.views.duelSwingMarker.SetActive (false);
 		StartCoroutine (ResolvePitch (false));
 	}
 
@@ -158,15 +173,6 @@ public class DuelController : BaseballElement {
 		}
 
 		yield return new WaitForSeconds (5.0f);
-
-		app.views.duelPitchMarker.GetComponent<DuelMarker> ().ResetPosition ();
-		app.views.duelSwingMarker.GetComponent<DuelMarker> ().ResetPosition ();
-
-		// enable raycasts on swing marker
-		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = true;
-
-		app.views.duelOutcomePhase.SetActive (false);
-		app.views.duelBatterPhase1.SetActive (true);
-		app.views.duelPitchMarker.SetActive (false);
+		SetUpNewDuel ();
 	}
 }
