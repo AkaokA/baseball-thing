@@ -61,6 +61,7 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 				HighlightCells (eventData.pointerEnter, true);
 			}
 		} else {
+			StartCoroutine (app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 			HighlightCells (null, false);
 		}
 	}
