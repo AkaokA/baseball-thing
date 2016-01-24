@@ -53,9 +53,10 @@ public class AppController : BaseballElement {
 		ballpark.homePlate.baseGameObject = app.views.homePlate;
 
 //		NewGame (); // DEBUG: automatically start a new game
+		ActivateDuelGrid (); // DEBUG: automatically go to duel grid
 	}
 
-	public void ActivateGrid () {
+	public void ActivateDuelGrid () {
 		// blur camera
 		Camera.main.GetComponent<Blur> ().enabled = true;
 
