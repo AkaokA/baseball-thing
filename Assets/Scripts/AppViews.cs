@@ -52,4 +52,7 @@ public class AppViews : BaseballElement {
 	public GameObject duelPitcherPhase1;
 	public GameObject duelBatterPhase2;
 	public GameObject duelOutcomePhase;
+
+	public GameObject pitchInventory;
+	public GameObject pitchSelectButton;
 }

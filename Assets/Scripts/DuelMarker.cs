@@ -32,9 +32,8 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 
 		targetPosition = startPosition;
 		targetScale = startScale;
-
 	}
-
+		
 	void Update () {
 		transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
 		transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleVelocity, smoothTime, maxSpeed);
@@ -52,12 +51,8 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 		if (eventData.pointerEnter != null) {
 			if (eventData.pointerEnter.tag == "Duel Grid Cell") {
 				targetPosition = eventData.pointerEnter.GetComponent<RectTransform> ().anchoredPosition;
-
 				ReportMarkerPosition ();
-				if (app.views.duelPitchEndMarker.activeInHierarchy) {
-					app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToCell (ClampToGridEdges(app.duelController.currentPitchLocation.column - 1, app.duelController.currentPitchLocation.row + 4).column, ClampToGridEdges(app.duelController.currentPitchLocation.column - 1, app.duelController.currentPitchLocation.row + 4).row);
-				}
-
+				MovePitchEndMarker ();
 				HighlightCells (eventData.pointerEnter, true);
 			}
 		} else {
@@ -67,11 +62,10 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 
 	public void OnPointerUp (PointerEventData eventData)
 	{
-		RectTransform parentRect = (RectTransform)transform.parent;
-
 		if (eventData.pointerEnter != null) {
 			if (eventData.pointerEnter.tag == "Duel Grid Cell") {
 				targetPosition = eventData.pointerEnter.GetComponent<RectTransform> ().anchoredPosition;
+				MovePitchEndMarker ();
 			}
 		}
 
@@ -96,14 +90,28 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 	}
 
 	public void MoveToCell (int column, int row) {
-		targetPosition = duelGrid.gridCells[ClampToGridEdges (column, row).column, ClampToGridEdges (column, row).row].GetComponent<RectTransform> ().anchoredPosition;
+		int targetColumn = ClampToGridEdges (column, row).column;
+		int targetRow = ClampToGridEdges (column, row).row;
+
+		targetPosition = app.views.duelGrid.GetComponent<DuelGrid> ().gridCells[targetColumn, targetRow].GetComponent<RectTransform> ().anchoredPosition;
 		ReportMarkerPosition ();
 	}
 
-	public DuelGridLocation ClampToGridEdges (int column, int row) {
+	public void MovePitchEndMarker () {
+		if (app.views.duelPitchEndMarker.activeInHierarchy) {
+			int targetColumn = app.duelController.currentPitchLocation.column + app.duelController.currentPitch.movement.column;
+			int targetRow = app.duelController.currentPitchLocation.row + app.duelController.currentPitch.movement.row;
+			targetColumn = ClampToGridEdges (targetColumn, targetRow).column;
+			targetRow = ClampToGridEdges (targetColumn, targetRow).row;
+			DuelGridCoordinates targetGridLocation = new DuelGridCoordinates (targetColumn, targetRow);
+			app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToCell (targetGridLocation.column, targetGridLocation.row);
+		}
+	}
+
+	public DuelGridCoordinates ClampToGridEdges (int column, int row) {
 		if (column < 0) {
 			column = 0;
-		} else if (column >= DuelGrid.gridColumns - 1) {
+		} else if (column > DuelGrid.gridColumns - 1) {
 			column = DuelGrid.gridColumns - 1;
 		} else if (row < 0) {
 			row = 0;
@@ -111,7 +119,7 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 			row = DuelGrid.gridRows - 1;
 		}
 			
-		return new DuelGridLocation (column, row);
+		return new DuelGridCoordinates (column, row);
 	}
 
 	void GetGridPositionUnderPointer (GameObject pointerEnter) {

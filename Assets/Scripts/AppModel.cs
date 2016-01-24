@@ -15,13 +15,25 @@ public class AppModel : BaseballElement {
 	public Texture redMaleTexture;
 }
 
-public class DuelGridLocation {
+public class DuelGridCoordinates {
 	public int column;
 	public int row;
 
-	public DuelGridLocation (int columnIndex, int rowIndex) {
+	// constructor
+	public DuelGridCoordinates (int columnIndex, int rowIndex) {
 		column = columnIndex;
 		row = rowIndex;
+	}
+}
+
+public class Pitch {
+	public string name;
+	public DuelGridCoordinates movement;
+
+	// constructor
+	public Pitch (string pitchName, int movementX, int movementY) {
+		name = pitchName;
+		movement = new DuelGridCoordinates (movementX, movementY);
 	}
 }
 
