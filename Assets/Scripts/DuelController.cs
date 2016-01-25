@@ -13,6 +13,8 @@ public class DuelController : BaseballElement {
 	public int centerColumn;
 	public int centerRow;
 
+	private bool firstTime = true;
+
 	// game state variables
 	private bool batterDidSwing = false;
 
@@ -99,8 +101,11 @@ public class DuelController : BaseballElement {
 		app.views.duelPitchMarker.SetActive (true);
 		app.views.duelSwingMarker.SetActive (true);
 
-//		app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToCell (centerColumn, centerRow);
-//		app.views.duelSwingMarker.GetComponent<DuelMarker> ().MoveToCell (centerColumn, centerRow);
+		if (firstTime == false) {
+			app.views.duelPitchMarker.GetComponent<DuelMarker> ().ResetPosition ();
+			app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().ResetPosition ();
+			app.views.duelSwingMarker.GetComponent<DuelMarker> ().ResetPosition ();
+		}
 
 		// hide everything else
 		app.views.duelPitchMarker.SetActive (false);
@@ -111,6 +116,8 @@ public class DuelController : BaseballElement {
 
 		// enable raycasts on swing marker
 		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = true;
+
+		firstTime = false;
 	}
 
 	public void OnConfirmSwing () {
@@ -166,8 +173,8 @@ public class DuelController : BaseballElement {
 		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = false;
 
 		// move pitch marker according to selected pitch
-		if (app.views.duelPitchEndMarker.activeInHierarchy) {
-			StartCoroutine (app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
+		if (app.views.duelPitchMarker.activeInHierarchy) {
+			StartCoroutine (app.views.duelPitchMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 		}
 
 		// determine outcome based on marker proximity

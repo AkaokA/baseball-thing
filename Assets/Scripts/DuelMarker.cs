@@ -68,7 +68,6 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 
 	public void ResetPosition () {
 		transform.localPosition = startPosition;
-		MoveToCell (app.duelController.centerColumn, app.duelController.centerRow);
 	}
 
 	public void OnPointerDown (PointerEventData eventData)
