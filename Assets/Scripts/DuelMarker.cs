@@ -17,7 +17,7 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 	private Vector3 targetScale;
 	private Vector3 scaleVelocity;
 
-	private static float smoothTime = 0.15f;
+	private static float smoothTime = 0.1f;
 	private static float maxSpeed = Mathf.Infinity;
 
 	private Vector3 scaleUp = new Vector3(2, 2, 2);
@@ -32,6 +32,11 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 		startScale = transform.localScale;
 
 		duelGrid = app.views.duelGrid.GetComponent<DuelGrid> ();
+	}
+
+	void Awake () {
+		isMoving = false;
+		isScaling = false;
 	}
 		
 	public void MoveToCell (int column, int row) {
