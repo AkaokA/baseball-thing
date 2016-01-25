@@ -57,9 +57,9 @@ public class DuelGrid : BaseballElement {
 				cellRect.sizeDelta = new Vector2 (cellWidth, cellHeight);
 				cellRect.localScale = new Vector3 (1, 1, 1);
 
-				Vector3 cellPosition = new Vector3(0,0,0);
-				cellPosition.y = -cellHeight * row + cellHeight * gridRows/2 - cellHeight/2;
-				cellPosition.x = cellWidth * column - cellWidth * gridColumns/2 + cellWidth/2;
+				Vector3 cellPosition = new Vector3 (0, 0, 0);
+				cellPosition.y = -cellHeight * row + cellHeight * gridRows / 2 - cellHeight / 2;
+				cellPosition.x = cellWidth * column - cellWidth * gridColumns / 2 + cellWidth / 2;
 				cellRect.localPosition = cellPosition;
 
 				if (row >= strikeZonePadding && row < gridRows - strikeZonePadding && column >= strikeZonePadding && column < gridColumns - strikeZonePadding) {
@@ -70,7 +70,5 @@ public class DuelGrid : BaseballElement {
 			}
 		}
 	}
-
-
 
 }
