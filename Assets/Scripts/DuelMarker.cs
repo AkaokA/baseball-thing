@@ -54,7 +54,7 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 
 	IEnumerator MoveMarker () {
 		isMoving = true;
-		while ( (targetPosition - transform.localPosition).magnitude > 0.1f ) {
+		while ( (targetPosition - transform.localPosition).magnitude > 0.01f ) {
 			transform.localPosition = Vector3.SmoothDamp(transform.localPosition, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
 			yield return null;
 		}
@@ -64,7 +64,7 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 
 	IEnumerator ResizeMarker () {
 		isScaling = true;
-		while ( (targetScale - transform.localScale).magnitude > 0.1f ) {
+		while ( (targetScale - transform.localScale).magnitude > 0.01f ) {
 			transform.localScale = Vector3.SmoothDamp(transform.localScale, targetScale, ref scaleVelocity, smoothTime, maxSpeed);
 			yield return null;
 		}

@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class RunnerView : BaseballElement {
+	private bool isMoving = false;
 
 	private Vector3 targetPosition;
 	private Vector3 transformVelocity;
@@ -19,12 +20,6 @@ public class RunnerView : BaseballElement {
 
 	// Update is called once per frame
 	void Update () {
-		// move runner to target
-		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);
-
-		// point runner towards stuff
-		transform.LookAt (targetPosition);
-	
 		TouchingBase ();
 
 		if (hadAnAtBat && RunnerIsInDugout ()) {
@@ -35,6 +30,24 @@ public class RunnerView : BaseballElement {
 	public void MoveToward (Vector3 newTarget) {
 		newTarget.y = 0;
 		targetPosition = newTarget;
+
+		if (!isMoving) {
+			StartCoroutine (MovePlayer ());
+		}
+	}
+
+	IEnumerator MovePlayer () {
+		isMoving = true;
+		while ( (targetPosition - transform.localPosition).magnitude > 0.01f ) {
+			// move runner to target
+			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref transformVelocity, smoothTime, maxSpeed);
+
+			// point runner towards stuff
+			transform.LookAt (targetPosition);
+
+			yield return null;
+		}
+		isMoving = false;
 	}
 
 	public bool RunnerIsInDugout () {

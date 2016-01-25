@@ -3,6 +3,7 @@ using System.Collections;
 using UnityStandardAssets.ImageEffects;
 
 public class CameraView : BaseballElement {
+	private Vector3 targetCameraPosition;
 
 	public float targetCameraSize = 0f;
 	public float targetCameraHeight = 0f;
@@ -19,6 +20,8 @@ public class CameraView : BaseballElement {
 	private float angleVelocity = 0.0f;
 
 	public float smoothTime = 0f;
+
+	private bool isMoving = false;
 
 	// Use this for initialization
 	void Start () {
@@ -59,37 +62,49 @@ public class CameraView : BaseballElement {
 			targetCameraAngle = 30f;
 			break;
 		}
+
+		targetCameraPosition = new Vector3 (targetCameraX, targetCameraHeight, targetCameraZ);
+
+		if (!isMoving) {
+			StartCoroutine (MoveCamera ());
+		}
 	}
 
-	// Update is called once per frame
-	void Update () {
+	IEnumerator MoveCamera () {
+		isMoving = true;
+		while ( (targetCameraPosition - transform.localPosition).magnitude > 0.01f ) {
 
-		// set position
-		float cameraX = transform.position.x;
-		float cameraZ = transform.position.z;
-		float cameraHeight = transform.position.y;
+			// set position
+			float cameraX = transform.position.x;
+			float cameraZ = transform.position.z;
+			float cameraHeight = transform.position.y;
 
-		cameraX = Mathf.SmoothDamp(cameraX, targetCameraX, ref xVelocity, smoothTime);
-		cameraZ = Mathf.SmoothDamp(cameraZ, targetCameraZ, ref zVelocity, smoothTime/2);
-		cameraHeight = Mathf.SmoothDamp(cameraHeight, targetCameraHeight, ref heightVelocity, smoothTime);
+			cameraX = Mathf.SmoothDamp(cameraX, targetCameraX, ref xVelocity, smoothTime);
+			cameraZ = Mathf.SmoothDamp(cameraZ, targetCameraZ, ref zVelocity, smoothTime/2);
+			cameraHeight = Mathf.SmoothDamp(cameraHeight, targetCameraHeight, ref heightVelocity, smoothTime);
 
-		Vector3 cameraPosition = new Vector3 (cameraX, cameraHeight, cameraZ);
-		transform.position = cameraPosition;
+			Vector3 cameraPosition = new Vector3 (cameraX, cameraHeight, cameraZ);
+			transform.position = cameraPosition;
 
-		// set size
-		float cameraSize = GetComponent<Camera> ().orthographicSize;
-		cameraSize = Mathf.SmoothDamp(cameraSize, targetCameraSize, ref sizeVelocity, smoothTime);
-		GetComponent<Camera>().orthographicSize = cameraSize;
+			// set size
+			float cameraSize = GetComponent<Camera> ().orthographicSize;
+			cameraSize = Mathf.SmoothDamp(cameraSize, targetCameraSize, ref sizeVelocity, smoothTime);
+			GetComponent<Camera>().orthographicSize = cameraSize;
 
-		// set angle
-		float cameraAngle = transform.rotation.eulerAngles.x;
-		cameraAngle = Mathf.SmoothDamp(cameraAngle, targetCameraAngle, ref angleVelocity, smoothTime);
+			// set angle
+			float cameraAngle = transform.rotation.eulerAngles.x;
+			cameraAngle = Mathf.SmoothDamp(cameraAngle, targetCameraAngle, ref angleVelocity, smoothTime);
 
-		Quaternion tempRotation = transform.rotation;
-		Vector3 tempEulerAngles = tempRotation.eulerAngles;
-		tempEulerAngles.x = cameraAngle;
-		tempRotation.eulerAngles = tempEulerAngles;
-		transform.rotation = tempRotation;
+			Quaternion tempRotation = transform.rotation;
+			Vector3 tempEulerAngles = tempRotation.eulerAngles;
+			tempEulerAngles.x = cameraAngle;
+			tempRotation.eulerAngles = tempEulerAngles;
+			transform.rotation = tempRotation;
 
+			yield return null;
+		}
+		isMoving = false;
+//		Debug.Log ("camera's done moving!"); 
 	}
+
 }

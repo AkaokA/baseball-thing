@@ -7,5 +7,4 @@ public class StrikeZoneView : BaseballElement {
 			app.controller.currentGame.currentInning.currentPitchIsStrike = true;
 		}
 	}
-
 }

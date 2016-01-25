@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class FielderView : BaseballElement {
+	private bool isMoving;
 	public int fieldingPositionNumber;
 
 	private Vector3 targetPosition;
@@ -30,22 +31,33 @@ public class FielderView : BaseballElement {
 				Idle ();
 			}
 		}
-		
-		// move fielder to target
-		transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
-
-		// point fielder towards stuff
-		if (app.controller.currentBaseballInstance) {
-			transform.LookAt (targetPosition);
-		} else {
-			transform.LookAt (app.views.homePlate.transform.position);
-		}
-
 	}
 		
 	public void MoveToward (Vector3 newTarget) {
 		newTarget.y = 0;
 		targetPosition = newTarget;
+
+		if (!isMoving) {
+			StartCoroutine (MovePlayer ());
+		}
+	}
+
+	IEnumerator MovePlayer () {
+		isMoving = true;
+		while ( (targetPosition - transform.localPosition).magnitude > 0.01f ) {
+			// move fielder to target
+			transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref positionVelocity, smoothTime, maxSpeed);
+
+			// point fielder towards stuff
+			if (app.controller.currentBaseballInstance) {
+				transform.LookAt (targetPosition);
+			} else {
+				transform.LookAt (app.views.homePlate.transform.position);
+			}
+
+			yield return null;
+		}
+		isMoving = false;
 	}
 
 	public void StopMoving () {
