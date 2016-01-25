@@ -59,7 +59,7 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 			yield return null;
 		}
 		isMoving = false;
-		Debug.Log ("done moving!"); 
+		// Debug.Log ("done moving!"); 
 	}
 
 	IEnumerator ResizeMarker () {

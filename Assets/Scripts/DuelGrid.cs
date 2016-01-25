@@ -8,7 +8,8 @@ public class DuelGrid : BaseballElement {
 
 	public static int gridRows = 9;
 	public static int gridColumns = 7;
-	public static int strikeZonePadding = 2;
+	public static int strikeZoneWidth = 3;
+	public static int strikeZoneHeight = 5;
 
 	private float cellWidth;
 	private float cellHeight;
@@ -62,7 +63,10 @@ public class DuelGrid : BaseballElement {
 				cellPosition.x = cellWidth * column - cellWidth * gridColumns / 2 + cellWidth / 2;
 				cellRect.localPosition = cellPosition;
 
-				if (row >= strikeZonePadding && row < gridRows - strikeZonePadding && column >= strikeZonePadding && column < gridColumns - strikeZonePadding) {
+				int strikeZoneWidthPadding = (gridColumns - strikeZoneWidth) / 2;
+				int strikeZoneHeightPadding = (gridRows - strikeZoneHeight) / 2;
+
+				if (column >= strikeZoneWidthPadding && column < gridColumns - strikeZoneWidthPadding && row >= strikeZoneHeightPadding && row < gridRows - strikeZoneHeightPadding) {
 					cellRect.transform.FindChild ("Dot").GetComponent<Image> ().color = darkerDotColor;
 				} else {
 					cellRect.transform.FindChild ("Dot").GetComponent<Image> ().color = normalDotColor;
