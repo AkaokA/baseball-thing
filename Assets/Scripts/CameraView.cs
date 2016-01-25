@@ -48,8 +48,8 @@ public class CameraView : BaseballElement {
 			targetCameraAngle = 20f;
 			break;
 		case "infield":
-			targetCameraSize = 6.5f;
-			targetCameraHeight = 6f;
+			targetCameraSize = 5.5f;
+			targetCameraHeight = 5f;
 			targetCameraX = 0f;
 			targetCameraZ = 0f;
 			targetCameraAngle = 30f;

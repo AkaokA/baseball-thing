@@ -116,11 +116,11 @@ public class AppController : BaseballElement {
 					float angle;
 					angle = Mathf.LerpUnclamped(initialYAngle, finalYAngle, easingCurve.Evaluate (perc));
 
-					Quaternion newRotation = menuElement.transform.rotation;
+					Quaternion newRotation = menuElement.transform.localRotation;
 					Vector3 newEulerAngles = newRotation.eulerAngles;
 					newEulerAngles.y = angle;
 					newRotation.eulerAngles = newEulerAngles;
-					menuElement.transform.rotation = newRotation;
+					menuElement.transform.localRotation = newRotation;
 
 				}
 				yield return null;
