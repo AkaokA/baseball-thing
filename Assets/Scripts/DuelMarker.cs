@@ -28,6 +28,8 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 	public Color highlightColor;
 
 	void Start () {
+		currentGridPosition = new DuelGridCoordinates (Mathf.FloorToInt (DuelGrid.gridColumns / 2), Mathf.FloorToInt (DuelGrid.gridRows / 2));
+
 		startPosition = transform.localPosition;
 		startScale = transform.localScale;
 

@@ -34,10 +34,10 @@ public class CameraView : BaseballElement {
 
 		switch(state) {
 		case "overhead":
-			targetCameraSize = 30f;
+			targetCameraSize = 28f;
 			targetCameraHeight = 30f;
-			targetCameraX = -5f;
-			targetCameraZ = 28f;
+			targetCameraX = 12f;
+			targetCameraZ = 12f;
 			targetCameraAngle = 90f;
 			break;
 		case "atbat":
@@ -48,15 +48,15 @@ public class CameraView : BaseballElement {
 			targetCameraAngle = 20f;
 			break;
 		case "infield":
-			targetCameraSize = 5.5f;
-			targetCameraHeight = 5f;
+			targetCameraSize = 16f;
+			targetCameraHeight = 12f;
 			targetCameraX = 0f;
 			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
 			break;
 		case "outfield":
-			targetCameraSize = 13f;
-			targetCameraHeight = 12f;
+			targetCameraSize = 40f;
+			targetCameraHeight = 30f;
 			targetCameraX = 0f;
 			targetCameraZ = 0f;
 			targetCameraAngle = 30f;
@@ -80,7 +80,7 @@ public class CameraView : BaseballElement {
 			float cameraHeight = transform.position.y;
 
 			cameraX = Mathf.SmoothDamp(cameraX, targetCameraX, ref xVelocity, smoothTime);
-			cameraZ = Mathf.SmoothDamp(cameraZ, targetCameraZ, ref zVelocity, smoothTime/2);
+			cameraZ = Mathf.SmoothDamp(cameraZ, targetCameraZ, ref zVelocity, smoothTime);
 			cameraHeight = Mathf.SmoothDamp(cameraHeight, targetCameraHeight, ref heightVelocity, smoothTime);
 
 			Vector3 cameraPosition = new Vector3 (cameraX, cameraHeight, cameraZ);
