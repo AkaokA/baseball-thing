@@ -187,7 +187,7 @@ public class DuelController : BaseballElement {
 			// batter didn't swing
 		}
 
-		yield return new WaitForSeconds (5.0f);
+		yield return new WaitForSeconds (4.0f);
 		StartCoroutine (SetUpNewDuel ());
 	}
 }
