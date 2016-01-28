@@ -54,7 +54,6 @@ public class DuelController : BaseballElement {
 			pitchButton.GetComponent<Button> ().onClick.AddListener (delegate {
 				currentPitch = pitches [localIndex];
 				Debug.Log (currentPitch.name);
-				Button thisButton = app.views.pitchInventory.transform.GetChild (localIndex).GetComponent<Button> ();
 
 				HighlightCurrentPitchButton ();
 
@@ -81,6 +80,9 @@ public class DuelController : BaseballElement {
 		currentPitchLocation = new DuelGridCoordinates (centerColumn, centerRow);
 		currentSwingLocation = new DuelGridCoordinates (centerColumn, centerRow);
 
+		// show disabled pitch buttons
+		DisablePitchButtons (app.model.fadedWhiteColor);
+
 		// show batter phase 1
 		app.views.duelBatterPhase1.SetActive (true);
 		app.views.duelPitchMarker.SetActive (true);
@@ -103,6 +105,17 @@ public class DuelController : BaseballElement {
 		// enable raycasts on swing marker
 		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = true;
 
+	}
+
+	void DisablePitchButtons (Color color) {
+		for (int index = 0; index < pitches.Length; index++) {
+			GameObject buttonObject = app.views.pitchInventory.transform.GetChild (index).gameObject;
+			buttonObject.SetActive (true);
+
+			buttonObject.GetComponent<Button> ().interactable = false;
+			buttonObject.GetComponentInChildren<Text> ().color = color;
+			buttonObject.GetComponentInChildren<Image> ().color = color;
+		}
 	}
 
 	void HighlightCurrentPitchButton () {
@@ -160,15 +173,7 @@ public class DuelController : BaseballElement {
 		app.views.duelPitchMarker.GetComponent<Image> ().raycastTarget = false;
 
 		// disable pitch buttons
-		foreach (Button button in app.views.pitchInventory.GetComponentsInChildren<Button> () ) {
-			button.interactable = false;
-			Text buttonText = button.GetComponentInChildren<Text> ();
-			Image buttonImage = button.GetComponentInChildren<Image> ();
-
-			buttonText.color = app.model.fadedWhiteColor;
-			buttonImage.color = app.model.fadedWhiteColor;
-		}
-
+		DisablePitchButtons (new Color (0,0,0,0) );
 	}
 
 	public void OnFollowThrough () {
