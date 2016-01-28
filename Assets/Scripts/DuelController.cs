@@ -22,67 +22,52 @@ public class DuelController : BaseballElement {
 	void Start () {
 		centerColumn = Mathf.FloorToInt (DuelGrid.gridColumns / 2);
 		centerRow = Mathf.FloorToInt (DuelGrid.gridRows / 2);
+
+		currentPitchLocation = new DuelGridCoordinates (centerColumn, centerRow);
+		currentSwingLocation = new DuelGridCoordinates (centerColumn, centerRow);
 			
 		SetUpPitchInventory ();
 		StartCoroutine (SetUpNewDuel ());
 	}
 
 	void SetUpPitchInventory () {
-		pitches = new Pitch[6];
-		pitches [0] = new Pitch ("Fastball", 0, 1);
-		pitches [1] = new Pitch ("Curveball", 0, 4);
-		pitches [2] = new Pitch ("Slider", 3, 1);
-		pitches [3] = new Pitch ("2-Seam", -2, 0);
-		pitches [4] = new Pitch ("Riser", 0, -2);
-		pitches [5] = new Pitch ("Slurve", 2, 3);
+		pitches = new Pitch[4];
+		pitches [0] = new Pitch ("Fastball", 0, 1, app.model.pitchIconFastball);
+		pitches [1] = new Pitch ("Curveball", -1, 4, app.model.pitchIconCurveball);
+		pitches [2] = new Pitch ("2-Seam", -2, 1, app.model.pitchIcon2Seam);
+		pitches [3] = new Pitch ("Slider", 3, 0, app.model.pitchIconSlider);
 
 		// create pitch buttons
 		int index = 0;
 		foreach (Pitch pitch in pitches) {
-			GameObject pitchButton = Instantiate (app.views.pitchSelectButton);
-			pitchButton.transform.SetParent (app.views.pitchInventory.transform);
-			pitchButton.GetComponent<Text> ().text = pitch.name;
+			GameObject pitchButton = app.views.pitchInventory.transform.GetChild (index).gameObject;
+			Text buttonText = pitchButton.GetComponentInChildren<Text> ();
+			Image buttonImage = pitchButton.GetComponentInChildren<Image> ();
 
-			RectTransform buttonRect = pitchButton.GetComponent<RectTransform> ();
+			buttonText.text = pitch.name;
+			buttonText.color = app.model.fadedWhiteColor;
 
-			Vector2 buttonPosition = new Vector2 (20f, -44f * index);
-			buttonRect.localPosition = buttonPosition;
-			buttonRect.localScale = new Vector3 (1, 1, 1);
+			buttonImage.sprite = pitch.pitchIcon;
+			buttonImage.color = app.model.fadedWhiteColor;
 
 			int localIndex = index;
 			pitchButton.GetComponent<Button> ().onClick.AddListener (delegate {
 				currentPitch = pitches [localIndex];
 				Debug.Log (currentPitch.name);
-
-				// highlight selected pitch button
-				ColorBlock allButtonColors = app.views.pitchInventory.GetComponentInChildren<Button> ().colors;
-				allButtonColors.normalColor = app.model.redTeamColor;
-				allButtonColors.highlightedColor = allButtonColors.normalColor;
-
-				foreach (Button button in app.views.pitchInventory.GetComponentsInChildren<Button> ()) {
-					button.colors = allButtonColors;
-				}
-
 				Button thisButton = app.views.pitchInventory.transform.GetChild (localIndex).GetComponent<Button> ();
-				ColorBlock thisButtonColors = thisButton.colors;
-				thisButtonColors.normalColor = app.model.buttonHighlightColor;
-				thisButtonColors.highlightedColor = thisButtonColors.normalColor;
-				thisButton.colors = thisButtonColors;
+
+				HighlightCurrentPitchButton ();
 
 				// move pitch destination marker
 				if (app.views.duelPitchEndMarker.activeInHierarchy) {
 					StartCoroutine (app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 				}
+
 			});
 
 			index++;
 		}
-
-		// set scrollview content height
-		RectTransform pitchInventoryRect = app.views.pitchInventory.GetComponent<RectTransform> ();
-		pitchInventoryRect.sizeDelta = new Vector2(0, 44 * pitches.Length);
-		app.views.pitchInventoryScrollView.GetComponent<ScrollRect> ().verticalNormalizedPosition = 1;
-
+			
 		currentPitch = pitches [0];
 		Button firstButton = app.views.pitchInventory.transform.GetChild (0).GetComponent<Button> ();
 		ColorBlock firstButtonColors = firstButton.colors;
@@ -92,7 +77,7 @@ public class DuelController : BaseballElement {
 	}
 
 	IEnumerator SetUpNewDuel () {
-		yield return new WaitForSeconds (1);
+		yield return null;
 		currentPitchLocation = new DuelGridCoordinates (centerColumn, centerRow);
 		currentSwingLocation = new DuelGridCoordinates (centerColumn, centerRow);
 
@@ -120,7 +105,26 @@ public class DuelController : BaseballElement {
 
 	}
 
+	void HighlightCurrentPitchButton () {
+		// enable pitch buttons
+		foreach (Button button in app.views.pitchInventory.GetComponentsInChildren<Button> () ) {
+			button.interactable = true;
+			Text buttonText = button.GetComponentInChildren<Text> ();
+			Image buttonImage = button.GetComponentInChildren<Image> ();
+
+			buttonText.color = new Color (1, 1, 1);
+			buttonImage.color = new Color (1, 1, 1);
+		}
+
+		int currentPitchIndex = System.Array.IndexOf (pitches, currentPitch);
+		Button selectedButton = app.views.pitchInventory.transform.GetChild (currentPitchIndex).GetComponent<Button> ();
+		selectedButton.GetComponentInChildren<Text> ().color = app.model.redTeamColor;
+		selectedButton.GetComponentInChildren<Image> ().color = app.model.redTeamColor;
+	}
+
 	public void OnConfirmSwing () {
+		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
+
 		// hide batter phase 1
 		app.views.duelBatterPhase1.SetActive (false);
 		app.views.duelSwingMarker.SetActive (false);
@@ -138,10 +142,12 @@ public class DuelController : BaseballElement {
 			StartCoroutine (app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().MoveToPitchDestination ());
 		}
 
-		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
+		HighlightCurrentPitchButton ();
 	}
 
 	public void OnConfirmPitch () {
+		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+
 		// hide pitcher phase 1
 		app.views.duelPitcherPhase1.SetActive (false);
 		app.views.duelPitchEndMarker.SetActive (false);
@@ -153,7 +159,16 @@ public class DuelController : BaseballElement {
 		// disable raycasts on pitch marker
 		app.views.duelPitchMarker.GetComponent<Image> ().raycastTarget = false;
 
-		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+		// disable pitch buttons
+		foreach (Button button in app.views.pitchInventory.GetComponentsInChildren<Button> () ) {
+			button.interactable = false;
+			Text buttonText = button.GetComponentInChildren<Text> ();
+			Image buttonImage = button.GetComponentInChildren<Image> ();
+
+			buttonText.color = app.model.fadedWhiteColor;
+			buttonImage.color = app.model.fadedWhiteColor;
+		}
+
 	}
 
 	public void OnFollowThrough () {

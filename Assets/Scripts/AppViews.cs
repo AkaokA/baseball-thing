@@ -39,7 +39,5 @@ public class AppViews : BaseballElement {
 	public GameObject duelBatterPhase2;
 	public GameObject duelOutcomePhase;
 
-	public GameObject pitchInventoryScrollView;
 	public GameObject pitchInventory;
-	public GameObject pitchSelectButton;
 }

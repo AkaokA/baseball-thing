@@ -15,6 +15,12 @@ public class AppModel : BaseballElement {
 	public Texture redMaleTexture;
 
 	public Color buttonHighlightColor;
+	public Color fadedWhiteColor;
+
+	public Sprite pitchIconFastball;
+	public Sprite pitchIconCurveball;
+	public Sprite pitchIcon2Seam;
+	public Sprite pitchIconSlider;
 }
 
 public class DuelGridCoordinates {
@@ -31,11 +37,13 @@ public class DuelGridCoordinates {
 public class Pitch {
 	public string name;
 	public DuelGridCoordinates movement;
+	public Sprite pitchIcon;
 
 	// constructor
-	public Pitch (string pitchName, int movementX, int movementY) {
+	public Pitch (string pitchName, int movementX, int movementY, Sprite icon) {
 		name = pitchName;
 		movement = new DuelGridCoordinates (movementX, movementY);
+		pitchIcon = icon;
 	}
 }
 

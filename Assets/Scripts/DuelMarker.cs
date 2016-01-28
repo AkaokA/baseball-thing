@@ -7,7 +7,6 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 	public DuelGrid duelGrid;
 	public GameObject objectBeingDragged;
 	Vector3 startPosition;
-	Vector3 startScale;
 
 	private Vector3 targetPosition;
 	private Vector3 positionVelocity;
@@ -31,7 +30,6 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 		currentGridPosition = new DuelGridCoordinates (Mathf.FloorToInt (DuelGrid.gridColumns / 2), Mathf.FloorToInt (DuelGrid.gridRows / 2));
 
 		startPosition = transform.localPosition;
-		startScale = transform.localScale;
 
 		duelGrid = app.views.duelGrid.GetComponent<DuelGrid> ();
 	}
