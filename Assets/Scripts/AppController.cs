@@ -21,30 +21,12 @@ public class AppController : BaseballElement {
 	public float pitchAccuracy = 0.5f;
 	public float throwSpeed = 15f;
 
-	private UIDotView ball1Dot;
-	private UIDotView ball2Dot;
-	private UIDotView ball3Dot;
-	private UIDotView strike1Dot;
-	private UIDotView strike2Dot;
-	private UIDotView out1Dot;
-	private UIDotView out2Dot;
-
-
 
 	// Use this for initialization
 	void Start () {
 		app.views.mainMenu.SetActive (true);
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = false;
 		app.views.duelGridCanvas.SetActive (false);
-
-		// init scoreboard variables (scoreboard stuff should go in its own class)
-		ball1Dot = app.views.ball1Dot.GetComponent<UIDotView> ();
-		ball2Dot = app.views.ball2Dot.GetComponent<UIDotView> ();
-		ball3Dot = app.views.ball3Dot.GetComponent<UIDotView> ();
-		strike1Dot = app.views.strike1Dot.GetComponent<UIDotView> ();
-		strike2Dot = app.views.strike2Dot.GetComponent<UIDotView> ();
-		out1Dot = app.views.out1Dot.GetComponent<UIDotView> ();
-		out2Dot = app.views.out2Dot.GetComponent<UIDotView> ();
 
 		ballpark = new Ballpark ();
 		ballpark.firstBase.baseGameObject = app.views.firstBase;
@@ -75,12 +57,6 @@ public class AppController : BaseballElement {
 		// create ballgame
 		SetUpBallgame ();
 
-		// show scoreboard
-		ShowUI (app.views.scoreboard);
-
-		// update scoreboard
-		UpdateScoreboard ();
-
 		// create fielders
 		SetUpFielders ();
 
@@ -93,12 +69,6 @@ public class AppController : BaseballElement {
 		// Intro animations
 		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
-	}
-
-	public void ShowUI (GameObject guiCanvas) {
-		if (guiCanvas.activeInHierarchy == false) {
-			guiCanvas.SetActive (true);
-		}
 	}
 
 	public IEnumerator HideMainMenu (GameObject guiCanvas) {
@@ -420,13 +390,6 @@ public class AppController : BaseballElement {
 	void ResetCount () {
 		currentGame.currentInning.currentAtBat.balls = 0;
 		currentGame.currentInning.currentAtBat.strikes = 0;
-
-		// update scoreboard count
-		ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.disabledColor));
-		ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.disabledColor));
-		ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.disabledColor));
-		strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.disabledColor));
-		strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.disabledColor));
 	}
 
 	public void IncrementBalls () {
@@ -434,17 +397,14 @@ public class AppController : BaseballElement {
 		case 0:
 			Debug.Log ("ball 1!");
 			currentGame.currentInning.currentAtBat.balls++;
-			ball1Dot.StartCoroutine (ball1Dot.changeColor (ball1Dot.ballDotColor));
 			break;
 		case 1:
 			Debug.Log ("ball 2!");
 			currentGame.currentInning.currentAtBat.balls++;
-			ball2Dot.StartCoroutine (ball2Dot.changeColor (ball2Dot.ballDotColor));
 			break;
 		case 2:
 			Debug.Log ("ball 3!");
 			currentGame.currentInning.currentAtBat.balls++;
-			ball3Dot.StartCoroutine (ball3Dot.changeColor (ball3Dot.ballDotColor));
 			break;
 		case 3:
 			Debug.Log ("walk!");
@@ -459,12 +419,10 @@ public class AppController : BaseballElement {
 		case 0:
 			Debug.Log ("strike 1!");
 			currentGame.currentInning.currentAtBat.strikes++;
-			strike1Dot.StartCoroutine (strike1Dot.changeColor (strike1Dot.strikeDotColor));
 			break;
 		case 1:
 			Debug.Log ("strike 2!");
 			currentGame.currentInning.currentAtBat.strikes++;
-			strike2Dot.StartCoroutine (strike2Dot.changeColor (strike2Dot.strikeDotColor));
 			break;
 		case 2:
 			Debug.Log ("strikeout!");
@@ -479,20 +437,16 @@ public class AppController : BaseballElement {
 		case 0:
 			Debug.Log ("1 out!");
 			currentGame.currentInning.outs++;
-			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.outDotColor));
 			break;
 		case 1:
 			Debug.Log ("2 outs!");
 			currentGame.currentInning.outs++;
-			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.outDotColor));
 			break;
 		case 2:
 			Debug.Log ("CHANGE!");
 			// reset B/S/O
 			ResetCount ();
 			currentGame.currentInning.outs = 0;
-			out1Dot.StartCoroutine (out1Dot.changeColor (out1Dot.disabledColor));
-			out2Dot.StartCoroutine (out2Dot.changeColor (out2Dot.disabledColor));
 
 			StartCoroutine (ClearTheField ());
 			break;
@@ -513,7 +467,7 @@ public class AppController : BaseballElement {
 		}
 
 		// update scoreboard
-		UpdateScoreboard ();
+//		UpdateScoreboard ();
 	}
 
 	public void IncrementScore () {
@@ -523,16 +477,16 @@ public class AppController : BaseballElement {
 			currentGame.awayTeam.score++;
 		}
 
-		UpdateScoreboard ();
+//		UpdateScoreboard ();
 	}
 
-	public void UpdateScoreboard () {
-		// text labels
-		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
-		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
-		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.score.ToString ();
-		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.score.ToString ();
-		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
-	}
+//	public void UpdateScoreboard () {
+//		// text labels
+//		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
+//		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
+//		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.score.ToString ();
+//		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.score.ToString ();
+//		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
+//	}
 		
 }

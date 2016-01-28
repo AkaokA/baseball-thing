@@ -24,21 +24,6 @@ public class AppViews : BaseballElement {
 
 	// UI & Scoreboard
 	public GameObject mainMenu;
-	public GameObject scoreboard;
-
-	public GameObject awayTeamNameLabel;
-	public GameObject homeTeamNameLabel;
-	public GameObject awayScoreLabel;
-	public GameObject homeScoreLabel;
-	public GameObject inningLabel;
-
-	public GameObject ball1Dot;
-	public GameObject ball2Dot;
-	public GameObject ball3Dot;
-	public GameObject strike1Dot;
-	public GameObject strike2Dot;
-	public GameObject out1Dot;
-	public GameObject out2Dot;
 
 	// Duel Grid
 	public GameObject duelGridCanvas;
