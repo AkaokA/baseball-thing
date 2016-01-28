@@ -24,6 +24,7 @@ public class AppViews : BaseballElement {
 
 	// UI & Scoreboard
 	public GameObject mainMenu;
+	public GameObject scoreboard;
 
 	// Duel Grid
 	public GameObject duelGridCanvas;

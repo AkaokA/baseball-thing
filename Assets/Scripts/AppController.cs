@@ -27,6 +27,7 @@ public class AppController : BaseballElement {
 		app.views.mainMenu.SetActive (true);
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = false;
 		app.views.duelGridCanvas.SetActive (false);
+		app.views.scoreboard.SetActive (false);
 
 		ballpark = new Ballpark ();
 		ballpark.firstBase.baseGameObject = app.views.firstBase;
@@ -35,7 +36,7 @@ public class AppController : BaseballElement {
 		ballpark.homePlate.baseGameObject = app.views.homePlate;
 
 //		NewGame (); // DEBUG: automatically start a new game
-		ActivateDuelGrid (); // DEBUG: automatically go to duel grid
+//		ActivateDuelGrid (); // DEBUG: automatically go to duel grid
 	}
 
 	public void ActivateDuelGrid () {
@@ -47,6 +48,9 @@ public class AppController : BaseballElement {
 
 		// show grid canvas
 		app.views.duelGridCanvas.SetActive (true);
+
+		// show scoreboard
+		app.views.scoreboard.SetActive (true);
 
 		// Intro animations
 		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
@@ -65,6 +69,9 @@ public class AppController : BaseballElement {
 
 		// hide main menu
 		StartCoroutine ( HideMainMenu () );
+
+		// show scoreboard
+		app.views.scoreboard.SetActive (true);
 
 		// Intro animations
 		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
