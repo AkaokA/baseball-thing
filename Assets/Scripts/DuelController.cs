@@ -106,6 +106,7 @@ public class DuelController : BaseballElement {
 			app.views.duelPitchEndMarker.GetComponent<DuelMarker> ().ResetPosition ();
 			app.views.duelSwingMarker.GetComponent<DuelMarker> ().ResetPosition ();
 		}
+		firstTime = false;
 
 		// hide everything else
 		app.views.duelPitchMarker.SetActive (false);
@@ -117,7 +118,6 @@ public class DuelController : BaseballElement {
 		// enable raycasts on swing marker
 		app.views.duelSwingMarker.GetComponent<Image> ().raycastTarget = true;
 
-		firstTime = false;
 	}
 
 	public void OnConfirmSwing () {

@@ -20,7 +20,7 @@ public class DuelGrid : BaseballElement {
 	public GameObject gridCell;
 
 	private Color normalDotColor = new Color (1f, 1f, 1f, 0.5f);
-	private Color outerEdgeDotColor = new Color (1f, 1f, 1f, 0.25f);
+	private Color outerEdgeDotColor = new Color (1f, 1f, 1f, 0.15f);
 
 	public Sprite strikeZoneDot;
 	public Sprite strikeZoneHighlightDot;
