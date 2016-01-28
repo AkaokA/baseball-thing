@@ -1,11 +1,12 @@
 fileFormatVersion: 2
 guid: 8186146a5e72b408b92771b068820506
-timeCreated: 1452835140
+timeCreated: 1453946343
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - gridCell: {fileID: 123416, guid: 5467d2ed4bd08491d8fcd67bf684c236, type: 2}
+  - strikeZoneDot: {fileID: 21300000, guid: d449b3e73c15d48e996796c757988c2d, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

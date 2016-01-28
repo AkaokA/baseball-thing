@@ -35,7 +35,7 @@ public class AppController : BaseballElement {
 		ballpark.homePlate.baseGameObject = app.views.homePlate;
 
 //		NewGame (); // DEBUG: automatically start a new game
-//		ActivateDuelGrid (); // DEBUG: automatically go to duel grid
+		ActivateDuelGrid (); // DEBUG: automatically go to duel grid
 	}
 
 	public void ActivateDuelGrid () {
@@ -43,7 +43,7 @@ public class AppController : BaseballElement {
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = true;
 
 		// hide main menu
-		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
+		StartCoroutine ( HideMainMenu () );
 
 		// show grid canvas
 		app.views.duelGridCanvas.SetActive (true);
@@ -64,15 +64,51 @@ public class AppController : BaseballElement {
 		NewBatter ();
 
 		// hide main menu
-		StartCoroutine ( HideMainMenu (app.views.mainMenu) );
+		StartCoroutine ( HideMainMenu () );
 
 		// Intro animations
 		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
-	public IEnumerator HideMainMenu (GameObject guiCanvas) {
-		if (guiCanvas.activeInHierarchy == true) {
+	public void OnPauseButton () {
+		if (app.views.mainMenu.activeInHierarchy == false) {
+			StartCoroutine (ShowMainMenu ());
+		} else {
+			StartCoroutine (HideMainMenu ());
+		}
+	}
+
+	public IEnumerator ShowMainMenu () {
+		app.views.duelGrid.SetActive (false);
+		app.views.mainMenu.SetActive (true);
+		float time = 0.5f;
+		float initialYAngle = -112f;
+		float finalYAngle = 0f;
+
+		float currentLerpTime;
+
+		for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
+
+			foreach (GameObject menuElement in GameObject.FindGameObjectsWithTag ("Menu Element")) {
+				float perc = currentLerpTime / time;
+				float angle;
+				angle = Mathf.LerpUnclamped(initialYAngle, finalYAngle, easingCurve.Evaluate (perc));
+
+				Quaternion newRotation = menuElement.transform.localRotation;
+				Vector3 newEulerAngles = newRotation.eulerAngles;
+				newEulerAngles.y = angle;
+				newRotation.eulerAngles = newEulerAngles;
+				menuElement.transform.localRotation = newRotation;
+
+			}
+			yield return null;
+		}
+
+	}
+
+	public IEnumerator HideMainMenu () {
+		if (app.views.mainMenu.activeInHierarchy == true) {
 			float time = 0.5f;
 			float initialYAngle = 0f;
 			float finalYAngle = -112f;
@@ -96,7 +132,7 @@ public class AppController : BaseballElement {
 				yield return null;
 			}
 
-			guiCanvas.SetActive (false);
+			app.views.mainMenu.SetActive (false);
 			app.views.duelGrid.SetActive (true);
 		}
 	}

@@ -216,7 +216,18 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 
 					if (column == currentGridPosition.column || row == currentGridPosition.row) {
 						highlightDot.SetActive (true);
-						highlightDot.GetComponent<Image> ().color = highlightColor;
+
+						int strikeZoneWidthPadding = (DuelGrid.gridColumns - DuelGrid.strikeZoneWidth) / 2;
+						int strikeZoneHeightPadding = (DuelGrid.gridRows - DuelGrid.strikeZoneHeight) / 2;
+
+						if (column >= strikeZoneWidthPadding && column < DuelGrid.gridColumns - strikeZoneWidthPadding && row >= strikeZoneHeightPadding && row < DuelGrid.gridRows - strikeZoneHeightPadding) {
+							highlightDot.GetComponent<Image> ().sprite = app.views.duelGrid.GetComponent<DuelGrid> ().strikeZoneHighlightDot;
+							highlightDot.GetComponent<Image> ().color = highlightColor;
+						} else {
+							highlightDot.GetComponent<Image> ().color = highlightColor;
+						}
+
+
 					} else {
 						highlightDot.SetActive (false);
 					}

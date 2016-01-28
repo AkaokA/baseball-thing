@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 2287c0000fcca47dfbc003e493991452
-timeCreated: 1453345239
+timeCreated: 1453946028
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - duelGrid: {instanceID: 0}
+  - objectBeingDragged: {instanceID: 0}
+  - strikeZoneHighlightDot: {fileID: 21300000, guid: d449b3e73c15d48e996796c757988c2d,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
