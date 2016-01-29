@@ -25,7 +25,10 @@ public class DuelGrid : BaseballElement {
 	public Sprite strikeZoneDot;
 	public Sprite strikeZoneHighlightDot;
 
+	public Animator animator;
+
 	void Start () {
+		animator = GetComponent<Animator> ();
 		SetUpDuelGrid ();
 	}
 
@@ -80,4 +83,7 @@ public class DuelGrid : BaseballElement {
 		}
 	}
 
+	public void AnimateOut () {
+		animator.Play ("animateOut");
+	}
 }

@@ -44,7 +44,7 @@ public class AppController : BaseballElement {
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = true;
 
 		// hide main menu
-		StartCoroutine ( HideMainMenu () );
+		HideMainMenu ();
 
 		// show grid canvas
 		app.views.duelGridCanvas.SetActive (true);
@@ -68,7 +68,7 @@ public class AppController : BaseballElement {
 		NewBatter ();
 
 		// hide main menu
-		StartCoroutine ( HideMainMenu () );
+		HideMainMenu ();
 
 		// show scoreboard
 		app.views.scoreboard.SetActive (true);
@@ -78,70 +78,9 @@ public class AppController : BaseballElement {
 		app.views.sun.GetComponent<SunView> ().BeginSunrise ();
 	}
 
-	public void OnPauseButton () {
-		if (app.views.mainMenu.activeInHierarchy == false) {
-			StartCoroutine (ShowMainMenu ());
-		} else {
-			StartCoroutine (HideMainMenu ());
-		}
-	}
-
-	public IEnumerator ShowMainMenu () {
-		app.views.duelGrid.SetActive (false);
-		app.views.mainMenu.SetActive (true);
-		float time = 0.5f;
-		float initialYAngle = -112f;
-		float finalYAngle = 0f;
-
-		float currentLerpTime;
-
-		for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
-
-			foreach (GameObject menuElement in GameObject.FindGameObjectsWithTag ("Menu Element")) {
-				float perc = currentLerpTime / time;
-				float angle;
-				angle = Mathf.LerpUnclamped(initialYAngle, finalYAngle, easingCurve.Evaluate (perc));
-
-				Quaternion newRotation = menuElement.transform.localRotation;
-				Vector3 newEulerAngles = newRotation.eulerAngles;
-				newEulerAngles.y = angle;
-				newRotation.eulerAngles = newEulerAngles;
-				menuElement.transform.localRotation = newRotation;
-
-			}
-			yield return null;
-		}
-
-	}
-
-	public IEnumerator HideMainMenu () {
-		if (app.views.mainMenu.activeInHierarchy == true) {
-			float time = 0.5f;
-			float initialYAngle = 0f;
-			float finalYAngle = -112f;
-				
-			float currentLerpTime;
-
-			for ( currentLerpTime = 0f; currentLerpTime <= time; currentLerpTime += Time.deltaTime ) {
-
-				foreach (GameObject menuElement in GameObject.FindGameObjectsWithTag ("Menu Element")) {
-					float perc = currentLerpTime / time;
-					float angle;
-					angle = Mathf.LerpUnclamped(initialYAngle, finalYAngle, easingCurve.Evaluate (perc));
-
-					Quaternion newRotation = menuElement.transform.localRotation;
-					Vector3 newEulerAngles = newRotation.eulerAngles;
-					newEulerAngles.y = angle;
-					newRotation.eulerAngles = newEulerAngles;
-					menuElement.transform.localRotation = newRotation;
-
-				}
-				yield return null;
-			}
-
-			app.views.mainMenu.SetActive (false);
-			app.views.duelGrid.SetActive (true);
-		}
+	public void HideMainMenu () {
+		app.views.mainMenu.SetActive (false);
+		app.views.duelGrid.SetActive (true);
 	}
 
 	// Update is called once per frame
