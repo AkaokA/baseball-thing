@@ -26,27 +26,27 @@ public class BaseballView : BaseballElement {
 		baseballRigidbody = GetComponent<Rigidbody> ();
 	}
 	
-	// Update is called once per frame
-	void FixedUpdate () {
-		// kill ball if it goes out of play
-		if ( transform.position.x < -6f || transform.position.z < -6f ) {
-			app.controller.ResetPlay ();
-			app.controller.NewBatter ();
-		}
-
-		// home run!
-		if ( transform.position.x > 32.5f || transform.position.z > 32f ) {
-			if (hasTouchedTheGround) {
-				// ground rule double
-				app.controller.ResetPlay ();
-				app.controller.NewBatter ();
-			} else {
-				// home run!
-				Debug.Log ("home run!");
-				app.controller.HomeRun();
-			}
-		}
-	}
+//	// Update is called once per frame
+//	void FixedUpdate () {
+//		// kill ball if it goes out of play
+//		if ( transform.position.x < -6f || transform.position.z < -6f ) {
+//			app.controller.ResetPlay ();
+//			app.controller.NewBatter ();
+//		}
+//
+//		// home run!
+//		if ( transform.position.x > 32.5f || transform.position.z > 32f ) {
+//			if (hasTouchedTheGround) {
+//				// ground rule double
+//				app.controller.ResetPlay ();
+//				app.controller.NewBatter ();
+//			} else {
+//				// home run!
+//				Debug.Log ("home run!");
+//				app.controller.HomeRun();
+//			}
+//		}
+//	}
 
 	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound

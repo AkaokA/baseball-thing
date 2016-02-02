@@ -105,6 +105,24 @@ public class ScoreController : BaseballElement {
 				index++;
 			}
 
+			// base icons
+			if (app.controller.ballpark.bases[1].isOccupied) {
+				app.views.scoreboardBases.transform.FindChild ("1st Base").gameObject.SetActive (true);
+			} else {
+				app.views.scoreboardBases.transform.FindChild ("1st Base").gameObject.SetActive (false);
+			}
+
+			if (app.controller.ballpark.bases[2].isOccupied) {
+				app.views.scoreboardBases.transform.FindChild ("2nd Base").gameObject.SetActive (true);
+			} else {
+				app.views.scoreboardBases.transform.FindChild ("2nd Base").gameObject.SetActive (false);
+			}
+
+			if (app.controller.ballpark.bases[3].isOccupied) {
+				app.views.scoreboardBases.transform.FindChild ("3rd Base").gameObject.SetActive (true);
+			} else {
+				app.views.scoreboardBases.transform.FindChild ("3rd Base").gameObject.SetActive (false);
+			}
 
 		}
 	}

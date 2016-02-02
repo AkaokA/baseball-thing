@@ -20,8 +20,6 @@ public class RunnerView : BaseballElement {
 
 	// Update is called once per frame
 	void Update () {
-		TouchingBase ();
-
 		if (hadAnAtBat && RunnerIsInDugout ()) {
 			Destroy ( app.controller.battingTeam.lineup[batterIndex].runnerInstance );
 		}
@@ -48,6 +46,7 @@ public class RunnerView : BaseballElement {
 			yield return null;
 		}
 		isMoving = false;
+		TouchingBase ();
 	}
 
 	public bool RunnerIsInDugout () {
@@ -91,7 +90,6 @@ public class RunnerView : BaseballElement {
 
 			if (distanceToBase.magnitude < 0.5f) {
 				currentBaseIndex = System.Array.IndexOf (app.controller.ballpark.bases, thisBase);
-				thisBase.isOccupied = true;
 
 				// crossing the plate
 				if ( thisBase == app.controller.ballpark.homePlate ) {
@@ -99,10 +97,15 @@ public class RunnerView : BaseballElement {
 						goBackToDugout ();
 						app.controller.IncrementScore ();
 						scoreCounted = true;
+						return;
 					}
 				} else {
 					reachedBase = true;
 					hadAnAtBat = true;
+					thisBase.isOccupied = true;
+					app.scoreController.UpdateScoreboard ();
+					Debug.Log ("reached base");
+					return;
 				}
 
 			} else {

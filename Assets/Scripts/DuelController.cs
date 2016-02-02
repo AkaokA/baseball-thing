@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 
 public class DuelController : BaseballElement {
 
@@ -215,6 +216,11 @@ public class DuelController : BaseballElement {
 			if (difference.column == 0 && difference.row == 0) {
 				// direct hit
 				Debug.Log ("Contact!");
+				app.controller.ResetCount ();
+
+				yield return new WaitForSeconds (1.0f);
+				// make things happen on the field
+				StartCoroutine (StartActionOnField ());
 
 			} else {
 				// swing and a miss
@@ -238,4 +244,38 @@ public class DuelController : BaseballElement {
 		yield return new WaitForSeconds (2.0f);
 		StartCoroutine (SetUpNewDuel ());
 	}
+
+	IEnumerator StartActionOnField () {
+		app.views.duelGridCanvas.SetActive (false);
+		app.views.fieldCamera.GetComponent<Blur> ().enabled = false;
+
+		yield return new WaitForSeconds (0.5f);
+
+		// throw pitch
+		app.controller.currentBaseballInstance = Instantiate (app.views.baseball);
+		app.controller.currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
+
+		yield return new WaitForSeconds (0.5f);
+
+		// hit ball
+		app.controller.currentGame.currentInning.ballIsInPlay = true;
+		app.controller.currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (app.controller.currentBatter.hittingPower);
+		app.controller.currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+		app.views.infieldCameraTrigger.SetActive (true);
+		app.controller.currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
+
+		// advance all runners
+		foreach (Player runner in app.controller.battingTeam.lineup) {
+			if (runner.runnerInstance) {
+				runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+			}
+		}
+			
+		yield return new WaitForSeconds (6f);
+		app.controller.ResetPlay ();
+		app.controller.NewBatter ();
+		app.views.fieldCamera.GetComponent<Blur> ().enabled = true;
+		app.views.duelGridCanvas.SetActive (true);
+	}
+
 }

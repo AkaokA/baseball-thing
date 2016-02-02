@@ -43,6 +43,12 @@ public class AppController : BaseballElement {
 		// create ballgame
 		SetUpBallgame ();
 
+		// create fielders
+		SetUpFielders ();
+
+		// create first batter
+		NewBatter ();
+
 		// blur camera
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = true;
 
@@ -92,37 +98,37 @@ public class AppController : BaseballElement {
 
 		if (currentBatter != null) {
 			
-			// mouse/tap controls
-			if (Input.GetMouseButtonDown (0) && currentBatter != null) {
-				if (currentGame.currentInning.ballIsInPlay == false && currentBaseballInstance == null) {
-					currentBaseballInstance = Instantiate (app.views.baseball);
-					currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
-
-					float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
-					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
-
-				} else {
-
-					if (currentBaseballInstance && currentGame.currentInning.ballIsInPlay == false) {
-						currentGame.currentInning.ballIsInPlay = true;
-						currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
-						currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
-						app.views.infieldCameraTrigger.SetActive (true);
-						currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
-
-						// advance all runners
-						foreach (Player runner in battingTeam.lineup) {
-							if (runner.runnerInstance) {
-								runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
-							}
-						}
-					} else {
-						ResetPlay ();
-						NewBatter ();
-					}
-
-				}
-			}
+//			// mouse/tap controls
+//			if (Input.GetMouseButtonDown (0) && currentBatter != null) {
+//				if (currentGame.currentInning.ballIsInPlay == false && currentBaseballInstance == null) {
+//					currentBaseballInstance = Instantiate (app.views.baseball);
+//					currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
+//
+//					float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
+//					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
+//
+//				} else {
+//
+//					if (currentBaseballInstance && currentGame.currentInning.ballIsInPlay == false) {
+//						currentGame.currentInning.ballIsInPlay = true;
+//						currentBaseballInstance.GetComponent<BaseballView> ().HitBaseball (currentBatter.hittingPower);
+//						currentBaseballInstance.GetComponent<BaseballView> ().heightIndicator.SetActive (true);
+//						app.views.infieldCameraTrigger.SetActive (true);
+//						currentBatter.runnerInstance.GetComponent<RunnerView> ().hadAnAtBat = true;
+//
+//						// advance all runners
+//						foreach (Player runner in battingTeam.lineup) {
+//							if (runner.runnerInstance) {
+//								runner.runnerInstance.GetComponent<RunnerView> ().advanceToNextBase ();
+//							}
+//						}
+//					} else {
+//						ResetPlay ();
+//						NewBatter ();
+//					}
+//
+//				}
+//			}
 
 
 			// C: DEBUG: clear the field
@@ -374,7 +380,7 @@ public class AppController : BaseballElement {
 		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("infield", 1f);
 	}
 
-	void ResetCount () {
+	public void ResetCount () {
 		currentGame.currentInning.currentAtBat.balls = 0;
 		currentGame.currentInning.currentAtBat.strikes = 0;
 	}
@@ -438,6 +444,8 @@ public class AppController : BaseballElement {
 //			StartCoroutine (ClearTheField ());
 			break;
 		}
+
+		app.scoreController.UpdateScoreboard ();
 	}
 
 	public void ChangeSides () {
