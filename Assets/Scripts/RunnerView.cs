@@ -97,6 +97,7 @@ public class RunnerView : BaseballElement {
 						goBackToDugout ();
 						app.controller.IncrementScore ();
 						scoreCounted = true;
+						app.scoreController.UpdateScoreboard ();
 						return;
 					}
 				} else {

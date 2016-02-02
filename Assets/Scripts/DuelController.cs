@@ -249,13 +249,14 @@ public class DuelController : BaseballElement {
 		app.views.duelGridCanvas.SetActive (false);
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = false;
 
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.2f);
 
 		// throw pitch
 		app.controller.currentBaseballInstance = Instantiate (app.views.baseball);
 		app.controller.currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
+		app.controller.currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, 10f, 0.8f);
 
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.75f);
 
 		// hit ball
 		app.controller.currentGame.currentInning.ballIsInPlay = true;
