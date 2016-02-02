@@ -40,6 +40,9 @@ public class AppController : BaseballElement {
 	}
 
 	public void ActivateDuelGrid () {
+		// create ballgame
+		SetUpBallgame ();
+
 		// blur camera
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = true;
 
@@ -50,6 +53,7 @@ public class AppController : BaseballElement {
 		app.views.duelGridCanvas.SetActive (true);
 
 		// show scoreboard
+		app.scoreController.UpdateScoreboard ();
 		app.views.scoreboard.SetActive (true);
 
 		// Intro animations
@@ -178,12 +182,13 @@ public class AppController : BaseballElement {
 		currentGame = new BallGame();
 	
 		// assign teams
-		currentGame.homeTeam = new Team ("Toronto", app.model.blueFemaleTexture, app.model.blueMaleTexture, true);
-		currentGame.awayTeam = new Team ("Boston", app.model.redFemaleTexture, app.model.redMaleTexture, false);
+		currentGame.homeTeam = new Team ("TOR", app.model.blueFemaleTexture, app.model.blueMaleTexture, true);
+		currentGame.awayTeam = new Team ("BOS", app.model.redFemaleTexture, app.model.redMaleTexture, false);
 
 		// home team on the field first
 		fieldingTeam = currentGame.homeTeam;
 		battingTeam = currentGame.awayTeam;
+
 	}
 
 	void SetUpFielders () {
@@ -430,7 +435,7 @@ public class AppController : BaseballElement {
 			ResetCount ();
 			currentGame.currentInning.outs = 0;
 
-			StartCoroutine (ClearTheField ());
+//			StartCoroutine (ClearTheField ());
 			break;
 		}
 	}
@@ -449,7 +454,7 @@ public class AppController : BaseballElement {
 		}
 
 		// update scoreboard
-//		UpdateScoreboard ();
+		app.scoreController.UpdateScoreboard ();
 	}
 
 	public void IncrementScore () {
@@ -459,16 +464,7 @@ public class AppController : BaseballElement {
 			currentGame.awayTeam.score++;
 		}
 
-//		UpdateScoreboard ();
+		app.scoreController.UpdateScoreboard ();
 	}
-
-//	public void UpdateScoreboard () {
-//		// text labels
-//		app.views.awayTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.teamName.ToUpper ();
-//		app.views.homeTeamNameLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.teamName.ToUpper ();
-//		app.views.awayScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.awayTeam.score.ToString ();
-//		app.views.homeScoreLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.homeTeam.score.ToString ();
-//		app.views.inningLabel.GetComponent<UnityEngine.UI.Text> ().text = currentGame.currentInning.half.ToUpper () + " " + currentGame.currentInning.inningNumber.ToString ();
-//	}
 		
 }

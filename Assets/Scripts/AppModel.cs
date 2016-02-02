@@ -6,21 +6,28 @@ public class AppModel : BaseballElement {
 	public Mesh femaleMesh;
 	public Mesh maleMesh;
 
-	public Color blueTeamColor;
 	public Texture blueFemaleTexture;
 	public Texture blueMaleTexture;
 
-	public Color redTeamColor;
 	public Texture redFemaleTexture;
 	public Texture redMaleTexture;
 
-	public Color buttonHighlightColor;
-	public Color fadedWhiteColor;
+	// Colors
+	public Color whiteColor;
+	public Color transparentWhiteColor;
+	public Color redColor;
+	public Color blueColor;
+	public Color goldColor;
 
+	// pitch icons
 	public Sprite pitchIconFastball;
 	public Sprite pitchIconCurveball;
 	public Sprite pitchIcon2Seam;
 	public Sprite pitchIconSlider;
+
+	// scoreboard assets
+	public Sprite scoreboardDotEmpty;
+	public Sprite scoreboardDotActive;
 }
 
 public class DuelGridCoordinates {

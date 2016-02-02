@@ -200,9 +200,9 @@ public class DuelMarker : BaseballElement, IPointerDownHandler, IDragHandler, IP
 	void HighlightCells (bool highlightActive) {
 
 		if (objectBeingDragged == app.views.duelPitchMarker) {
-			highlightColor = app.model.redTeamColor;
+			highlightColor = app.model.redColor;
 		} else {
-			highlightColor = app.model.blueTeamColor;
+			highlightColor = app.model.blueColor;
 		}
 
 		if (highlightActive) {

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class DuelController : BaseballElement {
 
 	public DuelGridCoordinates currentPitchLocation;
+	public DuelGridCoordinates finalPitchLocation;
 	public DuelGridCoordinates currentSwingLocation;
 
 	public Pitch[] pitches;
@@ -45,10 +46,10 @@ public class DuelController : BaseballElement {
 			Image buttonImage = pitchButton.GetComponentInChildren<Image> ();
 
 			buttonText.text = pitch.name;
-			buttonText.color = app.model.fadedWhiteColor;
+			buttonText.color = app.model.transparentWhiteColor;
 
 			buttonImage.sprite = pitch.pitchIcon;
-			buttonImage.color = app.model.fadedWhiteColor;
+			buttonImage.color = app.model.transparentWhiteColor;
 
 			int localIndex = index;
 			pitchButton.GetComponent<Button> ().onClick.AddListener (delegate {
@@ -70,7 +71,7 @@ public class DuelController : BaseballElement {
 		currentPitch = pitches [0];
 		Button firstButton = app.views.pitchInventory.transform.GetChild (0).GetComponent<Button> ();
 		ColorBlock firstButtonColors = firstButton.colors;
-		firstButtonColors.normalColor = app.model.buttonHighlightColor;
+		firstButtonColors.normalColor = app.model.whiteColor;
 		firstButtonColors.highlightedColor = firstButtonColors.normalColor;
 		firstButton.colors = firstButtonColors;
 	}
@@ -81,7 +82,7 @@ public class DuelController : BaseballElement {
 		currentSwingLocation = new DuelGridCoordinates (centerColumn, centerRow);
 
 		// show disabled pitch buttons
-		DisablePitchButtons (app.model.fadedWhiteColor);
+		DisablePitchButtons (app.model.transparentWhiteColor);
 
 		// show batter phase 1
 		app.views.duelBatterPhase1.SetActive (true);
@@ -131,12 +132,12 @@ public class DuelController : BaseballElement {
 
 		int currentPitchIndex = System.Array.IndexOf (pitches, currentPitch);
 		Button selectedButton = app.views.pitchInventory.transform.GetChild (currentPitchIndex).GetComponent<Button> ();
-		selectedButton.GetComponentInChildren<Text> ().color = app.model.redTeamColor;
-		selectedButton.GetComponentInChildren<Image> ().color = app.model.redTeamColor;
+		selectedButton.GetComponentInChildren<Text> ().color = app.model.redColor;
+		selectedButton.GetComponentInChildren<Image> ().color = app.model.redColor;
 	}
 
 	public void OnConfirmSwing () {
-		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
+//		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
 
 		// hide batter phase 1
 		app.views.duelBatterPhase1.SetActive (false);
@@ -159,7 +160,10 @@ public class DuelController : BaseballElement {
 	}
 
 	public void OnConfirmPitch () {
-		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+//		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+
+		// set final pitch location
+		finalPitchLocation = new DuelGridCoordinates (currentPitchLocation.column + currentPitch.movement.column, currentPitchLocation.row + currentPitch.movement.row);
 
 		// hide pitcher phase 1
 		app.views.duelPitcherPhase1.SetActive (false);
@@ -199,13 +203,37 @@ public class DuelController : BaseballElement {
 
 		// determine outcome based on marker proximity
 		Debug.Log ("Swing: " + currentSwingLocation.column + ", " + currentSwingLocation.row);
-		Debug.Log ("Pitch: " + currentPitchLocation.column + ", " + currentPitchLocation.row);
+		Debug.Log ("Pitch: " + finalPitchLocation.column + ", " + finalPitchLocation.row);
+
+		int columnDifference = currentSwingLocation.column - finalPitchLocation.column;
+		int rowDifference = currentSwingLocation.row - finalPitchLocation.row;
+
+		DuelGridCoordinates difference = new DuelGridCoordinates (columnDifference, rowDifference);
 
 		if (didSwing) {
-			// batter swung
+			// batter did swing
+			if (difference.column == 0 && difference.row == 0) {
+				// direct hit
+				Debug.Log ("Contact!");
+
+			} else {
+				// swing and a miss
+				Debug.Log ("Swing and a Miss!");
+				app.controller.IncrementStrikes ();
+			}
+
 		} else {
 			// batter didn't swing
+			if ( finalPitchLocation.column < 2 || finalPitchLocation.column > 4 || finalPitchLocation.row < 2 || finalPitchLocation.row > 6 ) {
+				Debug.Log ("Ball.");
+				app.controller.IncrementBalls ();
+			} else {
+				Debug.Log ("Strike!");
+				app.controller.IncrementStrikes ();
+			}
 		}
+
+		app.scoreController.UpdateScoreboard ();
 
 		yield return new WaitForSeconds (4.0f);
 		StartCoroutine (SetUpNewDuel ());
