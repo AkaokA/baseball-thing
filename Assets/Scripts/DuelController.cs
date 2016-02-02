@@ -235,7 +235,7 @@ public class DuelController : BaseballElement {
 
 		app.scoreController.UpdateScoreboard ();
 
-		yield return new WaitForSeconds (4.0f);
+		yield return new WaitForSeconds (2.0f);
 		StartCoroutine (SetUpNewDuel ());
 	}
 }
