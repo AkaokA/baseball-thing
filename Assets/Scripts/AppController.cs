@@ -105,7 +105,7 @@ public class AppController : BaseballElement {
 //					currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
 //
 //					float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
-//					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
+//					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (randomPitchSpeed, pitchAccuracy);
 //
 //				} else {
 //
@@ -149,7 +149,7 @@ public class AppController : BaseballElement {
 					currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
 
 					float randomPitchSpeed = Random.Range (minPitchSpeed, maxPitchSpeed);
-					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, randomPitchSpeed, pitchAccuracy);
+					currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (randomPitchSpeed, pitchAccuracy);
 				}
 			}
 

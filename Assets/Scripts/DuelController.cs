@@ -254,7 +254,7 @@ public class DuelController : BaseballElement {
 		// throw pitch
 		app.controller.currentBaseballInstance = Instantiate (app.views.baseball);
 		app.controller.currentBaseballInstance.transform.parent = GameObject.Find ("Ballpark").transform;
-		app.controller.currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (app.views.strikeZone.transform, 10f, 0.8f);
+		app.controller.currentBaseballInstance.GetComponent<BaseballView>().PitchBaseballWithSpeed (10f, 0.8f);
 
 		yield return new WaitForSeconds (0.75f);
 

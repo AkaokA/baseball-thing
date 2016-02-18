@@ -55,9 +55,10 @@ public class Pitch {
 }
 
 public class Ballpark {
-	// hard-coded batter's box locations
+	// hard-coded locations
 	public Vector3 leftBattersBox = new Vector3 (-0.6f, 0f, 0.6f);
 	public Vector3 rightBattersBox = new Vector3 (0.6f, 0f, -0.6f);
+	public Vector3 homePlatePosition = new Vector3 (0.33f, 1f, 0.33f);
 
 	public Base[] bases = new Base[4];
 	public Base firstBase = new Base();

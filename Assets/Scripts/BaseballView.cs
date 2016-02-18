@@ -25,36 +25,14 @@ public class BaseballView : BaseballElement {
 	void Awake () {
 		baseballRigidbody = GetComponent<Rigidbody> ();
 	}
-	
-//	// Update is called once per frame
-//	void FixedUpdate () {
-//		// kill ball if it goes out of play
-//		if ( transform.position.x < -6f || transform.position.z < -6f ) {
-//			app.controller.ResetPlay ();
-//			app.controller.NewBatter ();
-//		}
-//
-//		// home run!
-//		if ( transform.position.x > 32.5f || transform.position.z > 32f ) {
-//			if (hasTouchedTheGround) {
-//				// ground rule double
-//				app.controller.ResetPlay ();
-//				app.controller.NewBatter ();
-//			} else {
-//				// home run!
-//				Debug.Log ("home run!");
-//				app.controller.HomeRun();
-//			}
-//		}
-//	}
 
-	public void PitchBaseballWithSpeed(Transform target, float pitchSpeed, float accuracy) {
+	public void PitchBaseballWithSpeed(float pitchSpeed, float accuracy) {
 		// move to location of pitcher's mound
 		Vector3 pitcherPosition = app.controller.fieldingTeam.lineup [1 -1].fielderInstance.GetComponent<FielderView> ().idleLocation; // fielding positions are 1-indexed; that's why this is ugly
 		pitcherPosition.y = 1f;
 		transform.position = pitcherPosition;
 
-		Vector3 pitchDirection = target.position - transform.position; // get target direction 
+		Vector3 pitchDirection = app.controller.ballpark.homePlatePosition - transform.position; // get target direction 
 		pitchDirection.y = 0; // retain only the horizontal direction
 		float distanceToTarget = pitchDirection.magnitude; // get horizontal distance
 		pitchDirection = pitchDirection.normalized;
