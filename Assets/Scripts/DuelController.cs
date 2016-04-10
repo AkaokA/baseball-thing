@@ -248,6 +248,7 @@ public class DuelController : BaseballElement {
 	IEnumerator StartActionOnField () {
 		app.views.duelGridCanvas.SetActive (false);
 		app.views.fieldCamera.GetComponent<Blur> ().enabled = false;
+		app.views.fieldCamera.GetComponent<CameraView>().ChangeCameraState ("atbat", 0.5f);
 
 		yield return new WaitForSeconds (0.2f);
 
